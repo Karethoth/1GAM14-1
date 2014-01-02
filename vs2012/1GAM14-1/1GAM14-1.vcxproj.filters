@@ -35,5 +35,11 @@
     <None Include="..\..\src\shaderProgram.hh">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="..\..\data\shaders\test.vshader">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\data\shaders\test.fshader">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

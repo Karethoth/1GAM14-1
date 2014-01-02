@@ -21,6 +21,7 @@ class Shader
 	~Shader();
 
 	bool Load( const std::string &source );
+	bool LoadFromFile( const std::string &path );
 	const GLuint Get() const;
 
 

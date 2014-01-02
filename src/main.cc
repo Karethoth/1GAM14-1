@@ -54,27 +54,18 @@ int main( int argc, char **argv )
 	}
 
 	/* Shader testing */
-	std::string vShaderSource = \
-	"\n"
-	"attribute vec4 vPosition;\n"
-	"void main()\n"
-	"{\n"
-	"  gl_Position = vPosition;\n"
-	"}\n";
-
-	std::string fShaderSource = \
-	"\n"
-	"void main()\n"
-	"{\n"
-	"  gl_FragColor = vec4( 1.0, 0.0, 0.0, 1.0 );\n"
-	"}\n";
-
-
 	Shader vShader( GL_VERTEX_SHADER );
 	Shader fShader( GL_FRAGMENT_SHADER );
 
-	vShader.Load( vShaderSource );
-	fShader.Load( fShaderSource );
+	if( !vShader.LoadFromFile( "data/shaders/test.vshader" ) )
+	{
+		std::cerr << "Failed to load vertex shader!\n";
+	}
+
+	if( !fShader.LoadFromFile( "data/shaders/test.fshader" ) )
+	{
+		std::cerr << "Failed to load fragment shader!\n";
+	}
 
 	ShaderProgram shaderProgram;
 	shaderProgram.Load( vShader, fShader );

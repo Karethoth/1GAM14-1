@@ -16,6 +16,8 @@
     <ClCompile Include="..\..\src\shaderProgram.cc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\data\shaders\test.fshader" />
+    <None Include="..\..\data\shaders\test.vshader" />
     <None Include="..\..\src\main.hh" />
     <None Include="..\..\src\shader.hh" />
     <None Include="..\..\src\shaderProgram.hh" />

@@ -1,7 +1,11 @@
 #include "shader.hh"
 #include <memory>
+#include <string>
+#include <fstream>
+#include <sstream>
 #include <iostream>
 
+using std::string;
 
 Shader::Shader( GLenum type ) : type(type)
 {
@@ -18,7 +22,7 @@ Shader::~Shader()
 
 
 
-bool Shader::Load( const std::string &source )
+bool Shader::Load( const string &source )
 {
 	if( compiled || shader )
 	{
@@ -43,12 +47,12 @@ bool Shader::Load( const std::string &source )
 		if( infoLen > 1 )
 		{
 			char* infoLog = new char[ sizeof( char )*infoLen ];
-			std::string errorMsg;
+			string errorMsg;
 
 			if( infoLog )
 			{
 				glGetShaderInfoLog( shader, infoLen, NULL, infoLog );
-				errorMsg = "Error compiling shader: " + std::string( infoLog );
+				errorMsg = "Error compiling shader: " + string( infoLog );
 				delete[] infoLog;
 			}
 			else
@@ -64,6 +68,29 @@ bool Shader::Load( const std::string &source )
 	}
 
 	return true;
+}
+
+
+
+bool Shader::LoadFromFile( const string &filepath )
+{
+	std::ifstream file( filepath );
+	string str;
+	string shaderSource;
+
+	if( !file.is_open() )
+	{
+		std::cerr << "Error: Failed to load shader from file \"" << filepath << "\"\n";
+		return false;
+	}
+
+	while( std::getline( file, str ) )
+	{
+	  shaderSource += str;
+	  shaderSource.push_back('\n');
+	}
+
+	return Load( shaderSource );
 }
 
 
