@@ -3,6 +3,13 @@
 #include <memory>
 
 
+#ifdef _WIN32
+	#pragma comment(lib, "GLFW3.lib")
+	#pragma comment(lib, "opengl32.lib")
+	#pragma comment(lib, "glu32.lib")
+#endif
+
+
 static void GLFWErrorCallback( int error, const char* description )
 {
   std::cerr << "Error: " << description << "\n";

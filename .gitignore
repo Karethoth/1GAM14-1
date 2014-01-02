@@ -1,5 +1,12 @@
 bin
 obj
+Debug
+Release
 *.exe
 *.tmp
 *.out
+*.log
+*.tlog
+*.ilk
+*.pdb
+*.opensdf
