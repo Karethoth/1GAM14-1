@@ -15,6 +15,7 @@ TGT = 1401
 
 OBJS=\
       $(OBJDIR)/shader.o \
+      $(OBJDIR)/shaderProgram.o \
       $(OBJDIR)/main.o
 
 
