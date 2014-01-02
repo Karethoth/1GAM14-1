@@ -1,13 +1,4 @@
-#include <GLFW/glfw3.h>
-#include <iostream>
-#include <memory>
-
-
-#ifdef _WIN32
-	#pragma comment(lib, "GLFW3.lib")
-	#pragma comment(lib, "opengl32.lib")
-	#pragma comment(lib, "glu32.lib")
-#endif
+#include "main.hh"
 
 
 static void GLFWErrorCallback( int error, const char* description )
@@ -33,17 +24,44 @@ int main( int argc, char **argv )
 
   glfwSetErrorCallback( GLFWErrorCallback );
   if( !glfwInit() )
-    exit( EXIT_FAILURE );
+  {
+	  std::cerr << "Couldn't initialize GLFW\n";
+	  exit( EXIT_FAILURE );
+  }
+
+    glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3 );
+    glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 2 );
+    glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE );
+    glfwWindowHint( GLFW_SAMPLES, 4 );
+
 
   window = glfwCreateWindow( 640, 480, "Simple example", NULL, NULL );
   if( !window )
   {
     glfwTerminate();
+	std::cerr << "Couldn't create window\n";
     exit( EXIT_FAILURE );
   }
 
   glfwMakeContextCurrent( window );
   glfwSetKeyCallback( window, GLFWKeyCallback );
+
+  glewExperimental = GL_TRUE;
+  if( glewInit() != GLEW_OK )
+  {
+	  std::cerr << "Couldn't initialize GLEW\n";
+	  exit( EXIT_FAILURE );
+  }
+
+  std::string fShaderSource = \
+	"precision mediump float;\n"
+	"void main()\n"
+	"{\n"
+	"  gl_FragColor = vec4( 1.0, 0.0, 0.0, 1.0 );\n"
+	"}\n";
+
+  Shader fShader( GL_FRAGMENT_SHADER );
+  fShader.Load( fShaderSource );
 
   while( !glfwWindowShouldClose( window ) )
   {
