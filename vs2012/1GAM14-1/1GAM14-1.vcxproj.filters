@@ -21,12 +21,18 @@
     <ClCompile Include="..\..\src\shader.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\shaderProgram.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\main.hh">
       <Filter>Header Files</Filter>
     </None>
     <None Include="..\..\src\shader.hh">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\..\src\shaderProgram.hh">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>

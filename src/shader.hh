@@ -21,7 +21,7 @@ class Shader
 	~Shader();
 
 	bool Load( const std::string &source );
-	GLuint Get();
+	const GLuint Get() const;
 
 
  private:

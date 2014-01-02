@@ -59,6 +59,7 @@ bool Shader::Load( const std::string &source )
 		}
 
 		glDeleteShader( shader );
+		shader = 0;
 		return false;
 	}
 
@@ -67,7 +68,7 @@ bool Shader::Load( const std::string &source )
 
 
 
-GLuint Shader::Get()
+const GLuint Shader::Get() const
 {
 	return shader;
 }

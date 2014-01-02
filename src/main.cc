@@ -53,6 +53,15 @@ int main( int argc, char **argv )
 		exit( EXIT_FAILURE );
 	}
 
+	/* Shader testing */
+	std::string vShaderSource = \
+	"\n"
+	"attribute vec4 vPosition;\n"
+	"void main()\n"
+	"{\n"
+	"  gl_Position = vPosition;\n"
+	"}\n";
+
 	std::string fShaderSource = \
 	"\n"
 	"void main()\n"
@@ -60,9 +69,20 @@ int main( int argc, char **argv )
 	"  gl_FragColor = vec4( 1.0, 0.0, 0.0, 1.0 );\n"
 	"}\n";
 
+
+	Shader vShader( GL_VERTEX_SHADER );
 	Shader fShader( GL_FRAGMENT_SHADER );
+
+	vShader.Load( vShaderSource );
 	fShader.Load( fShaderSource );
 
+	ShaderProgram shaderProgram;
+	shaderProgram.Load( vShader, fShader );
+
+	glUseProgram( shaderProgram.Get() );
+
+
+	/* Main loop */
 	while( !glfwWindowShouldClose( window ) )
 	{
 		float ratio;
