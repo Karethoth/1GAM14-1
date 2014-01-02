@@ -3,7 +3,7 @@
 #define _SHADER_HH_
 
 #ifdef _WIN32
-	#include <Windows.h>
+#include <Windows.h>
 #endif
 
 
@@ -17,11 +17,11 @@
 class Shader
 {
  public:
-	 Shader( GLenum type );
-	 ~Shader();
+	Shader( GLenum type );
+	~Shader();
 
-	 bool Load( const std::string &source );
-	 GLuint Get();
+	bool Load( const std::string &source );
+	GLuint Get();
 
 
  private:

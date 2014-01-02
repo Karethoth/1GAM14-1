@@ -4,7 +4,7 @@ BINDIR = ../bin
 
 DIRS = $(OBJDIR) $(BINDIR)
 
-LIBS = -lGL -lGLU -lglfw3 -lX11 -lXxf86vm -lXrandr -lpthread -lXi
+LIBS = -lGL -lGLU -lGLEW -lglfw3 -lX11 -lXxf86vm -lXrandr -lpthread -lXi
 
 CC = g++ -g
 
@@ -14,6 +14,7 @@ TGT = 1401
 
 
 OBJS=\
+      $(OBJDIR)/shader.o \
       $(OBJDIR)/main.o
 
 
