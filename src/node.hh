@@ -17,6 +17,11 @@ class Node
 	Node( const std::string &name );
 	~Node();
 
+	Node( const Node &other );
+	Node(  Node &&other );
+	Node& operator = ( Node other );
+	void Swap( Node &first, Node &second );
+
 	void SetLocation( const glm::vec3 &loc );
 	void SetRotation( const glm::quat &rot );
 

@@ -4,10 +4,12 @@
 
 using namespace glm;
 
+
 Node::Node()
 {
 	Node( "NoName" );
 }
+
 
 Node::Node( const std::string &name ) : name( name )
 {
@@ -18,9 +20,48 @@ Node::Node( const std::string &name ) : name( name )
 }
 
 
+Node::Node( const Node &other )
+{
+	name = other.name;
+	location = other.location;
+	rotation = other.rotation;
+	worldLocation = other.worldLocation;
+	worldRotation = other.worldRotation;
+	parent = other.parent;
+	children = other.children;
+}
+
+
+Node::Node( Node &&other )
+{
+	Node();
+	Swap( *this, other );
+}
+
+
+Node& Node::operator = ( Node other )
+{
+	Swap( *this, other );
+	return *this;
+}
+
+
 Node::~Node()
 {
 	children.clear();
+}
+
+
+
+void Node::Swap( Node &first, Node &second )
+{
+	std::swap( first.name, second.name );
+	std::swap( first.location, second.location );
+	std::swap( first.rotation, second.rotation );
+	std::swap( first.worldLocation, second.worldLocation );
+	std::swap( first.worldRotation, second.worldRotation );
+	std::swap( first.parent, second.parent );
+	std::swap( first.children, second.children );
 }
 
 
