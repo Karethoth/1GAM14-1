@@ -17,6 +17,8 @@
 
 #include "shaderProgram.hh"
 #include "node.hh"
+#include "mesh.hh"
+#include "surface.hh"
 
 #include <GLFW/glfw3.h>
 #include <iostream>

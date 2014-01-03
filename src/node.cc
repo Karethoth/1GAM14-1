@@ -38,6 +38,13 @@ void Node::SetRotation( const quat &rot )
 
 
 
+std::string Node::GetName()
+{
+	return name;
+}
+
+
+
 vec3 Node::GetLocation() const
 {
 	return location;

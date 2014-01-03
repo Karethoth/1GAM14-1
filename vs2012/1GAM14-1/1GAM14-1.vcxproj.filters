@@ -27,6 +27,12 @@
     <ClCompile Include="..\..\src\node.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\surface.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mesh.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\data\shaders\test.vshader">
@@ -47,6 +53,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\node.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\surface.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mesh.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

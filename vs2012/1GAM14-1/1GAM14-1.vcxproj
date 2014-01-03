@@ -12,9 +12,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\main.cc" />
+    <ClCompile Include="..\..\src\mesh.cc" />
     <ClCompile Include="..\..\src\node.cc" />
     <ClCompile Include="..\..\src\shader.cc" />
     <ClCompile Include="..\..\src\shaderProgram.cc" />
+    <ClCompile Include="..\..\src\surface.cc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\data\shaders\test.fshader" />
@@ -24,6 +26,8 @@
     <None Include="..\..\src\shaderProgram.hh" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\mesh.hh" />
+    <ClInclude Include="..\..\src\surface.hh" />
     <ClInclude Include="..\..\src\node.hh" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -20,6 +20,8 @@ class Node
 	void SetLocation( const glm::vec3 &loc );
 	void SetRotation( const glm::quat &rot );
 
+	std::string GetName();
+
 	glm::vec3 GetLocation() const;
 	glm::vec3 GetWorldLocation() const;
 	glm::quat GetRotation() const;
