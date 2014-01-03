@@ -2,6 +2,7 @@
 #ifndef _NODE_HH_
 #define _NODE_HH_
 
+#include <string>
 #include <memory>
 #include <vector>
 
