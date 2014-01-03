@@ -24,8 +24,17 @@
     <ClCompile Include="..\..\src\shaderProgram.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\node.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\data\shaders\test.vshader">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\data\shaders\test.fshader">
+      <Filter>Resource Files</Filter>
+    </None>
     <None Include="..\..\src\main.hh">
       <Filter>Header Files</Filter>
     </None>
@@ -35,11 +44,10 @@
     <None Include="..\..\src\shaderProgram.hh">
       <Filter>Header Files</Filter>
     </None>
-    <None Include="..\..\data\shaders\test.vshader">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\..\data\shaders\test.fshader">
-      <Filter>Resource Files</Filter>
-    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\node.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

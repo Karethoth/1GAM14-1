@@ -73,6 +73,24 @@ int main( int argc, char **argv )
 	glUseProgram( shaderProgram.Get() );
 
 
+	Node rootNode( "RootNode" );
+	rootNode.SetLocation( glm::vec3( 0, 0.5, 0.0 ) );
+
+	glm::quat rot = glm::quat ( glm::vec3( 0.01, 0.02, 0.02) );
+
+	// These are for testing the Node system
+	{
+		auto testNode = std::make_shared<Node>( "TestNode" );
+		rootNode.AddChild( testNode );
+
+		auto secNode = std::make_shared<Node>( "SecNode" );
+		testNode->AddChild( secNode );
+
+		rootNode.UpdateWorldInfo();
+
+		rootNode.EraseChild( testNode );
+	}
+
 	/* Main loop */
 	while( !glfwWindowShouldClose( window ) )
 	{
@@ -91,13 +109,15 @@ int main( int argc, char **argv )
 		glLoadIdentity();
 		glRotatef( (float) glfwGetTime() * 50.f, 0.f, 0.f, 1.f );
 
+		rootNode.SetRotation( glm::normalize( rot * rootNode.GetRotation() ) );
+
 		glBegin( GL_TRIANGLES );
-			glColor3f( 1.f, 0.f, 0.f );
-			glVertex3f( -0.6f, -0.4f, 0.f );
-			glColor3f( 0.f, 1.f, 0.f );
-			glVertex3f( 0.6f, -0.4f, 0.f );
-			glColor3f( 0.f, 0.f, 1.f );
-			glVertex3f( 0.f, 0.6f, 0.f );
+			glm::vec3 vec = glm::vec3( 1.f, 0.f, 0.f ) * rootNode.GetRotation() + rootNode.GetLocation();
+			glVertex3f( vec.x, vec.y, vec.z );
+			vec = glm::vec3( 0.6f, -0.4f, 0.f ) * rootNode.GetRotation() + rootNode.GetLocation();
+			glVertex3f( vec.x, vec.y, vec.z );
+			vec = glm::vec3( 0.f, 0.6f, 0.f ) * rootNode.GetRotation() + rootNode.GetLocation();
+			glVertex3f( vec.x, vec.y, vec.z );
 		glEnd();
 
 		glfwSwapBuffers( window );

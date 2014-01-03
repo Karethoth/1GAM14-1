@@ -16,6 +16,7 @@
 #include <GL/glew.h>
 
 #include "shaderProgram.hh"
+#include "node.hh"
 
 #include <GLFW/glfw3.h>
 #include <iostream>

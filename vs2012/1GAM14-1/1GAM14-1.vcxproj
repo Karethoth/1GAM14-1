@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\main.cc" />
+    <ClCompile Include="..\..\src\node.cc" />
     <ClCompile Include="..\..\src\shader.cc" />
     <ClCompile Include="..\..\src\shaderProgram.cc" />
   </ItemGroup>
@@ -21,6 +22,9 @@
     <None Include="..\..\src\main.hh" />
     <None Include="..\..\src\shader.hh" />
     <None Include="..\..\src\shaderProgram.hh" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\node.hh" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{783D5327-2E85-4550-912E-7890DB489711}</ProjectGuid>
