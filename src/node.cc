@@ -13,6 +13,8 @@ Node::Node()
 
 Node::Node( const std::string &name ) : name( name )
 {
+	parent = nullptr;
+
 	SetLocation( vec3( 0, 0, 0 ) );
 	SetRotation( quat( 0, 0, 0, 0 ) );
 
@@ -79,6 +81,12 @@ void Node::SetRotation( const quat &rot )
 
 
 
+void Node::SetName( std::string name )
+{
+	this->name = name;
+}
+
+
 std::string Node::GetName()
 {
 	return name;
@@ -115,14 +123,12 @@ quat Node::GetWorldRotation() const
 // Used to update worldLocation and worldPosition
 void Node::UpdateWorldInfo()
 {
-	std::shared_ptr<Node> pParent = parent.lock();
-
 	// Update this node
-	if( pParent )
+	if( parent )
 	{
-		worldLocation = pParent->GetWorldLocation() +
-		                pParent->GetWorldRotation() * location;
-		worldRotation = pParent->GetRotation() + rotation;
+		worldLocation = parent->GetWorldLocation() +
+		                parent->GetWorldRotation() * location;
+		worldRotation = parent->GetRotation() + rotation;
 	}
 	else
 	{
@@ -142,7 +148,7 @@ void Node::UpdateWorldInfo()
 void Node::AddChild( const std::shared_ptr<Node> &child )
 {
 	children.push_back( child );
-	child->SetParent( std::make_shared<Node>( *this ) );
+	child->SetParent( this );
 }
 
 
@@ -156,7 +162,7 @@ void Node::EraseChild( const std::shared_ptr<Node> &child )
 		if( it->get() == child.get() )
 		{
 			children.erase( it );
-			child->SetParent( std::shared_ptr<Node>( nullptr ) );
+			child->SetParent( nullptr );
 			return;
 		}
 	}
@@ -164,7 +170,7 @@ void Node::EraseChild( const std::shared_ptr<Node> &child )
 
 
 
-void Node::SetParent( const std::shared_ptr<Node> &parent )
+void Node::SetParent( Node *parent )
 {
 	this->parent = parent;
 }
@@ -173,10 +179,5 @@ void Node::SetParent( const std::shared_ptr<Node> &parent )
 
 void Node::Delete()
 {
-	std::shared_ptr<Node> pParent = parent.lock();
-	if( pParent )
-	{
-
-	}
 }
 

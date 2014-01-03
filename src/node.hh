@@ -22,10 +22,12 @@ class Node
 	Node& operator = ( Node other );
 	void Swap( Node &first, Node &second );
 
+	void SetName( std::string );
+	std::string GetName();
+
 	void SetLocation( const glm::vec3 &loc );
 	void SetRotation( const glm::quat &rot );
 
-	std::string GetName();
 
 	glm::vec3 GetLocation() const;
 	glm::vec3 GetWorldLocation() const;
@@ -41,7 +43,7 @@ class Node
 
 
  protected:
-	void SetParent( const std::shared_ptr<Node> &parent );
+	void SetParent( Node *parent );
 
 
  private:
@@ -52,7 +54,7 @@ class Node
 	glm::vec3 worldLocation;
 	glm::quat worldRotation;
 
-	std::weak_ptr<Node> parent;
+	Node *parent;
 	std::vector<std::shared_ptr<Node>> children;
 };
 
