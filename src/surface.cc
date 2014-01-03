@@ -29,7 +29,8 @@ void Surface::SetTextureCorners( const vec2 corners[4]  )
 }
 
 
-
+// This method returns a subsurfaced surface as a mesh.
+// ( The surface is split in pieces of wanted amount )
 Mesh Surface::GenerateMesh( int xSplits, int ySplits )
 {
 	Mesh mesh;
@@ -51,7 +52,28 @@ Mesh Surface::GenerateMesh( int xSplits, int ySplits )
 		}
 	}
 
-	// TODO: Calculating indices goes here
+	// Create the index buffer
+	int yLod = ySplits-1;
+	int xLod = xSplits-1;
+
+	for( unsigned int y=0; y < yLod; ++y )
+	{
+		int index = y * (xLod+1);
+
+		for( unsigned int x=0; x < xLod; ++x )
+		{
+			// First triangle
+			mesh.indexBuffer.push_back( index );
+			mesh.indexBuffer.push_back( index+1 );
+			mesh.indexBuffer.push_back( index+xLod+1 );
+			// Second triangle
+			mesh.indexBuffer.push_back( index+1 );
+			mesh.indexBuffer.push_back( index+2+xLod );
+			mesh.indexBuffer.push_back( index+1+xLod );
+
+			++index;
+		}
+	}
 
 	return mesh;
 }

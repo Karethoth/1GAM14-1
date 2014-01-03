@@ -91,6 +91,14 @@ int main( int argc, char **argv )
 		rootNode.EraseChild( testNode );
 	}
 
+	// Test mesh generation from a surface
+	Surface testSurface( 10, 5 );
+	Mesh testSurfaceMesh = testSurface.GenerateMesh( 1, 0 );
+	for( auto& ind : testSurfaceMesh.indexBuffer )
+	{
+		std::cout << "TESTSURFACE INDEX: " << ind << "\n";
+	}
+
 	/* Main loop */
 	while( !glfwWindowShouldClose( window ) )
 	{
