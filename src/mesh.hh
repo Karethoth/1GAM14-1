@@ -3,6 +3,11 @@
 #define _MESH_HH_
 
 #include "node.hh"
+
+#define GLEW_STATIC
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
 #include <vector>
 
 
@@ -21,7 +26,10 @@ struct Mesh : public Node
 	Mesh();
 	~Mesh();
 
-	std::vector<VBOData> vboBuffer;
+	bool GenerateGLBuffers();
+
+	GLuint vbo, ibo;
+	std::vector<VBOData> vertexBuffer;
 	std::vector<unsigned int> indexBuffer;
 };
 
