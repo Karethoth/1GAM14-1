@@ -56,11 +56,11 @@ Mesh Surface::GenerateMesh( int xSplits, int ySplits )
 	int yLod = ySplits-1;
 	int xLod = xSplits-1;
 
-	for( unsigned int y=0; y < yLod; ++y )
+	for( int y=0; y < yLod; ++y )
 	{
 		int index = y * (xLod+1);
 
-		for( unsigned int x=0; x < xLod; ++x )
+		for( int x=0; x < xLod; ++x )
 		{
 			// First triangle
 			mesh.indexBuffer.push_back( index );
