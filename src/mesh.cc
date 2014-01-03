@@ -31,14 +31,14 @@ bool Mesh::GenerateGLBuffers()
 {
 	glBindBuffer( GL_ARRAY_BUFFER, vbo );
 	glBufferData( GL_ARRAY_BUFFER,
-	              vertexBuffer.size() * sizeof VBOData,
+	              vertexBuffer.size() * sizeof( VBOData ),
 				  &vertexBuffer[0],
 				  GL_STATIC_DRAW );
 
 
 	glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, ibo );
 	glBufferData( GL_ELEMENT_ARRAY_BUFFER,
-	              indexBuffer.size() * sizeof VBOData,
+	              indexBuffer.size() * sizeof( VBOData ),
 				  &indexBuffer[0],
 				  GL_STATIC_DRAW );
 
