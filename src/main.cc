@@ -86,18 +86,29 @@ int main( int argc, char **argv )
 		auto secNode = std::make_shared<Node>( "SecNode" );
 		testNode->AddChild( secNode );
 
-		rootNode.UpdateWorldInfo();
-
 		rootNode.EraseChild( testNode );
 	}
 
 	// Test mesh generation from a surface
-	Surface testSurface( 10, 5 );
+	Surface testSurface( 1, 5 );
 	Mesh testSurfaceMesh = testSurface.GenerateMesh( 1, 0 );
-	for( auto& ind : testSurfaceMesh.indexBuffer )
-	{
-		std::cout << "TESTSURFACE INDEX: " << ind << "\n";
-	}
+
+	testSurfaceMesh.SetName( "TestMesh" );
+	testSurfaceMesh.GenerateGLBuffers();
+
+	rootNode.AddChild( std::shared_ptr<Node>( &testSurfaceMesh ) );
+
+	/*
+	glEnableVertexAttribArray(0);
+	glBindBuffer( GL_ARRAY_BUFFER, testSurfaceMesh.vbo );
+	glVertexAttribPointer(
+	   0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+	   3,                  // size
+	   GL_FLOAT,           // type
+	   GL_FALSE,           // normalized?
+	   0,                  // stride
+	   (void*)0            // array buffer offset
+	);*/
 
 	/* Main loop */
 	while( !glfwWindowShouldClose( window ) )
@@ -108,24 +119,18 @@ int main( int argc, char **argv )
 		glfwGetFramebufferSize( window, &width, &height );
 		ratio = width / (float) height;
 
-		glViewport( 0, 0, width, height );
 		glClear( GL_COLOR_BUFFER_BIT );
-		glMatrixMode( GL_PROJECTION );
-		glLoadIdentity();
-		glOrtho( -ratio, ratio, -1.f, 1.f, 1.f, -1.f );
-		glMatrixMode( GL_MODELVIEW );
-		glLoadIdentity();
-		glRotatef( (float) glfwGetTime() * 50.f, 0.f, 0.f, 1.f );
+		//glRotatef( (float) glfwGetTime() * 50.f, 0.f, 0.f, 1.f );
 
 		rootNode.SetRotation( glm::normalize( rot * rootNode.GetRotation() ) );
+		rootNode.UpdateWorldInfo();
 
 		glBegin( GL_TRIANGLES );
-			glm::vec3 vec = glm::vec3( 1.f, 0.f, 0.f ) * rootNode.GetRotation() + rootNode.GetLocation();
-			glVertex3f( vec.x, vec.y, vec.z );
-			vec = glm::vec3( 0.6f, -0.4f, 0.f ) * rootNode.GetRotation() + rootNode.GetLocation();
-			glVertex3f( vec.x, vec.y, vec.z );
-			vec = glm::vec3( 0.f, 0.6f, 0.f ) * rootNode.GetRotation() + rootNode.GetLocation();
-			glVertex3f( vec.x, vec.y, vec.z );
+			for( auto& ind : testSurfaceMesh.indexBuffer )
+			{
+				glm::vec3 vec =testSurfaceMesh.GetWorldRotation() * testSurfaceMesh.vertexBuffer[ind].vertex + testSurfaceMesh.GetWorldLocation();
+				glVertex3f( vec.x, vec.y, vec.z );
+			}
 		glEnd();
 
 		glfwSwapBuffers( window );

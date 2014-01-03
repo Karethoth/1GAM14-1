@@ -48,7 +48,7 @@ Mesh Surface::GenerateMesh( int xSplits, int ySplits )
 
 			// TODO: Calculating texture coordinate goes here
 
-			mesh.vboBuffer.push_back( tmp );
+			mesh.vertexBuffer.push_back( tmp );
 		}
 	}
 
