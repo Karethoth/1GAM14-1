@@ -22,7 +22,8 @@ ShaderProgram::~ShaderProgram()
 
 
 bool ShaderProgram::Load( const Shader &vertexShader,
-                          const Shader &fragmentShader )
+                          const Shader &fragmentShader,
+                          std::map<std::string, GLuint> attributes )
 {
 	if( !program )
 	{
@@ -36,13 +37,19 @@ bool ShaderProgram::Load( const Shader &vertexShader,
 		return false;
 	}
 
+	this->attributes = attributes;
 
+	// Attach the shaders
 	glAttachShader( program, vertexShader.Get() );
 	glAttachShader( program, fragmentShader.Get() );
 
-	/* Binding could be done as a "callback" to a passed function. */
-	glBindAttribLocation( program, 0, "vertexPosition" );
+	// Bind attribute locations as requested
+	for( auto& attr : attributes )
+	{
+		glBindAttribLocation( program, attr.second, attr.first.c_str() );
+	}
 
+	// Link the shader program
 	glLinkProgram( program );
 	glGetProgramiv( program, GL_LINK_STATUS, &linked );
 
@@ -106,8 +113,29 @@ const GLint ShaderProgram::GetUniform( const std::string &uniformName )
 	if( uniform == -1 )
 	{
 		std::cerr << "Error: Tried to get location of shader uniform '"
-		          << uniformName << "', which doesn't exist.\n";
+	              << uniformName << "', which doesn't exist.\n";
 	}
 
 	return uniform;
+}
+
+
+// Fetches the requested attribute location
+const GLuint ShaderProgram::GetAttribute( const std::string &attributeName )
+{
+	if( !program )
+	{
+		return 0;
+	}
+	std::map<std::string, GLuint>::iterator it = attributes.find( attributeName );
+
+	if( it != attributes.end() )
+	{
+	   return it->second;
+	}
+
+	std::cerr << "Error: Tried to get location of shader attribute '"
+	          << attributeName << "', which doesn't exist.\n";
+
+	return 0;
 }

@@ -68,14 +68,20 @@ int main( int argc, char **argv )
 		std::cerr << "Failed to load fragment shader!\n";
 	}
 
-	ShaderProgram shaderProgram;
-	shaderProgram.Load( vShader, fShader );
 
-	// Get MVP uniform location
-	const GLint mvpUniform = shaderProgram.GetUniform( "MVP" );
+	// Construct list of attributes and their locations
+	std::map<std::string, GLuint> attributes;
+	attributes["vertexPosition"] = 0;
+
+	// Create the shader and pass the shaders and the attribute list to it.
+	ShaderProgram shaderProgram;
+	shaderProgram.Load( vShader, fShader, attributes );
 
 	// Use dat program
 	glUseProgram( shaderProgram.Get() );
+
+	// Get MVP uniform location
+	const GLint mvpUniform = shaderProgram.GetUniform( "MVP" );
 
 
 	Node rootNode( "RootNode" );

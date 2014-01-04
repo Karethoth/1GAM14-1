@@ -14,18 +14,21 @@ class ShaderProgram
 
 
 	bool Load( const Shader &vertexShader,
-	           const Shader &fragmentShader );
+	           const Shader &fragmentShader,
+			   std::map<std::string, GLuint> attributes );
 
 	const GLuint Get() const;
 
-	const GLint GetUniform( const std::string &uniformName );
+	const GLint  GetUniform( const std::string &uniformName );
+	const GLuint GetAttribute( const std::string &attributeName );
 
 
  private:
 	GLuint program;
 	GLint linked;
 
-	std::map<std::string, GLint> uniforms;
+	std::map<std::string, GLint>  uniforms;
+	std::map<std::string, GLuint> attributes;
 };
 
 #endif
