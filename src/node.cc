@@ -5,17 +5,12 @@
 using namespace glm;
 
 
-Node::Node()
-{
-	Node( "NoName" );
-}
-
-
-Node::Node( const std::string& name ) : name( name )
+Node::Node( std::string name ) : name( name )
 {
 	parent = nullptr;
 
-	SetLocation( vec3( 0, 0, 0 ) );
+	SetScale( vec3( 1.f ) );
+	SetLocation( vec3( 0.f ) );
 	SetRotation( quat( 0, 0, 0, 0 ) );
 
 	//UpdateWorldInfo();
@@ -36,7 +31,6 @@ Node::Node( const Node& other )
 
 Node::Node( Node&& other )
 {
-	Node();
 	Swap( *this, other );
 }
 
@@ -68,28 +62,42 @@ void Node::Swap( Node& first, Node& second )
 
 
 
-void Node::SetLocation( vec3 loc )
+void Node::SetScale( vec3 newScale )
 {
-	location = loc;
-}
-
-
-void Node::SetRotation( quat rot )
-{
-	rotation = rot;
+	scale = newScale;
 }
 
 
 
-void Node::SetName( std::string name )
+void Node::SetLocation( vec3 newLocation )
 {
-	this->name = name;
+	location = newLocation;
+}
+
+
+void Node::SetRotation( quat newRotation )
+{
+	rotation = newRotation;
+}
+
+
+
+void Node::SetName( std::string newName )
+{
+	name = newName;
 }
 
 
 std::string Node::GetName()
 {
 	return name;
+}
+
+
+
+vec3 Node::GetScale() const
+{
+	return scale;
 }
 
 

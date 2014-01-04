@@ -1,10 +1,9 @@
 #include "mesh.hh"
+#include <iostream>
 
 
-Mesh::Mesh()
+Mesh::Mesh( std::string meshName ) : Node( meshName )
 {
-	Node();
-
 	glGenVertexArrays( 1, &vao );
 	glBindVertexArray( vao );
 	glGenBuffers( 1, &vbo );

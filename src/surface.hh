@@ -19,7 +19,7 @@ struct Surface
 
 	void SetTextureCorners( const glm::vec2 corners[4]  );
 
-	Mesh GenerateMesh( int xSplits, int ySplits );
+	std::shared_ptr<Mesh> GenerateMesh( int xSplits, int ySplits );
 
 	glm::vec2 size;
 	glm::vec2 textureCorners[4];

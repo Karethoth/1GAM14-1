@@ -23,8 +23,8 @@ struct VBOData
 
 struct Mesh : public Node
 {
-	Mesh();
-	~Mesh();
+	Mesh( std::string name="UnnamedMesh" );
+	virtual ~Mesh();
 
 	bool GenerateGLBuffers();
 

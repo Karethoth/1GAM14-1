@@ -13,9 +13,8 @@
 class Node
 {
  public:
-	Node();
-	Node( const std::string &name );
-	~Node();
+	Node( std::string name="NoName" );
+	virtual ~Node();
 
 	Node( const Node& other );
 	Node(  Node&& other );
@@ -25,10 +24,11 @@ class Node
 	void SetName( std::string );
 	std::string GetName();
 
-	void SetLocation( glm::vec3 loc );
-	void SetRotation( glm::quat rot );
+	void SetScale( glm::vec3 newScale );
+	void SetLocation( glm::vec3 newLocation );
+	void SetRotation( glm::quat newRotation );
 
-
+	glm::vec3 GetScale() const;
 	glm::vec3 GetLocation() const;
 	glm::vec3 GetWorldLocation() const;
 	glm::quat GetRotation() const;
@@ -47,6 +47,7 @@ class Node
  private:
 	std::string name;
 
+	glm::vec3 scale;
 	glm::vec3 location;
 	glm::quat rotation;
 	glm::vec3 worldLocation;

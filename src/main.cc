@@ -101,15 +101,15 @@ int main( int argc, char **argv )
 
 	// Test mesh generation from a surface
 	Surface testSurface( 1, 5 );
-	Mesh testSurfaceMesh = testSurface.GenerateMesh( 1, 0 );
+	auto testSurfaceMesh = testSurface.GenerateMesh( 1, 0 );
 
-	testSurfaceMesh.SetName( "TestMesh" );
-	testSurfaceMesh.GenerateGLBuffers();
+	testSurfaceMesh->SetName( "TestMesh" );
+	testSurfaceMesh->GenerateGLBuffers();
 
-	rootNode.AddChild( std::shared_ptr<Node>( &testSurfaceMesh ) );
+	rootNode.AddChild( testSurfaceMesh );
 
 	glEnableVertexAttribArray( shaderProgram.GetAttribute( "vertexPosition" ) );
-	glBindBuffer( GL_ARRAY_BUFFER, testSurfaceMesh.vbo );
+	glBindBuffer( GL_ARRAY_BUFFER, testSurfaceMesh->vbo );
 
 	glVertexAttribPointer(
 	   shaderProgram.GetAttribute( "vertexPosition" ),
@@ -148,12 +148,12 @@ int main( int argc, char **argv )
 
 		// Calculate Model matrix and use that to calculate the final MVP matrix
 		glm::mat4 modelMat = glm::mat4( 1.0f );
-		modelMat = modelMat * glm::toMat4(  testSurfaceMesh.GetWorldRotation() );
-		modelMat = glm::translate(  modelMat, testSurfaceMesh.GetWorldLocation() );
+		modelMat = modelMat * glm::toMat4(  testSurfaceMesh->GetWorldRotation() );
+		modelMat = glm::translate(  modelMat, testSurfaceMesh->GetWorldLocation() );
 		glm::mat4 mvpMat   = projectionMat * viewMat * modelMat;
 
 		// Use the vertex array object of the mesh
-		glBindVertexArray( testSurfaceMesh.vao );
+		glBindVertexArray( testSurfaceMesh->vao );
 		glUseProgram( shaderProgram.Get() );
 
 		// Upload the MVP matrix to GPU
@@ -161,7 +161,7 @@ int main( int argc, char **argv )
 
 		glDrawElements(
 			GL_TRIANGLES,
-			testSurfaceMesh.indexBuffer.size(),
+			testSurfaceMesh->indexBuffer.size(),
 			GL_UNSIGNED_INT,
 			(void*)0
         );
@@ -174,6 +174,6 @@ int main( int argc, char **argv )
 
 	glfwDestroyWindow( window );
 	glfwTerminate();
-	exit( EXIT_SUCCESS );
+	return 0;
 }
 

@@ -31,9 +31,9 @@ void Surface::SetTextureCorners( const vec2 corners[4]  )
 
 // This method returns a subsurfaced surface as a mesh.
 // ( The surface is split in pieces of wanted amount )
-Mesh Surface::GenerateMesh( int xSplits, int ySplits )
+std::shared_ptr<Mesh> Surface::GenerateMesh( int xSplits, int ySplits )
 {
-	Mesh mesh;
+	auto mesh = std::make_shared<Mesh>();
 	VBOData tmp;
 
 	xSplits += 2;
@@ -48,7 +48,7 @@ Mesh Surface::GenerateMesh( int xSplits, int ySplits )
 
 			// TODO: Calculating texture coordinate goes here
 
-			mesh.vertexBuffer.push_back( tmp );
+			mesh->vertexBuffer.push_back( tmp );
 		}
 	}
 
@@ -63,13 +63,13 @@ Mesh Surface::GenerateMesh( int xSplits, int ySplits )
 		for( int x=0; x < xLod; ++x )
 		{
 			// First triangle
-			mesh.indexBuffer.push_back( index );
-			mesh.indexBuffer.push_back( index+1 );
-			mesh.indexBuffer.push_back( index+xLod+1 );
+			mesh->indexBuffer.push_back( index );
+			mesh->indexBuffer.push_back( index+1 );
+			mesh->indexBuffer.push_back( index+xLod+1 );
 			// Second triangle
-			mesh.indexBuffer.push_back( index+1 );
-			mesh.indexBuffer.push_back( index+2+xLod );
-			mesh.indexBuffer.push_back( index+1+xLod );
+			mesh->indexBuffer.push_back( index+1 );
+			mesh->indexBuffer.push_back( index+2+xLod );
+			mesh->indexBuffer.push_back( index+1+xLod );
 
 			++index;
 		}
