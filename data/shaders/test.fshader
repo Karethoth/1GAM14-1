@@ -1,4 +1,4 @@
-in vec3 normal;
+varying vec3 normal;
 
 uniform vec3 lightDirection;
 
