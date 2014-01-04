@@ -73,6 +73,7 @@ int main( int argc, char **argv )
 	// Construct list of attributes and their locations
 	std::map<std::string, GLuint> attributes;
 	attributes["vertexPosition"] = 0;
+	attributes["vertexNormal"]   = 1;
 
 	// Create the shader and pass the shaders and the attribute list to it.
 	ShaderProgram shaderProgram;
@@ -81,6 +82,7 @@ int main( int argc, char **argv )
 
 	// Get MVP uniform location
 	const GLint mvpUniform = shaderProgram.GetUniform( "MVP" );
+	const GLint lightDirectionUniform = shaderProgram.GetUniform( "lightDirection" );
 
 
 	Node rootNode( "RootNode" );
@@ -109,8 +111,10 @@ int main( int argc, char **argv )
 	rootNode.AddChild( testSurfaceMesh );
 
 	glEnableVertexAttribArray( shaderProgram.GetAttribute( "vertexPosition" ) );
+	glEnableVertexAttribArray( shaderProgram.GetAttribute( "vertexNormal" ) );
 	glBindBuffer( GL_ARRAY_BUFFER, testSurfaceMesh->vbo );
 
+	// Vertex position
 	glVertexAttribPointer(
 	   shaderProgram.GetAttribute( "vertexPosition" ),
 	   3,
@@ -118,6 +122,16 @@ int main( int argc, char **argv )
 	   GL_FALSE,
 	   sizeof( VBOData ),
 	   (void*)0
+	);
+
+	// Vertex normal
+	glVertexAttribPointer(
+	   shaderProgram.GetAttribute( "vertexNormal" ),
+	   3,
+	   GL_FLOAT,
+	   GL_FALSE,
+	   sizeof( VBOData ),
+	   (void*)3
 	);
 
 
@@ -156,8 +170,9 @@ int main( int argc, char **argv )
 		glBindVertexArray( testSurfaceMesh->vao );
 		glUseProgram( shaderProgram.Get() );
 
-		// Upload the MVP matrix to GPU
+		// Upload uniforms to GPU
 		glUniformMatrix4fv( mvpUniform, 1, GL_FALSE, &mvpMat[0][0] );
+		glUniform3f( lightDirectionUniform, 1.0, 1.0, 0.0 );
 
 		glDrawElements(
 			GL_TRIANGLES,
@@ -170,6 +185,7 @@ int main( int argc, char **argv )
 		glfwPollEvents();
 	}
 
+    glDisableVertexAttribArray( shaderProgram.GetAttribute( "vertexNormal" ) );
     glDisableVertexAttribArray( shaderProgram.GetAttribute( "vertexPosition" ) );
 
 	glfwDestroyWindow( window );
