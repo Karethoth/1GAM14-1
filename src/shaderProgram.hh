@@ -3,6 +3,7 @@
 #define _SHADERPROGRAM_HH_
 
 #include "shader.hh"
+#include <map>
 
 
 class ShaderProgram
@@ -17,10 +18,14 @@ class ShaderProgram
 
 	const GLuint Get() const;
 
+	const GLint GetUniform( const std::string &uniformName );
+
 
  private:
 	GLuint program;
 	GLint linked;
+
+	std::map<std::string, GLint> uniforms;
 };
 
 #endif

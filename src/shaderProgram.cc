@@ -81,3 +81,33 @@ const GLuint ShaderProgram::Get() const
 {
 	return program;
 }
+
+
+// Fetches the requested uniform location
+const GLint ShaderProgram::GetUniform( const std::string &uniformName )
+{
+	if( !program )
+	{
+		return 0;
+	}
+	std::map<std::string, GLint>::iterator it = uniforms.find( uniformName );
+
+	GLint uniform = -1;
+	if( it != uniforms.end() )
+	{
+	   uniform = it->second;
+	}
+	else
+	{
+		uniform = glGetUniformLocation( program, uniformName.c_str() );
+		uniforms[uniformName] = uniform;
+	}
+
+	if( uniform == -1 )
+	{
+		std::cerr << "Error: Tried to get location of shader uniform '"
+		          << uniformName << "', which doesn't exist.\n";
+	}
+
+	return uniform;
+}
