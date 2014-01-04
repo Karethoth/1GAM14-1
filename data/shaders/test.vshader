@@ -1,4 +1,4 @@
-in vec3 vertexPosition;
+attribute vec3 vertexPosition;
 uniform mat4 MVP;
 
 void main()
