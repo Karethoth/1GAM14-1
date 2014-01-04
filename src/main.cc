@@ -35,7 +35,7 @@ int main( int argc, char **argv )
 	glfwWindowHint( GLFW_SAMPLES, 4 );
 
 
-	window = glfwCreateWindow( 640, 480, "Simple example", NULL, NULL );
+	window = glfwCreateWindow( 640, 480, "1GAM14-1", NULL, NULL );
 	if( !window )
 	{
 		glfwTerminate();
