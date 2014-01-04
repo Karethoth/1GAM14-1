@@ -28,7 +28,7 @@ struct Mesh : public Node
 
 	bool GenerateGLBuffers();
 
-	GLuint vbo, ibo;
+	GLuint vbo, ibo, vao;
 	std::vector<VBOData> vertexBuffer;
 	std::vector<unsigned int> indexBuffer;
 };
