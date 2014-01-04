@@ -8,7 +8,7 @@ void main()
 
   vec3 norm = normalize( normal );
   vec3 lightDir = normalize( lightDirection );
-  float cosTheta = clamp( dot( norm, lightDir  ), 0, 0.9 );
+  float cosTheta = clamp( dot( norm, lightDir  ), 0.1, 0.9 );
 
   cosTheta = cosTheta + 0.1;
 

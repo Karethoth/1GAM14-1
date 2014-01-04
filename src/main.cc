@@ -102,8 +102,8 @@ int main( int argc, char **argv )
 	}
 
 	// Test mesh generation from a surface
-	Surface testSurface( 1, 5 );
-	auto testSurfaceMesh = testSurface.GenerateMesh( 1, 0 );
+	Surface testSurface( 10, 10 );
+	auto testSurfaceMesh = testSurface.GenerateMesh( 10, 10 );
 
 	testSurfaceMesh->SetName( "TestMesh" );
 	testSurfaceMesh->GenerateGLBuffers();
@@ -134,6 +134,8 @@ int main( int argc, char **argv )
 	   (void*)3
 	);
 
+	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+	glLineWidth( 5.0 );
 
 	/* Main loop */
 	while( !glfwWindowShouldClose( window ) )
