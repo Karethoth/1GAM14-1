@@ -1,4 +1,5 @@
 #include "main.hh"
+#include "../deb/glm/gtc/matrix_transform.hpp"
 
 
 static void GLFWErrorCallback( int error, const char* description )
@@ -70,6 +71,10 @@ int main( int argc, char **argv )
 	ShaderProgram shaderProgram;
 	shaderProgram.Load( vShader, fShader );
 
+	// Get MVP uniform location
+	const GLint mvpUniform = shaderProgram.GetUniform( "MVP" );
+
+	// Use dat program
 	glUseProgram( shaderProgram.Get() );
 
 
@@ -110,6 +115,7 @@ int main( int argc, char **argv )
 	   (void*)0            // array buffer offset
 	);*/
 
+
 	/* Main loop */
 	while( !glfwWindowShouldClose( window ) )
 	{
@@ -122,13 +128,31 @@ int main( int argc, char **argv )
 		glClear( GL_COLOR_BUFFER_BIT );
 		//glRotatef( (float) glfwGetTime() * 50.f, 0.f, 0.f, 1.f );
 
+		// Matrix stuff
+		glm::mat4 Projection = glm::perspective( 60.0f, 4.0f / 3.0f, 0.1f, 100.0f );
+
+		glm::mat4 View = glm::lookAt(
+			glm::vec3(0,0,-10),
+			glm::vec3(0,0,0),
+			glm::vec3(0,1,0)
+		);
+
+		// Rotate the world, because that's how stuff works
 		rootNode.SetRotation( glm::normalize( rot * rootNode.GetRotation() ) );
 		rootNode.UpdateWorldInfo();
 
+		// Calculate Model matrix and use that to calculate the final MVP matrix
+		glm::mat4 Model = glm::translate( glm::mat4( 1.0f ), testSurfaceMesh.GetWorldLocation() );
+		glm::mat4 MVP        = Projection * View * Model;
+
+		// Upload the MVP matrix to GPU
+		glUniformMatrix4fv( mvpUniform, 1, GL_FALSE, &MVP[0][0] );
+
+		// Draw the triangles, in old fashion for now
 		glBegin( GL_TRIANGLES );
 			for( auto& ind : testSurfaceMesh.indexBuffer )
 			{
-				glm::vec3 vec =testSurfaceMesh.GetWorldRotation() * testSurfaceMesh.vertexBuffer[ind].vertex + testSurfaceMesh.GetWorldLocation();
+				glm::vec3 vec =testSurfaceMesh.GetWorldRotation() * testSurfaceMesh.vertexBuffer[ind].vertex;
 				glVertex3f( vec.x, vec.y, vec.z );
 			}
 		glEnd();

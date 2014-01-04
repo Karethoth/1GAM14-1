@@ -1,6 +1,8 @@
-attribute vec4 vPosition;
+in vec3 vertexPosition;
+uniform mat4 MVP;
 
 void main()
 {
-	gl_Position = vPosition;
+    vec4 v = vec4( vertexPosition, 1 );
+    gl_Position = MVP * v;
 }
