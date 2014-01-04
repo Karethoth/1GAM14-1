@@ -77,3 +77,4 @@ Mesh Surface::GenerateMesh( int xSplits, int ySplits )
 
 	return mesh;
 }
+

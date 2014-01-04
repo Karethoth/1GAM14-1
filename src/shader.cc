@@ -7,6 +7,7 @@
 
 using std::string;
 
+
 Shader::Shader( GLenum type ) : type(type)
 {
 	compiled = 0;
@@ -22,7 +23,7 @@ Shader::~Shader()
 
 
 
-bool Shader::Load( const string &source )
+bool Shader::Load( const string& source )
 {
 	if( compiled || shader )
 	{
@@ -72,7 +73,7 @@ bool Shader::Load( const string &source )
 
 
 
-bool Shader::LoadFromFile( const string &filepath )
+bool Shader::LoadFromFile( const string& filepath )
 {
 	std::ifstream file( filepath );
 	string str;
@@ -99,3 +100,4 @@ const GLuint Shader::Get() const
 {
 	return shader;
 }
+

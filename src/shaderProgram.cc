@@ -21,8 +21,8 @@ ShaderProgram::~ShaderProgram()
 
 
 
-bool ShaderProgram::Load( const Shader &vertexShader,
-                          const Shader &fragmentShader,
+bool ShaderProgram::Load( const Shader& vertexShader,
+                          const Shader& fragmentShader,
                           std::map<std::string, GLuint> attributes )
 {
 	if( !program )
@@ -91,7 +91,7 @@ const GLuint ShaderProgram::Get() const
 
 
 // Fetches the requested uniform location
-const GLint ShaderProgram::GetUniform( const std::string &uniformName )
+const GLint ShaderProgram::GetUniform( const std::string& uniformName )
 {
 	if( !program )
 	{
@@ -121,7 +121,7 @@ const GLint ShaderProgram::GetUniform( const std::string &uniformName )
 
 
 // Fetches the requested attribute location
-const GLuint ShaderProgram::GetAttribute( const std::string &attributeName )
+const GLuint ShaderProgram::GetAttribute( const std::string& attributeName )
 {
 	if( !program )
 	{
@@ -139,3 +139,4 @@ const GLuint ShaderProgram::GetAttribute( const std::string &attributeName )
 
 	return 0;
 }
+

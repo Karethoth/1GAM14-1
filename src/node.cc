@@ -11,7 +11,7 @@ Node::Node()
 }
 
 
-Node::Node( const std::string &name ) : name( name )
+Node::Node( const std::string& name ) : name( name )
 {
 	parent = nullptr;
 
@@ -22,7 +22,7 @@ Node::Node( const std::string &name ) : name( name )
 }
 
 
-Node::Node( const Node &other )
+Node::Node( const Node& other )
 {
 	name = other.name;
 	location = other.location;
@@ -34,7 +34,7 @@ Node::Node( const Node &other )
 }
 
 
-Node::Node( Node &&other )
+Node::Node( Node&& other )
 {
 	Node();
 	Swap( *this, other );
@@ -55,7 +55,7 @@ Node::~Node()
 
 
 
-void Node::Swap( Node &first, Node &second )
+void Node::Swap( Node& first, Node& second )
 {
 	std::swap( first.name, second.name );
 	std::swap( first.location, second.location );
@@ -68,13 +68,13 @@ void Node::Swap( Node &first, Node &second )
 
 
 
-void Node::SetLocation( const vec3 &loc )
+void Node::SetLocation( vec3 loc )
 {
 	location = loc;
 }
 
 
-void Node::SetRotation( const quat &rot )
+void Node::SetRotation( quat rot )
 {
 	rotation = rot;
 }
@@ -145,7 +145,7 @@ void Node::UpdateWorldInfo()
 
 
 
-void Node::AddChild( const std::shared_ptr<Node> &child )
+void Node::AddChild( const std::shared_ptr<Node>& child )
 {
 	children.push_back( child );
 	child->SetParent( this );
@@ -153,7 +153,7 @@ void Node::AddChild( const std::shared_ptr<Node> &child )
 
 
 
-void Node::EraseChild( const std::shared_ptr<Node> &child )
+void Node::EraseChild( const std::shared_ptr<Node>& child )
 {
 	std::vector<std::shared_ptr<Node>>::iterator it;
 
@@ -170,7 +170,8 @@ void Node::EraseChild( const std::shared_ptr<Node> &child )
 
 
 
-void Node::SetParent( Node *parent )
+void Node::SetParent( Node* parent )
 {
 	this->parent = parent;
 }
+

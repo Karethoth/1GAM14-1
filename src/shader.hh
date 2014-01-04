@@ -20,8 +20,8 @@ class Shader
 	Shader( GLenum type );
 	~Shader();
 
-	bool Load( const std::string &source );
-	bool LoadFromFile( const std::string &path );
+	bool Load( const std::string& source );
+	bool LoadFromFile( const std::string& path );
 	const GLuint Get() const;
 
 
@@ -32,3 +32,4 @@ class Shader
 };
 
 #endif
+

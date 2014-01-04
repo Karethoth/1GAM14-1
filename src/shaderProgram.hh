@@ -13,14 +13,14 @@ class ShaderProgram
 	~ShaderProgram();
 
 
-	bool Load( const Shader &vertexShader,
-	           const Shader &fragmentShader,
+	bool Load( const Shader& vertexShader,
+	           const Shader& fragmentShader,
 			   std::map<std::string, GLuint> attributes );
 
 	const GLuint Get() const;
 
-	const GLint  GetUniform( const std::string &uniformName );
-	const GLuint GetAttribute( const std::string &attributeName );
+	const GLint  GetUniform( const std::string& uniformName );
+	const GLuint GetAttribute( const std::string& attributeName );
 
 
  private:
@@ -32,3 +32,4 @@ class ShaderProgram
 };
 
 #endif
+
