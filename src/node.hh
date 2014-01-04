@@ -39,8 +39,6 @@ class Node
 	void AddChild( const std::shared_ptr<Node> &child );
 	void EraseChild( const std::shared_ptr<Node> &child );
 
-	void Delete();
-
 
  protected:
 	void SetParent( Node *parent );

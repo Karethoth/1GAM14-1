@@ -174,10 +174,3 @@ void Node::SetParent( Node *parent )
 {
 	this->parent = parent;
 }
-
-
-
-void Node::Delete()
-{
-}
-
