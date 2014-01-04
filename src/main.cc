@@ -1,5 +1,6 @@
 #include "main.hh"
 #include "../deb/glm/gtc/matrix_transform.hpp"
+#include "../deb/glm/gtx/quaternion.hpp"
 
 
 static void GLFWErrorCallback( int error, const char* description )
@@ -77,8 +78,6 @@ int main( int argc, char **argv )
 	ShaderProgram shaderProgram;
 	shaderProgram.Load( vShader, fShader, attributes );
 
-	// Use dat program
-	glUseProgram( shaderProgram.Get() );
 
 	// Get MVP uniform location
 	const GLint mvpUniform = shaderProgram.GetUniform( "MVP" );
@@ -109,17 +108,17 @@ int main( int argc, char **argv )
 
 	rootNode.AddChild( std::shared_ptr<Node>( &testSurfaceMesh ) );
 
-	/*
-	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray( shaderProgram.GetAttribute( "vertexPosition" ) );
 	glBindBuffer( GL_ARRAY_BUFFER, testSurfaceMesh.vbo );
+
 	glVertexAttribPointer(
-	   0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-	   3,                  // size
-	   GL_FLOAT,           // type
-	   GL_FALSE,           // normalized?
-	   0,                  // stride
-	   (void*)0            // array buffer offset
-	);*/
+	   shaderProgram.GetAttribute( "vertexPosition" ),
+	   3,
+	   GL_FLOAT,
+	   GL_FALSE,
+	   sizeof( VBOData ),
+	   (void*)0
+	);
 
 
 	/* Main loop */
@@ -135,9 +134,9 @@ int main( int argc, char **argv )
 		//glRotatef( (float) glfwGetTime() * 50.f, 0.f, 0.f, 1.f );
 
 		// Matrix stuff
-		glm::mat4 Projection = glm::perspective( 60.0f, 4.0f / 3.0f, 0.1f, 100.0f );
+		glm::mat4 projectionMat = glm::perspective( 60.0f, 4.0f / 3.0f, 0.1f, 100.0f );
 
-		glm::mat4 View = glm::lookAt(
+		glm::mat4 viewMat = glm::lookAt(
 			glm::vec3(0,0,-10),
 			glm::vec3(0,0,0),
 			glm::vec3(0,1,0)
@@ -148,24 +147,30 @@ int main( int argc, char **argv )
 		rootNode.UpdateWorldInfo();
 
 		// Calculate Model matrix and use that to calculate the final MVP matrix
-		glm::mat4 Model = glm::translate( glm::mat4( 1.0f ), testSurfaceMesh.GetWorldLocation() );
-		glm::mat4 MVP        = Projection * View * Model;
+		glm::mat4 modelMat = glm::mat4( 1.0f );
+		modelMat = modelMat * glm::toMat4(  testSurfaceMesh.GetWorldRotation() );
+		modelMat = glm::translate(  modelMat, testSurfaceMesh.GetWorldLocation() );
+		glm::mat4 mvpMat   = projectionMat * viewMat * modelMat;
+
+		// Use the vertex array object of the mesh
+		glBindVertexArray( testSurfaceMesh.vao );
+		glUseProgram( shaderProgram.Get() );
 
 		// Upload the MVP matrix to GPU
-		glUniformMatrix4fv( mvpUniform, 1, GL_FALSE, &MVP[0][0] );
+		glUniformMatrix4fv( mvpUniform, 1, GL_FALSE, &mvpMat[0][0] );
 
-		// Draw the triangles, in old fashion for now
-		glBegin( GL_TRIANGLES );
-			for( auto& ind : testSurfaceMesh.indexBuffer )
-			{
-				glm::vec3 vec =testSurfaceMesh.GetWorldRotation() * testSurfaceMesh.vertexBuffer[ind].vertex;
-				glVertex3f( vec.x, vec.y, vec.z );
-			}
-		glEnd();
+		glDrawElements(
+			GL_TRIANGLES,
+			testSurfaceMesh.indexBuffer.size(),
+			GL_UNSIGNED_INT,
+			(void*)0
+        );
 
 		glfwSwapBuffers( window );
 		glfwPollEvents();
 	}
+
+    glDisableVertexAttribArray( shaderProgram.GetAttribute( "vertexPosition" ) );
 
 	glfwDestroyWindow( window );
 	glfwTerminate();
