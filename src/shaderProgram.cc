@@ -41,7 +41,7 @@ bool ShaderProgram::Load( const Shader &vertexShader,
 	glAttachShader( program, fragmentShader.Get() );
 
 	/* Binding could be done as a "callback" to a passed function. */
-	glBindAttribLocation( program, 0, "vPosition" );
+	glBindAttribLocation( program, 0, "vertexPosition" );
 
 	glLinkProgram( program );
 	glGetProgramiv( program, GL_LINK_STATUS, &linked );
