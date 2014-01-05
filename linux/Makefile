@@ -19,6 +19,7 @@ OBJS=\
       $(OBJDIR)/node.o \
       $(OBJDIR)/camera.o \
       $(OBJDIR)/mesh.o \
+      $(OBJDIR)/meshManager.o \
       $(OBJDIR)/entity.o \
       $(OBJDIR)/surface.o \
       $(OBJDIR)/main.o
