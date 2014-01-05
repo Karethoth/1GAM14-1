@@ -12,8 +12,6 @@ Node::Node( std::string name ) : name( name )
 	SetScale( vec3( 1.f ) );
 	SetLocation( vec3( 0.f ) );
 	SetRotation( quat( 0, 0, 0, 0 ) );
-
-	//UpdateWorldInfo();
 }
 
 
@@ -72,12 +70,14 @@ void Node::SetScale( vec3 newScale )
 void Node::SetLocation( vec3 newLocation )
 {
 	location = newLocation;
+	UpdateWorldInfo();
 }
 
 
 void Node::SetRotation( quat newRotation )
 {
 	rotation = newRotation;
+	UpdateWorldInfo();
 }
 
 

@@ -7,7 +7,11 @@
 	#pragma comment(lib, "GLFW3.lib")
 	#pragma comment(lib, "opengl32.lib")
 	#pragma comment(lib, "glu32.lib")
-	#pragma comment(lib, "glew32s.lib")
+	#ifdef _DEBUG
+		#pragma comment(lib, "glew32sd.lib")
+	#else
+		#pragma comment(lib, "glew32s.lib")
+	#endif
 
 	#include <Windows.h>
 #endif
@@ -16,7 +20,7 @@
 #include <GL/glew.h>
 
 #include "shaderProgram.hh"
-#include "node.hh"
+#include "camera.hh"
 #include "mesh.hh"
 #include "surface.hh"
 

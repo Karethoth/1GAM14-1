@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\camera.cc" />
     <ClCompile Include="..\..\src\main.cc" />
     <ClCompile Include="..\..\src\mesh.cc" />
     <ClCompile Include="..\..\src\node.cc" />
@@ -21,6 +22,7 @@
   <ItemGroup>
     <None Include="..\..\data\shaders\test.fshader" />
     <None Include="..\..\data\shaders\test.vshader" />
+    <None Include="..\..\src\camera.hh" />
     <None Include="..\..\src\main.hh" />
     <None Include="..\..\src\shader.hh" />
     <None Include="..\..\src\shaderProgram.hh" />
@@ -72,6 +74,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -86,6 +89,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
