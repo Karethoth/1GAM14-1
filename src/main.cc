@@ -2,6 +2,8 @@
 #include "../deb/glm/gtc/matrix_transform.hpp"
 #include "../deb/glm/gtx/quaternion.hpp"
 
+
+// Global to hold window information.
 struct WindowInfo
 {
 	int   width;
@@ -21,7 +23,12 @@ struct WindowInfo
 } windowInfo;
 
 
+// Global managers, at least for now
+MeshManager meshManager;
 
+
+
+// Callbacks for GLFW events
 static void GLFWErrorCallback( int error, const char* description )
 {
 	std::cerr << "Error: " << description << "\n";
@@ -112,6 +119,7 @@ int main( int argc, char **argv )
 	attributes["vertexPosition"] = 0;
 	attributes["vertexNormal"]   = 1;
 
+
 	// Create the shader and pass the shaders and the attribute list to it.
 	ShaderProgram shaderProgram;
 	shaderProgram.Load( vShader, fShader, attributes );
@@ -128,6 +136,7 @@ int main( int argc, char **argv )
 	// Create the root node
 	Node rootNode( "RootNode" );
 
+
 	// Create the camera
 	auto camera = std::make_shared<Camera>();
 	camera->SetLocation( glm::vec3( 0.f, 8.f, -10.f ) );
@@ -137,6 +146,7 @@ int main( int argc, char **argv )
 	camera->SetRatio( windowInfo.ratio );
 	camera->SetFOV( 60.f );
 	rootNode.AddChild( camera );
+
 
 	// Just something I'm temporarely using to have the terrain rotating.
 	glm::quat rot = glm::quat( glm::vec3( 0.f, 0.05*glfwGetTime(), 0.f) );
@@ -148,19 +158,24 @@ int main( int argc, char **argv )
 	worldCenter->SetLocation( glm::vec3( 0.0, -70.0, 0.0 ) );
 	rootNode.AddChild( worldCenter );
 
+
 	// Test mesh generation from a surface
 	Surface testSurface( 40, 40 );
 	auto testSurfaceMesh = testSurface.GenerateMesh( 10, 10 );
 
+	// Give name to the mesh and generate
+	// the OpenGL arrays and buffers
 	testSurfaceMesh->SetName( "TestMesh" );
 	testSurfaceMesh->GenerateGLBuffers();
-	rootNode.AddChild( testSurfaceMesh );
 
-	testSurfaceMesh->SetLocation( glm::vec3( -20.0, 0.0, -20.0 ) );
+	// Give the mesh to the mesh manager
+	meshManager.Add( "TestMesh", testSurfaceMesh );
+
+	meshManager.Get( "TestMesh" )->SetLocation( glm::vec3( -20.0, 0.0, -20.0 ) );
 
 	glEnableVertexAttribArray( shaderProgram.GetAttribute( "vertexPosition" ) );
 	glEnableVertexAttribArray( shaderProgram.GetAttribute( "vertexNormal" ) );
-	glBindBuffer( GL_ARRAY_BUFFER, testSurfaceMesh->vbo );
+	glBindBuffer( GL_ARRAY_BUFFER, meshManager.Get( "TestMesh" )->vbo );
 
 	// Vertex position
 	glVertexAttribPointer(
@@ -201,17 +216,25 @@ int main( int argc, char **argv )
 		auto viewMat = camera->GetViewMatrix();
 
 
-		testSurfaceMesh->SetRotation( glm::normalize( rot * testSurfaceMesh->GetRotation() ) );
+		// Get the mesh from manager. Testing the manager....
+		auto mesh = meshManager.Get( "TestMesh" );
+		mesh->SetRotation( glm::normalize( rot * mesh->GetRotation() ) );
+
+
+		// Update the node tree
 		rootNode.UpdateWorldInfo();
+
 
 		// Calculate Model matrix and use that to calculate the final MVP matrix
 		glm::mat4 modelMat = glm::mat4( 1.0f );
-		modelMat = modelMat * glm::toMat4(  testSurfaceMesh->GetWorldRotation() );
-		modelMat = glm::translate(  modelMat, testSurfaceMesh->GetWorldLocation() );
+		modelMat = modelMat * glm::toMat4(  mesh->GetWorldRotation() );
+		modelMat = glm::translate(  modelMat, mesh->GetWorldLocation() );
+
 
 		// Use the vertex array object of the mesh
-		glBindVertexArray( testSurfaceMesh->vao );
+		glBindVertexArray( mesh->vao );
 		glUseProgram( shaderProgram.Get() );
+
 
 		// Upload uniforms to GPU
 		glUniformMatrix4fv( modelUniform, 1, GL_FALSE, &modelMat[0][0] );
@@ -220,12 +243,15 @@ int main( int argc, char **argv )
 		glUniform3fv( worldCenterUniform, 1, &worldCenter->GetLocation()[0] );
 		glUniform3fv( lightDirectionUniform, 1, &glm::normalize( glm::vec3( 0.6, 1.0, 1.0 ) )[0] );
 
+
+		// Draw the elements
 		glDrawElements(
 			GL_TRIANGLES,
-			testSurfaceMesh->indexBuffer.size(),
+			mesh->indexBuffer.size(),
 			GL_UNSIGNED_INT,
 			(void*)0
         );
+
 
 		glfwSwapBuffers( window );
 		glfwPollEvents();

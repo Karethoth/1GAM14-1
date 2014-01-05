@@ -19,13 +19,17 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 
+
 #include "shaderProgram.hh"
 #include "camera.hh"
 #include "mesh.hh"
 #include "surface.hh"
+#include "meshManager.hh"
+
 
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <memory>
+
 
 #endif
