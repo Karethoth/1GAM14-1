@@ -80,35 +80,35 @@ int main( int argc, char **argv )
 	shaderProgram.Load( vShader, fShader, attributes );
 
 
-	// Get MVP uniform location
-	const GLint mvpUniform = shaderProgram.GetUniform( "MVP" );
+	// Get uniform locations
+	const GLint modelUniform          = shaderProgram.GetUniform( "M" );
+	const GLint viewUniform           = shaderProgram.GetUniform( "V" );
+	const GLint projUniform           = shaderProgram.GetUniform( "P" );
+	const GLint worldCenterUniform    = shaderProgram.GetUniform( "worldCenter" );
 	const GLint lightDirectionUniform = shaderProgram.GetUniform( "lightDirection" );
 
 
 	Node rootNode( "RootNode" );
-	rootNode.SetLocation( glm::vec3( 0, 0.5, 0.0 ) );
+	rootNode.SetLocation( glm::vec3( 0, 0.0, 0.0 ) );
 
-	glm::quat rot = glm::quat ( glm::vec3( 0.01, 0.02, 0.02) );
+	glm::quat rot = glm::quat ( glm::vec3( 0.f, 0.05*glfwGetTime(), 0.f) );
 
-	// These are for testing the Node system
-	{
-		auto testNode = std::make_shared<Node>( "TestNode" );
-		rootNode.AddChild( testNode );
 
-		auto secNode = std::make_shared<Node>( "SecNode" );
-		testNode->AddChild( secNode );
-
-		rootNode.EraseChild( testNode );
-	}
+	// Generate Node that acts as the "center" of the world.
+	// (vertices that are affected by it, rotate around it)
+	auto worldCenter = std::make_shared<Node>( "WorldCenter" );
+	worldCenter->SetLocation( glm::vec3( 0.0, -50.0, 0.0 ) );
+	rootNode.AddChild( worldCenter );
 
 	// Test mesh generation from a surface
-	Surface testSurface( 10, 10 );
-	auto testSurfaceMesh = testSurface.GenerateMesh( 10, 10 );
+	Surface testSurface( 20, 40 );
+	auto testSurfaceMesh = testSurface.GenerateMesh( 5, 5 );
 
 	testSurfaceMesh->SetName( "TestMesh" );
 	testSurfaceMesh->GenerateGLBuffers();
-
 	rootNode.AddChild( testSurfaceMesh );
+
+	testSurfaceMesh->SetLocation( glm::vec3( -10.0, 0.0, -20.0 ) );
 
 	glEnableVertexAttribArray( shaderProgram.GetAttribute( "vertexPosition" ) );
 	glEnableVertexAttribArray( shaderProgram.GetAttribute( "vertexNormal" ) );
@@ -137,6 +137,11 @@ int main( int argc, char **argv )
 	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 	glLineWidth( 5.0 );
 
+	//glEnable(GL_DEPTH_TEST);
+	//glDepthFunc(GL_LESS);
+	//glEnable(GL_CULL_FACE);
+
+
 	/* Main loop */
 	while( !glfwWindowShouldClose( window ) )
 	{
@@ -147,33 +152,34 @@ int main( int argc, char **argv )
 		ratio = width / (float) height;
 
 		glClear( GL_COLOR_BUFFER_BIT );
-		//glRotatef( (float) glfwGetTime() * 50.f, 0.f, 0.f, 1.f );
 
 		// Matrix stuff
 		glm::mat4 projectionMat = glm::perspective( 60.0f, 4.0f / 3.0f, 0.1f, 100.0f );
 
 		glm::mat4 viewMat = glm::lookAt(
-			glm::vec3(0,0,-10),
-			glm::vec3(0,0,0),
-			glm::vec3(0,1,0)
+			glm::vec3( 0, 5,-15),
+			glm::vec3( 0, -4, 0 ),
+			glm::vec3( 0, 1, 0)
 		);
 
-		// Rotate the world, because that's how stuff works
-		rootNode.SetRotation( glm::normalize( rot * rootNode.GetRotation() ) );
+
+		testSurfaceMesh->SetRotation( glm::normalize( rot * testSurfaceMesh->GetRotation() ) );
 		rootNode.UpdateWorldInfo();
 
 		// Calculate Model matrix and use that to calculate the final MVP matrix
 		glm::mat4 modelMat = glm::mat4( 1.0f );
 		modelMat = modelMat * glm::toMat4(  testSurfaceMesh->GetWorldRotation() );
 		modelMat = glm::translate(  modelMat, testSurfaceMesh->GetWorldLocation() );
-		glm::mat4 mvpMat   = projectionMat * viewMat * modelMat;
 
 		// Use the vertex array object of the mesh
 		glBindVertexArray( testSurfaceMesh->vao );
 		glUseProgram( shaderProgram.Get() );
 
 		// Upload uniforms to GPU
-		glUniformMatrix4fv( mvpUniform, 1, GL_FALSE, &mvpMat[0][0] );
+		glUniformMatrix4fv( modelUniform, 1, GL_FALSE, &modelMat[0][0] );
+		glUniformMatrix4fv( viewUniform,  1, GL_FALSE, &viewMat[0][0] );
+		glUniformMatrix4fv( projUniform,  1, GL_FALSE, &projectionMat[0][0] );
+		glUniform3fv( worldCenterUniform, 1, &worldCenter->GetLocation()[0] );
 		glUniform3f( lightDirectionUniform, 1.0, 1.0, 0.0 );
 
 		glDrawElements(
