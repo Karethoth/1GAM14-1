@@ -35,7 +35,6 @@ static void GLFWErrorCallback( int error, const char* description )
 }
 
 
-
 static void GLFWKeyCallback( GLFWwindow* window,
                              int key, int scancode,
                              int action, int mods )
@@ -43,7 +42,6 @@ static void GLFWKeyCallback( GLFWwindow* window,
 	if( key == GLFW_KEY_ESCAPE && action == GLFW_PRESS )
 		glfwSetWindowShouldClose( window, GL_TRUE );
 }
-
 
 
 static void GLFWFrameBufferSizeCallback( GLFWwindow* window, int width, int height )
@@ -160,22 +158,29 @@ int main( int argc, char **argv )
 
 
 	// Test mesh generation from a surface
-	Surface testSurface( 40, 40 );
-	auto testSurfaceMesh = testSurface.GenerateMesh( 10, 10 );
+	Surface groundSurface( 40, 40 );
+	auto groundSurfaceMesh = groundSurface.GenerateMesh( 10, 10 );
 
 	// Give name to the mesh and generate
 	// the OpenGL arrays and buffers
-	testSurfaceMesh->SetName( "TestMesh" );
-	testSurfaceMesh->GenerateGLBuffers();
+	groundSurfaceMesh->name = "GroundSurfaceMesh";
+	groundSurfaceMesh->GenerateGLBuffers();
 
 	// Give the mesh to the mesh manager
-	meshManager.Add( "TestMesh", testSurfaceMesh );
+	meshManager.Add( "GroundSurfaceMesh", groundSurfaceMesh );
 
-	meshManager.Get( "TestMesh" )->SetLocation( glm::vec3( -20.0, 0.0, -20.0 ) );
+	// Generate entity and set it to use the ground surface mesh
+	auto ground = std::make_shared<Entity>( "GroundSurfaceEntity" );
+	ground->SetMeshName( "GroundSurfaceMesh" );
+	ground->SetLocation( glm::vec3( -20.0, 0.0, -20.0 ) );
+
+	// Give the entity to the root node
+	rootNode.AddChild( ground );
+
 
 	glEnableVertexAttribArray( shaderProgram.GetAttribute( "vertexPosition" ) );
 	glEnableVertexAttribArray( shaderProgram.GetAttribute( "vertexNormal" ) );
-	glBindBuffer( GL_ARRAY_BUFFER, meshManager.Get( "TestMesh" )->vbo );
+	glBindBuffer( GL_ARRAY_BUFFER, meshManager.Get( "GroundSurfaceMesh" )->vbo );
 
 	// Vertex position
 	glVertexAttribPointer(
@@ -217,8 +222,8 @@ int main( int argc, char **argv )
 
 
 		// Get the mesh from manager. Testing the manager....
-		auto mesh = meshManager.Get( "TestMesh" );
-		mesh->SetRotation( glm::normalize( rot * mesh->GetRotation() ) );
+		auto mesh = meshManager.Get( "GroundSurfaceMesh" );
+		ground->SetRotation( glm::normalize( rot * ground->GetRotation() ) );
 
 
 		// Update the node tree
@@ -227,8 +232,8 @@ int main( int argc, char **argv )
 
 		// Calculate Model matrix and use that to calculate the final MVP matrix
 		glm::mat4 modelMat = glm::mat4( 1.0f );
-		modelMat = modelMat * glm::toMat4(  mesh->GetWorldRotation() );
-		modelMat = glm::translate(  modelMat, mesh->GetWorldLocation() );
+		modelMat = modelMat * glm::toMat4(  ground->GetWorldRotation() );
+		modelMat = glm::translate(  modelMat, ground->GetWorldLocation() );
 
 
 		// Use the vertex array object of the mesh
@@ -244,13 +249,8 @@ int main( int argc, char **argv )
 		glUniform3fv( lightDirectionUniform, 1, &glm::normalize( glm::vec3( 0.6, 1.0, 1.0 ) )[0] );
 
 
-		// Draw the elements
-		glDrawElements(
-			GL_TRIANGLES,
-			mesh->indexBuffer.size(),
-			GL_UNSIGNED_INT,
-			(void*)0
-        );
+		// Render the scene
+		rootNode.Render();
 
 
 		glfwSwapBuffers( window );

@@ -2,8 +2,9 @@
 #include <iostream>
 
 
-Mesh::Mesh( std::string meshName ) : Node( meshName )
+Mesh::Mesh( std::string meshName )
 {
+	name = meshName;
 	glGenVertexArrays( 1, &vao );
 	glBindVertexArray( vao );
 	glGenBuffers( 1, &vbo );

@@ -24,6 +24,8 @@
 #include "camera.hh"
 #include "mesh.hh"
 #include "surface.hh"
+#include "entity.hh"
+
 #include "meshManager.hh"
 
 

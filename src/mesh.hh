@@ -21,13 +21,14 @@ struct VBOData
 
 
 
-struct Mesh : public Node
+struct Mesh
 {
 	Mesh( std::string name="UnnamedMesh" );
 	virtual ~Mesh();
 
 	bool GenerateGLBuffers();
 
+	std::string name;
 	GLuint vbo, ibo, vao;
 	std::vector<VBOData> vertexBuffer;
 	std::vector<unsigned int> indexBuffer;

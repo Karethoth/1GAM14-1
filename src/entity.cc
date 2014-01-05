@@ -1,6 +1,11 @@
 #include "entity.hh"
 #include <memory>
 
+#include "meshManager.hh"
+
+extern MeshManager meshManager;
+
+
 Entity::Entity( std::string entityName ) : Node( entityName )
 {
 	meshName = "defaultMesh";
@@ -29,7 +34,18 @@ std::string Entity::GetMeshName()
 void Entity::Render()
 {
 	// TODO: Rendering goes here.
+	auto mesh = meshManager.Get( meshName );
 
+	if( mesh )
+	{
+		// Draw the elements
+		glDrawElements(
+			GL_TRIANGLES,
+			mesh->indexBuffer.size(),
+			GL_UNSIGNED_INT,
+			(void*)0
+		);
+	}
 
 	for( auto& child : children )
 	{
