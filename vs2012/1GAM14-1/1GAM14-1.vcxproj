@@ -15,6 +15,7 @@
     <ClCompile Include="..\..\src\entity.cc" />
     <ClCompile Include="..\..\src\main.cc" />
     <ClCompile Include="..\..\src\mesh.cc" />
+    <ClCompile Include="..\..\src\meshManager.cc" />
     <ClCompile Include="..\..\src\node.cc" />
     <ClCompile Include="..\..\src\shader.cc" />
     <ClCompile Include="..\..\src\shaderProgram.cc" />
@@ -26,8 +27,10 @@
     <None Include="..\..\src\camera.hh" />
     <None Include="..\..\src\entity.hh" />
     <None Include="..\..\src\main.hh" />
+    <None Include="..\..\src\meshManager.hh" />
     <None Include="..\..\src\shader.hh" />
     <None Include="..\..\src\shaderProgram.hh" />
+    <None Include="..\..\src\templateManager.hh" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\mesh.hh" />

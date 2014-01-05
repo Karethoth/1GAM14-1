@@ -39,6 +39,9 @@
     <ClCompile Include="..\..\src\entity.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\meshManager.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\data\shaders\test.vshader">
@@ -60,6 +63,12 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="..\..\src\entity.hh">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\..\src\templateManager.hh">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\..\src\meshManager.hh">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>
