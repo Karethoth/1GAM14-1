@@ -102,7 +102,7 @@ int main( int argc, char **argv )
 
 	// Test mesh generation from a surface
 	Surface testSurface( 20, 40 );
-	auto testSurfaceMesh = testSurface.GenerateMesh( 5, 5 );
+	auto testSurfaceMesh = testSurface.GenerateMesh( 5, 10 );
 
 	testSurfaceMesh->SetName( "TestMesh" );
 	testSurfaceMesh->GenerateGLBuffers();
@@ -129,17 +129,17 @@ int main( int argc, char **argv )
 	   shaderProgram.GetAttribute( "vertexNormal" ),
 	   3,
 	   GL_FLOAT,
-	   GL_FALSE,
+	   GL_TRUE,
 	   sizeof( VBOData ),
-	   (void*)3
+	   (void*)sizeof(glm::vec3)
 	);
 
 	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-	glLineWidth( 5.0 );
+	glLineWidth( 2.0 );
 
 	//glEnable(GL_DEPTH_TEST);
 	//glDepthFunc(GL_LESS);
-	//glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
 
 
 	/* Main loop */
@@ -180,7 +180,7 @@ int main( int argc, char **argv )
 		glUniformMatrix4fv( viewUniform,  1, GL_FALSE, &viewMat[0][0] );
 		glUniformMatrix4fv( projUniform,  1, GL_FALSE, &projectionMat[0][0] );
 		glUniform3fv( worldCenterUniform, 1, &worldCenter->GetLocation()[0] );
-		glUniform3f( lightDirectionUniform, 1.0, 1.0, 0.0 );
+		glUniform3fv( lightDirectionUniform, 1, &glm::normalize( glm::vec3( 0.6, 1.0, -1.0 ) )[0] );
 
 		glDrawElements(
 			GL_TRIANGLES,

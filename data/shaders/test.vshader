@@ -41,6 +41,6 @@ void main()
 	v = worldSurfaceRotation * v;
 
 	gl_Position = P * V * v;
-	normal = (worldSurfaceRotation*vec4(vertexNormal,1) ).xyz;
+	normal = (M*vec4(vertexNormal,0) ).xyz;
 }
 
