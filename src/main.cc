@@ -130,9 +130,9 @@ int main( int argc, char **argv )
 
 	// Create the camera
 	auto camera = std::make_shared<Camera>();
-	camera->SetLocation( glm::vec3( 0.f, 5.f, -15.f ) );
-	camera->SetTarget( glm::vec3( 0.0, -0.0, 0.0 ) );
-	glm::vec3 cameraRot( 0.0, 0.0, 90.0*(float)3.145/180.0 );
+	camera->SetLocation( glm::vec3( 0.f, 8.f, -10.f ) );
+	camera->SetTarget( glm::vec3( 0.0, 1.0, 0.0 ) );
+	glm::vec3 cameraRot( 0.0, 0.0, 0.0 );
 	camera->SetRotation( glm::normalize( glm::quat( cameraRot ) ) );
 	camera->SetRatio( windowInfo.ratio );
 	camera->SetFOV( 60.f );
