@@ -63,12 +63,12 @@ std::shared_ptr<Mesh> Surface::GenerateMesh( int xSplits, int ySplits )
 		for( int x=0; x < xLod; ++x )
 		{
 			// First triangle
-			mesh->indexBuffer.push_back( index );
 			mesh->indexBuffer.push_back( index+1 );
+			mesh->indexBuffer.push_back( index );
 			mesh->indexBuffer.push_back( index+xLod+1 );
 			// Second triangle
-			mesh->indexBuffer.push_back( index+1 );
 			mesh->indexBuffer.push_back( index+2+xLod );
+			mesh->indexBuffer.push_back( index+1 );
 			mesh->indexBuffer.push_back( index+1+xLod );
 
 			++index;
