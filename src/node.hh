@@ -40,9 +40,12 @@ class Node
 	void AddChild( const std::shared_ptr<Node>& child );
 	void EraseChild( const std::shared_ptr<Node>& child );
 
+	std::vector<std::shared_ptr<Node>> GetChildren();
+
 
  protected:
 	void SetParent( Node* parent );
+	std::vector<std::shared_ptr<Node>> children;
 
 
  private:
@@ -55,7 +58,6 @@ class Node
 	glm::quat worldRotation;
 
 	Node* parent;
-	std::vector<std::shared_ptr<Node>> children;
 };
 
 #endif
