@@ -185,15 +185,15 @@ int main( int argc, char **argv )
 	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 	glLineWidth( 2.0 );
 
-	//glEnable(GL_DEPTH_TEST);
-	//glDepthFunc(GL_LESS);
-	glEnable(GL_CULL_FACE);
+	glEnable( GL_CULL_FACE );
+	glEnable( GL_DEPTH_TEST );
+	glDepthFunc( GL_LESS );
 
 
 	/* Main loop */
 	while( !glfwWindowShouldClose( window ) )
 	{
-		glClear( GL_COLOR_BUFFER_BIT );
+		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 		// Camera handling and matrix stuff
 		camera->SetRatio( windowInfo.ratio );

@@ -128,6 +128,18 @@ quat Node::GetWorldRotation() const
 
 
 
+// Used to recursively go trough subentities and render them.
+void Node::Render()
+{
+	// Render children
+	for( auto& child : children )
+	{
+		child->Render();
+	}
+}
+
+
+
 // Used to update worldLocation and worldPosition
 void Node::UpdateWorldInfo()
 {

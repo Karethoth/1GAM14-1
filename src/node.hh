@@ -34,6 +34,7 @@ class Node
 	glm::quat GetRotation() const;
 	glm::quat GetWorldRotation() const;
 
+	virtual void Render();
 	void UpdateWorldInfo();
 
 	void AddChild( const std::shared_ptr<Node>& child );
