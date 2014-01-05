@@ -125,9 +125,21 @@ int main( int argc, char **argv )
 	const GLint lightDirectionUniform = shaderProgram.GetUniform( "lightDirection" );
 
 
+	// Create the root node
 	Node rootNode( "RootNode" );
 
-	glm::quat rot = glm::quat ( glm::vec3( 0.f, 0.05*glfwGetTime(), 0.f) );
+	// Create the camera
+	auto camera = std::make_shared<Camera>();
+	camera->SetLocation( glm::vec3( 0.f, 5.f, -15.f ) );
+	camera->SetTarget( glm::vec3( 0.0, -0.0, 0.0 ) );
+	glm::vec3 cameraRot( 0.0, 0.0, 90.0*(float)3.145/180.0 );
+	camera->SetRotation( glm::normalize( glm::quat( cameraRot ) ) );
+	camera->SetRatio( windowInfo.ratio );
+	camera->SetFOV( 60.f );
+	rootNode.AddChild( camera );
+
+	// Just something I'm temporarely using to have the terrain rotating.
+	glm::quat rot = glm::quat( glm::vec3( 0.f, 0.05*glfwGetTime(), 0.f) );
 
 
 	// Generate Node that acts as the "center" of the world.
@@ -183,14 +195,10 @@ int main( int argc, char **argv )
 	{
 		glClear( GL_COLOR_BUFFER_BIT );
 
-		// Matrix stuff
-		glm::mat4 projectionMat = glm::perspective( 60.0f, windowInfo.ratio, 0.1f, 100.0f );
-
-		glm::mat4 viewMat = glm::lookAt(
-			glm::vec3( 0, 5,-15),
-			glm::vec3( 0, -4, 0 ),
-			glm::vec3( 0, 1, 0)
-		);
+		// Camera handling and matrix stuff
+		camera->SetRatio( windowInfo.ratio );
+		auto projectionMat = camera->GetProjectionMatrix();
+		auto viewMat = camera->GetViewMatrix();
 
 
 		testSurfaceMesh->SetRotation( glm::normalize( rot * testSurfaceMesh->GetRotation() ) );
@@ -207,8 +215,8 @@ int main( int argc, char **argv )
 
 		// Upload uniforms to GPU
 		glUniformMatrix4fv( modelUniform, 1, GL_FALSE, &modelMat[0][0] );
-		glUniformMatrix4fv( viewUniform,  1, GL_FALSE, &viewMat[0][0] );
-		glUniformMatrix4fv( projUniform,  1, GL_FALSE, &projectionMat[0][0] );
+		glUniformMatrix4fv( viewUniform,  1, GL_FALSE, &(*viewMat)[0][0] );
+		glUniformMatrix4fv( projUniform,  1, GL_FALSE, &(*projectionMat)[0][0] );
 		glUniform3fv( worldCenterUniform, 1, &worldCenter->GetLocation()[0] );
 		glUniform3fv( lightDirectionUniform, 1, &glm::normalize( glm::vec3( 0.6, 1.0, 1.0 ) )[0] );
 

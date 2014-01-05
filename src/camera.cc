@@ -1,4 +1,6 @@
 #include "camera.hh"
+#include "../deb/glm/gtc/matrix_transform.hpp"
+#include "../deb/glm/gtx/quaternion.hpp"
 
 using namespace glm;
 
@@ -21,7 +23,13 @@ Camera::~Camera()
 
 std::shared_ptr<mat4> Camera::GetViewMatrix()
 {
-	auto view = std::make_shared<mat4>();
+	auto view = std::make_shared<mat4>(
+		glm::lookAt(
+			GetWorldLocation(),
+			target,
+			GetWorldRotation() * upVector
+		)
+	);
 	return view;
 }
 
@@ -29,7 +37,11 @@ std::shared_ptr<mat4> Camera::GetViewMatrix()
 
 std::shared_ptr<mat4> Camera::GetProjectionMatrix()
 {
-	auto projection = std::make_shared<mat4>();
+	// This matrix probably should be saved and updated just when necessary.
+	auto projection = std::make_shared<mat4>(
+	    glm::perspective( fieldOfView, aspectRatio, zNear, zFar )
+	);
+
 	return projection;
 }
 
