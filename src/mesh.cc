@@ -44,7 +44,7 @@ bool Mesh::GenerateGLBuffers()
 
 	glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, ibo );
 	glBufferData( GL_ELEMENT_ARRAY_BUFFER,
-	              indexBuffer.size() * sizeof( VBOData ),
+	              indexBuffer.size() * sizeof( GLfloat ),
 				  &indexBuffer[0],
 				  GL_STATIC_DRAW );
 
