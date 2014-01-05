@@ -2,6 +2,25 @@
 #include "../deb/glm/gtc/matrix_transform.hpp"
 #include "../deb/glm/gtx/quaternion.hpp"
 
+struct WindowInfo
+{
+	int   width;
+	int   height;
+	float ratio;
+
+	WindowInfo()
+	{
+		width  = 600;
+		height = 400;
+	}
+
+	void UpdateRatio()
+	{
+		ratio = (float)width/(float)height;
+	}
+} windowInfo;
+
+
 
 static void GLFWErrorCallback( int error, const char* description )
 {
@@ -20,9 +39,23 @@ static void GLFWKeyCallback( GLFWwindow* window,
 
 
 
+static void GLFWFrameBufferSizeCallback( GLFWwindow* window, int width, int height )
+{
+	windowInfo.width  = width;
+	windowInfo.height = height;
+
+	glViewport( 0, 0, width, height );
+	windowInfo.UpdateRatio();
+}
+
+
+
 int main( int argc, char **argv )
 {
 	GLFWwindow* window;
+	windowInfo.width  = 600;
+	windowInfo.height = 400;
+	windowInfo.UpdateRatio();
 
 	glfwSetErrorCallback( GLFWErrorCallback );
 	if( !glfwInit() )
@@ -37,7 +70,10 @@ int main( int argc, char **argv )
 	glfwWindowHint( GLFW_SAMPLES, 4 );
 
 
-	window = glfwCreateWindow( 640, 480, "1GAM14-1", NULL, NULL );
+	window = glfwCreateWindow( windowInfo.width,
+	                           windowInfo.height,
+	                           "1GAM14-1", NULL, NULL );
+
 	if( !window )
 	{
 		glfwTerminate();
@@ -47,6 +83,7 @@ int main( int argc, char **argv )
 
 	glfwMakeContextCurrent( window );
 	glfwSetKeyCallback( window, GLFWKeyCallback );
+	glfwSetFramebufferSizeCallback( window, GLFWFrameBufferSizeCallback );
 
 	glewExperimental = GL_TRUE;
 	if( glewInit() != GLEW_OK )
@@ -89,7 +126,6 @@ int main( int argc, char **argv )
 
 
 	Node rootNode( "RootNode" );
-	rootNode.SetLocation( glm::vec3( 0, 0.0, 0.0 ) );
 
 	glm::quat rot = glm::quat ( glm::vec3( 0.f, 0.05*glfwGetTime(), 0.f) );
 
@@ -97,18 +133,18 @@ int main( int argc, char **argv )
 	// Generate Node that acts as the "center" of the world.
 	// (vertices that are affected by it, rotate around it)
 	auto worldCenter = std::make_shared<Node>( "WorldCenter" );
-	worldCenter->SetLocation( glm::vec3( 0.0, -50.0, 0.0 ) );
+	worldCenter->SetLocation( glm::vec3( 0.0, -70.0, 0.0 ) );
 	rootNode.AddChild( worldCenter );
 
 	// Test mesh generation from a surface
-	Surface testSurface( 20, 40 );
-	auto testSurfaceMesh = testSurface.GenerateMesh( 5, 10 );
+	Surface testSurface( 40, 40 );
+	auto testSurfaceMesh = testSurface.GenerateMesh( 10, 10 );
 
 	testSurfaceMesh->SetName( "TestMesh" );
 	testSurfaceMesh->GenerateGLBuffers();
 	rootNode.AddChild( testSurfaceMesh );
 
-	testSurfaceMesh->SetLocation( glm::vec3( -10.0, 0.0, -20.0 ) );
+	testSurfaceMesh->SetLocation( glm::vec3( -20.0, 0.0, -20.0 ) );
 
 	glEnableVertexAttribArray( shaderProgram.GetAttribute( "vertexPosition" ) );
 	glEnableVertexAttribArray( shaderProgram.GetAttribute( "vertexNormal" ) );
@@ -145,16 +181,10 @@ int main( int argc, char **argv )
 	/* Main loop */
 	while( !glfwWindowShouldClose( window ) )
 	{
-		float ratio;
-		int width, height;
-
-		glfwGetFramebufferSize( window, &width, &height );
-		ratio = width / (float) height;
-
 		glClear( GL_COLOR_BUFFER_BIT );
 
 		// Matrix stuff
-		glm::mat4 projectionMat = glm::perspective( 60.0f, 4.0f / 3.0f, 0.1f, 100.0f );
+		glm::mat4 projectionMat = glm::perspective( 60.0f, windowInfo.ratio, 0.1f, 100.0f );
 
 		glm::mat4 viewMat = glm::lookAt(
 			glm::vec3( 0, 5,-15),
@@ -180,7 +210,7 @@ int main( int argc, char **argv )
 		glUniformMatrix4fv( viewUniform,  1, GL_FALSE, &viewMat[0][0] );
 		glUniformMatrix4fv( projUniform,  1, GL_FALSE, &projectionMat[0][0] );
 		glUniform3fv( worldCenterUniform, 1, &worldCenter->GetLocation()[0] );
-		glUniform3fv( lightDirectionUniform, 1, &glm::normalize( glm::vec3( 0.6, 1.0, -1.0 ) )[0] );
+		glUniform3fv( lightDirectionUniform, 1, &glm::normalize( glm::vec3( 0.6, 1.0, 1.0 ) )[0] );
 
 		glDrawElements(
 			GL_TRIANGLES,
