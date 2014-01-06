@@ -53,7 +53,10 @@ void Entity::Render()
 
 	if( mesh && shader )
 	{
+		// Use the vertex array object of the mesh
+		glBindVertexArray( mesh->vao );
 		const GLint modelUniform  = shader->GetUniform( "M" );
+
 
 		glm::mat4 modelMat = glm::mat4( 1.0f );
 		modelMat = modelMat * glm::toMat4(  GetWorldRotation() );

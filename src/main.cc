@@ -224,6 +224,8 @@ int main( int argc, char **argv )
 	{
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
+		glUseProgram( shaderProgram->Get() );
+
 		// Camera handling and matrix stuff
 		camera->SetRatio( windowInfo.ratio );
 		auto projectionMat = camera->GetProjectionMatrix();
@@ -237,12 +239,6 @@ int main( int argc, char **argv )
 
 		// Update the node tree
 		rootNode.UpdateWorldInfo();
-
-
-		// Use the vertex array object of the mesh
-		glBindVertexArray( mesh->vao );
-		glUseProgram( shaderProgram->Get() );
-
 
 		// Upload uniforms to GPU
 		glUniformMatrix4fv( viewUniform,  1, GL_FALSE, &(*viewMat)[0][0] );
