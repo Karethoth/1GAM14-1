@@ -144,7 +144,7 @@ int main( int argc, char **argv )
 
 	// Create the camera
 	auto camera = std::make_shared<Camera>();
-	camera->SetLocation( glm::vec3( 0.f, 8.f, -10.f ) );
+	camera->SetLocation( glm::vec3( 0.f, 8.f, -20.f ) );
 	camera->SetTarget( glm::vec3( 0.0, 1.0, 0.0 ) );
 	glm::vec3 cameraRot( 0.0, 0.0, 0.0 );
 	camera->SetRotation( glm::normalize( glm::quat( cameraRot ) ) );
@@ -160,7 +160,7 @@ int main( int argc, char **argv )
 	// Generate Node that acts as the "center" of the world.
 	// (vertices that are affected by it, rotate around it)
 	auto worldCenter = std::make_shared<Node>( "WorldCenter" );
-	worldCenter->SetLocation( glm::vec3( 0.0, -70.0, 0.0 ) );
+	worldCenter->SetLocation( glm::vec3( 0.0, -40.0, 0.0 ) );
 	rootNode.AddChild( worldCenter );
 
 
@@ -171,7 +171,7 @@ int main( int argc, char **argv )
 	// Give name to the mesh and generate
 	// the OpenGL arrays and buffers
 	groundSurfaceMesh->name = "GroundSurfaceMesh";
-	groundSurfaceMesh->GenerateGLBuffers();
+	groundSurfaceMesh->GenerateGLBuffers( "TestShader" );
 
 	// Give the mesh to the mesh manager
 	meshManager.Add( "GroundSurfaceMesh", groundSurfaceMesh );
@@ -187,29 +187,29 @@ int main( int argc, char **argv )
 	rootNode.AddChild( ground );
 
 
-	glEnableVertexAttribArray( shaderProgram->GetAttribute( "vertexPosition" ) );
-	glEnableVertexAttribArray( shaderProgram->GetAttribute( "vertexNormal" ) );
-	glBindBuffer( GL_ARRAY_BUFFER, meshManager.Get( "GroundSurfaceMesh" )->vbo );
+	// Repeat process for a wall
+	Surface wallSurface( 40, 10 );
+	auto wallMesh = wallSurface.GenerateMesh( 10, 5 );
+	wallMesh->name = "WallMesh";
+	wallMesh->GenerateGLBuffers( "TestShader" );
+	meshManager.Add( "WallMesh", wallMesh );
+	auto wall = std::make_shared<Entity>( "WallEntity" );
+	wall->SetMeshName( "WallMesh" );
+	wall->SetShaderName( "TestShader" );
+	wall->SetLocation( glm::vec3( 0.0, 0.0, 0.0 ) );
+	wall->SetRotation( glm::quat( glm::vec3( -1.6, 0.0, 0.0 ) ) );
+	ground->AddChild( wall );
 
-	// Vertex position
-	glVertexAttribPointer(
-	   shaderProgram->GetAttribute( "vertexPosition" ),
-	   3,
-	   GL_FLOAT,
-	   GL_FALSE,
-	   sizeof( VBOData ),
-	   (void*)0
-	);
 
-	// Vertex normal
-	glVertexAttribPointer(
-	   shaderProgram->GetAttribute( "vertexNormal" ),
-	   3,
-	   GL_FLOAT,
-	   GL_TRUE,
-	   sizeof( VBOData ),
-	   (void*)sizeof(glm::vec3)
-	);
+	// And another wall Entity!
+	auto secondWall = std::make_shared<Entity>( "WallEntity2" );
+	secondWall->SetMeshName( "WallMesh" );
+	secondWall->SetShaderName( "TestShader" );
+	secondWall->SetLocation( glm::vec3( -40.0, 0.0, 0.0 ) );
+	secondWall->SetRotation( glm::quat( glm::vec3( -1.6, 1.6, 0.0 ) ) );
+	ground->AddChild( secondWall );
+
+
 
 	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 	glLineWidth( 2.0 );
@@ -232,8 +232,6 @@ int main( int argc, char **argv )
 		auto viewMat = camera->GetViewMatrix();
 
 
-		// Get the mesh from manager. Testing the manager....
-		auto mesh = meshManager.Get( "GroundSurfaceMesh" );
 		ground->SetRotation( glm::normalize( rot * ground->GetRotation() ) );
 
 
@@ -247,18 +245,8 @@ int main( int argc, char **argv )
 		glUniform3fv( lightDirectionUniform, 1, &glm::normalize( glm::vec3( 0.6, 1.0, 1.0 ) )[0] );
 
 
-		// Let's test how rendering the same entity in multiple places works:
-		auto defLoc = ground->GetLocation();
-
 		// Render the current scene
 		rootNode.Render();
-
-		// Modify location of the ground entity and render the scene again
-		ground->SetLocation( defLoc + glm::vec3( 0.f, 5.f, 40.f ) );
-		rootNode.Render();
-
-		// Set the ground back to it's default location
-		ground->SetLocation( defLoc );
 
 
 		glfwSwapBuffers( window );

@@ -12,6 +12,6 @@ void main()
 
   cosTheta = cosTheta;
 
-  gl_FragColor = vec4( color*cosTheta, 1 );
+  gl_FragColor = vec4( color, 1 );
 }
 
