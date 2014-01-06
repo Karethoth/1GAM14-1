@@ -153,10 +153,6 @@ int main( int argc, char **argv )
 	rootNode.AddChild( camera );
 
 
-	// Just something I'm temporarely using to have the terrain rotating.
-	glm::quat rot = glm::quat( glm::vec3( 0.f, 0.05*glfwGetTime(), 0.f) );
-
-
 	// Generate Node that acts as the "center" of the world.
 	// (vertices that are affected by it, rotate around it)
 	auto worldCenter = std::make_shared<Node>( "WorldCenter" );
@@ -210,7 +206,6 @@ int main( int argc, char **argv )
 	ground->AddChild( secondWall );
 
 
-
 	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 	glLineWidth( 2.0 );
 
@@ -218,10 +213,16 @@ int main( int argc, char **argv )
 	glEnable( GL_DEPTH_TEST );
 	glDepthFunc( GL_LESS );
 
+	// We need to know how long has been since the last update
+	auto time = glfwGetTime();
+	auto deltaTime = time;
 
 	/* Main loop */
 	while( !glfwWindowShouldClose( window ) )
 	{
+		deltaTime = glfwGetTime()-time;
+		time = glfwGetTime();
+
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 		glUseProgram( shaderProgram->Get() );
@@ -231,9 +232,8 @@ int main( int argc, char **argv )
 		auto projectionMat = camera->GetProjectionMatrix();
 		auto viewMat = camera->GetViewMatrix();
 
-
-		ground->SetRotation( glm::normalize( rot * ground->GetRotation() ) );
-
+		// Rotate the ground
+		ground->SetRotation( glm::normalize( glm::quat( glm::vec3( 0.f, deltaTime, 0.f) ) * ground->GetRotation() ) );
 
 		// Update the node tree
 		rootNode.UpdateWorldInfo();
@@ -242,7 +242,7 @@ int main( int argc, char **argv )
 		glUniformMatrix4fv( viewUniform,  1, GL_FALSE, &(*viewMat)[0][0] );
 		glUniformMatrix4fv( projUniform,  1, GL_FALSE, &(*projectionMat)[0][0] );
 		glUniform3fv( worldCenterUniform, 1, &worldCenter->GetLocation()[0] );
-		glUniform3fv( lightDirectionUniform, 1, &glm::normalize( glm::vec3( 0.6, 1.0, 1.0 ) )[0] );
+		glUniform3fv( lightDirectionUniform, 1, &glm::normalize( glm::vec3( 0.0, 1.0, 1.0 ) )[0] );
 
 
 		// Render the current scene
