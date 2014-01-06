@@ -3,6 +3,7 @@
 #include "../deb/glm/gtc/matrix_transform.hpp"
 #include "../deb/glm/gtx/quaternion.hpp"
 
+#include <iostream>
 #include <memory>
 
 
@@ -44,12 +45,23 @@ std::string Entity::GetShaderName()
 }
 
 
+static glm::mat4 modelMatrix;
+
 
 void Entity::Render()
 {
-	// TODO: Rendering goes here.
 	auto mesh = meshManager.Get( meshName );
 	auto shader = shaderManager.Get( shaderName );
+
+	if( !parent )
+	{
+		modelMatrix = glm::mat4( 1.0 );
+	}
+
+	auto savedMatrix = modelMatrix;
+
+	modelMatrix =  modelMatrix * glm::toMat4( GetRotation() );
+	modelMatrix = glm::translate( modelMatrix, GetLocation() );
 
 	if( mesh && shader )
 	{
@@ -57,11 +69,7 @@ void Entity::Render()
 		glBindVertexArray( mesh->vao );
 		const GLint modelUniform  = shader->GetUniform( "M" );
 
-
-		glm::mat4 modelMat = glm::mat4( 1.0f );
-		modelMat = modelMat * glm::toMat4(  GetWorldRotation() );
-		modelMat = glm::translate(  modelMat, GetWorldLocation() );
-		glUniformMatrix4fv( modelUniform, 1, GL_FALSE, &modelMat[0][0] );
+		glUniformMatrix4fv( modelUniform, 1, GL_FALSE, &modelMatrix[0][0] );
 
 		// Draw the elements
 		glDrawElements(
@@ -71,14 +79,30 @@ void Entity::Render()
 			(void*)0
 		);
 	}
+	else
+	{
+		if( !mesh )
+		{
+			std::cerr << "Error: Entity '" << GetName() << "' is trying to "
+		                 "use mesh '" << meshName << "' which can't be found!\n";
+		}
+		if( !shader )
+		{
+			std::cerr << "Error: Entity '" << GetName() << "' is trying to "
+		                 "use shader '" << shaderName << "' which can't be found!\n";
+		}
+	}
+
 
 	for( auto& child : children )
 	{
 		auto entityChild = std::dynamic_pointer_cast<Entity>( child );
-		if( !entityChild )
+		if( entityChild )
 		{
 			entityChild->Render();
 		}
 	}
+
+	modelMatrix = savedMatrix;
 }
 
