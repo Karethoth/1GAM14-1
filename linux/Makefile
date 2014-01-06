@@ -20,6 +20,7 @@ OBJS=\
       $(OBJDIR)/camera.o \
       $(OBJDIR)/mesh.o \
       $(OBJDIR)/meshManager.o \
+      $(OBJDIR)/shaderProgramManager.o \
       $(OBJDIR)/entity.o \
       $(OBJDIR)/surface.o \
       $(OBJDIR)/main.o

@@ -19,6 +19,7 @@
     <ClCompile Include="..\..\src\node.cc" />
     <ClCompile Include="..\..\src\shader.cc" />
     <ClCompile Include="..\..\src\shaderProgram.cc" />
+    <ClCompile Include="..\..\src\shaderProgramManager.cc" />
     <ClCompile Include="..\..\src\surface.cc" />
   </ItemGroup>
   <ItemGroup>
@@ -27,9 +28,11 @@
     <None Include="..\..\src\camera.hh" />
     <None Include="..\..\src\entity.hh" />
     <None Include="..\..\src\main.hh" />
+    <None Include="..\..\src\managers.hh" />
     <None Include="..\..\src\meshManager.hh" />
     <None Include="..\..\src\shader.hh" />
     <None Include="..\..\src\shaderProgram.hh" />
+    <None Include="..\..\src\shaderProgramManager.hh" />
     <None Include="..\..\src\templateManager.hh" />
   </ItemGroup>
   <ItemGroup>

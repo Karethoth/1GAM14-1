@@ -26,7 +26,7 @@
 #include "surface.hh"
 #include "entity.hh"
 
-#include "meshManager.hh"
+#include "managers.hh"
 
 
 #include <GLFW/glfw3.h>
