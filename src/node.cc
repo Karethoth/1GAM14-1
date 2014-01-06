@@ -1,4 +1,7 @@
 #include "node.hh"
+#include "../deb/glm/gtc/matrix_transform.hpp"
+#include "../deb/glm/gtx/quaternion.hpp"
+
 #include <iostream>
 #include <string>
 
@@ -11,7 +14,7 @@ Node::Node( std::string name ) : name( name )
 
 	SetScale( vec3( 1.f ) );
 	SetLocation( vec3( 0.f ) );
-	SetRotation( quat( 0, 0, 0, 0 ) );
+	SetRotation( quat( glm::vec3( 0.0, 0.0, 0.0 ) ) );
 }
 
 
@@ -146,9 +149,8 @@ void Node::UpdateWorldInfo()
 	// Update this node
 	if( parent )
 	{
-		worldLocation = parent->GetWorldLocation() +
-		                parent->GetWorldRotation() * location;
-		worldRotation = parent->GetRotation() + rotation;
+		worldLocation = location;
+		worldRotation = rotation;
 	}
 	else
 	{

@@ -45,6 +45,8 @@ class Node
 
  protected:
 	void SetParent( Node* parent );
+
+	Node* parent;
 	std::vector<std::shared_ptr<Node>> children;
 
 
@@ -56,8 +58,6 @@ class Node
 	glm::quat rotation;
 	glm::vec3 worldLocation;
 	glm::quat worldRotation;
-
-	Node* parent;
 };
 
 #endif
