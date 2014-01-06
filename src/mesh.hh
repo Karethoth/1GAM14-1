@@ -26,7 +26,7 @@ struct Mesh
 	Mesh( std::string name="UnnamedMesh" );
 	virtual ~Mesh();
 
-	bool GenerateGLBuffers();
+	bool GenerateGLBuffers( const std::string& shaderName );
 
 	std::string name;
 	GLuint vbo, ibo, vao;

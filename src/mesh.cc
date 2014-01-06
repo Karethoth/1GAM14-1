@@ -1,4 +1,5 @@
 #include "mesh.hh"
+#include "managers.hh"
 #include <iostream>
 
 
@@ -33,8 +34,9 @@ Mesh::~Mesh()
 
 
 
-bool Mesh::GenerateGLBuffers()
+bool Mesh::GenerateGLBuffers( const std::string& shaderName )
 {
+	auto shaderProgram = shaderManager.Get( shaderName );
 	glBindVertexArray( vao );
 
 	glBindBuffer( GL_ARRAY_BUFFER, vbo );
@@ -49,6 +51,31 @@ bool Mesh::GenerateGLBuffers()
 				  &indexBuffer[0],
 				  GL_STATIC_DRAW );
 
+	glEnableVertexAttribArray( shaderProgram->GetAttribute( "vertexPosition" ) );
+	glEnableVertexAttribArray( shaderProgram->GetAttribute( "vertexNormal" ) );
+	glBindBuffer( GL_ARRAY_BUFFER, vbo );
+
+	// Vertex position
+	glVertexAttribPointer(
+	   shaderProgram->GetAttribute( "vertexPosition" ),
+	   3,
+	   GL_FLOAT,
+	   GL_FALSE,
+	   sizeof( VBOData ),
+	   (void*)0
+	);
+
+	// Vertex normal
+	glVertexAttribPointer(
+	   shaderProgram->GetAttribute( "vertexNormal" ),
+	   3,
+	   GL_FLOAT,
+	   GL_TRUE,
+	   sizeof( VBOData ),
+	   (void*)sizeof(glm::vec3)
+	);
+
+	glBindVertexArray( 0 );
 	return true;
 }
 
