@@ -25,6 +25,7 @@ struct WindowInfo
 
 // Global managers, at least for now
 MeshManager meshManager;
+ShaderProgramManager shaderManager;
 
 
 
@@ -119,16 +120,22 @@ int main( int argc, char **argv )
 
 
 	// Create the shader and pass the shaders and the attribute list to it.
-	ShaderProgram shaderProgram;
-	shaderProgram.Load( vShader, fShader, attributes );
+	auto shaderProgram = std::make_shared<ShaderProgram>();
+	if( !shaderProgram->Load( vShader, fShader, attributes ) )
+	{
+		std::cerr << "Error: Compiling or linking the shader program has failed.\n";
+		return 1;
+	}
+
+	// Give the shaderProgram to the manager
+	shaderManager.Add( "TestShader", shaderProgram );
 
 
 	// Get uniform locations
-	const GLint modelUniform          = shaderProgram.GetUniform( "M" );
-	const GLint viewUniform           = shaderProgram.GetUniform( "V" );
-	const GLint projUniform           = shaderProgram.GetUniform( "P" );
-	const GLint worldCenterUniform    = shaderProgram.GetUniform( "worldCenter" );
-	const GLint lightDirectionUniform = shaderProgram.GetUniform( "lightDirection" );
+	const GLint viewUniform           = shaderProgram->GetUniform( "V" );
+	const GLint projUniform           = shaderProgram->GetUniform( "P" );
+	const GLint worldCenterUniform    = shaderProgram->GetUniform( "worldCenter" );
+	const GLint lightDirectionUniform = shaderProgram->GetUniform( "lightDirection" );
 
 
 	// Create the root node
@@ -170,21 +177,23 @@ int main( int argc, char **argv )
 	meshManager.Add( "GroundSurfaceMesh", groundSurfaceMesh );
 
 	// Generate entity and set it to use the ground surface mesh
+	// and the wanted shader
 	auto ground = std::make_shared<Entity>( "GroundSurfaceEntity" );
 	ground->SetMeshName( "GroundSurfaceMesh" );
+	ground->SetShaderName( "TestShader" );
 	ground->SetLocation( glm::vec3( -20.0, 0.0, -20.0 ) );
 
 	// Give the entity to the root node
 	rootNode.AddChild( ground );
 
 
-	glEnableVertexAttribArray( shaderProgram.GetAttribute( "vertexPosition" ) );
-	glEnableVertexAttribArray( shaderProgram.GetAttribute( "vertexNormal" ) );
+	glEnableVertexAttribArray( shaderProgram->GetAttribute( "vertexPosition" ) );
+	glEnableVertexAttribArray( shaderProgram->GetAttribute( "vertexNormal" ) );
 	glBindBuffer( GL_ARRAY_BUFFER, meshManager.Get( "GroundSurfaceMesh" )->vbo );
 
 	// Vertex position
 	glVertexAttribPointer(
-	   shaderProgram.GetAttribute( "vertexPosition" ),
+	   shaderProgram->GetAttribute( "vertexPosition" ),
 	   3,
 	   GL_FLOAT,
 	   GL_FALSE,
@@ -194,7 +203,7 @@ int main( int argc, char **argv )
 
 	// Vertex normal
 	glVertexAttribPointer(
-	   shaderProgram.GetAttribute( "vertexNormal" ),
+	   shaderProgram->GetAttribute( "vertexNormal" ),
 	   3,
 	   GL_FLOAT,
 	   GL_TRUE,
@@ -205,7 +214,7 @@ int main( int argc, char **argv )
 	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 	glLineWidth( 2.0 );
 
-	glEnable( GL_CULL_FACE );
+	//glEnable( GL_CULL_FACE );
 	glEnable( GL_DEPTH_TEST );
 	glDepthFunc( GL_LESS );
 
@@ -230,35 +239,38 @@ int main( int argc, char **argv )
 		rootNode.UpdateWorldInfo();
 
 
-		// Calculate Model matrix and use that to calculate the final MVP matrix
-		glm::mat4 modelMat = glm::mat4( 1.0f );
-		modelMat = modelMat * glm::toMat4(  ground->GetWorldRotation() );
-		modelMat = glm::translate(  modelMat, ground->GetWorldLocation() );
-
-
 		// Use the vertex array object of the mesh
 		glBindVertexArray( mesh->vao );
-		glUseProgram( shaderProgram.Get() );
+		glUseProgram( shaderProgram->Get() );
 
 
 		// Upload uniforms to GPU
-		glUniformMatrix4fv( modelUniform, 1, GL_FALSE, &modelMat[0][0] );
 		glUniformMatrix4fv( viewUniform,  1, GL_FALSE, &(*viewMat)[0][0] );
 		glUniformMatrix4fv( projUniform,  1, GL_FALSE, &(*projectionMat)[0][0] );
 		glUniform3fv( worldCenterUniform, 1, &worldCenter->GetLocation()[0] );
 		glUniform3fv( lightDirectionUniform, 1, &glm::normalize( glm::vec3( 0.6, 1.0, 1.0 ) )[0] );
 
 
-		// Render the scene
+		// Let's test how rendering the same entity in multiple places works:
+		auto defLoc = ground->GetLocation();
+
+		// Render the current scene
 		rootNode.Render();
+
+		// Modify location of the ground entity and render the scene again
+		ground->SetLocation( defLoc + glm::vec3( 0.f, 5.f, 40.f ) );
+		rootNode.Render();
+
+		// Set the ground back to it's default location
+		ground->SetLocation( defLoc );
 
 
 		glfwSwapBuffers( window );
 		glfwPollEvents();
 	}
 
-    glDisableVertexAttribArray( shaderProgram.GetAttribute( "vertexNormal" ) );
-    glDisableVertexAttribArray( shaderProgram.GetAttribute( "vertexPosition" ) );
+    glDisableVertexAttribArray( shaderProgram->GetAttribute( "vertexNormal" ) );
+    glDisableVertexAttribArray( shaderProgram->GetAttribute( "vertexPosition" ) );
 
 	glfwDestroyWindow( window );
 	glfwTerminate();

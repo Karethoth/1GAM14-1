@@ -14,11 +14,15 @@ class Entity : public Node
 	void SetMeshName( std::string newMeshName );
 	std::string GetMeshName();
 
+	void SetShaderName( std::string newShaderName );
+	std::string GetShaderName();
+
 	virtual void Render();
 
 
  private:
 	std::string meshName;
+	std::string shaderName;
 };
 
 #endif
