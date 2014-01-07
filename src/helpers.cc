@@ -47,10 +47,19 @@ std::shared_ptr<glm::vec2> Intersection( const glm::vec2& a,
                                          const glm::vec2& c,
                                          const glm::vec2& dOffset )
 {
-	float t = Cross( (c-a), dOffset / ( Cross( bOffset, dOffset ) ) );
-	float u = Cross( (c-a), bOffset / ( Cross( bOffset, dOffset ) ) );
+	float tmpCross = Cross( bOffset, dOffset );
 
-	auto point = std::make_shared<glm::vec2>();
-	return point;
+	float t = Cross( (c-a), dOffset / tmpCross );
+	float u = Cross( (c-a), bOffset / tmpCross );
+
+	// Do we have an intersection?
+	if( ( tmpCross != 0 ) &&
+		( t >= 0.0 && t <= 1.0 ) &&
+		( u >= 0.0 && u <= 1.0 ) )
+	{
+		glm::vec2 point;
+		return std::make_shared<glm::vec2>( a + t * bOffset );
+	}
+
+	return std::shared_ptr<glm::vec2>( nullptr );
 }
-
