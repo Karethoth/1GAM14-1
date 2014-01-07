@@ -21,5 +21,8 @@ std::shared_ptr<glm::vec2> Intersection( const glm::vec2& a,
                                          const glm::vec2& c,
                                          const glm::vec2& dOffset );
 
+
+float Noise2D( float x, float y );
+
 #endif
 

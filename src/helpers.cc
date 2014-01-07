@@ -59,3 +59,13 @@ std::shared_ptr<glm::vec2> Intersection( const glm::vec2& a,
 	}
 	return std::shared_ptr<glm::vec2>( nullptr );
 }
+
+
+
+float Noise2D( float x, float y )
+{
+	int n = (int)x + (int)y * 57;
+	n = (n<<13) ^ n;
+	return ( 1.0 - ( (n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0);   
+}
+
