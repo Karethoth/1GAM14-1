@@ -19,6 +19,7 @@ OBJS=\
       $(OBJDIR)/shaderProgram.o \
       $(OBJDIR)/node.o \
       $(OBJDIR)/camera.o \
+      $(OBJDIR)/texture.o \
       $(OBJDIR)/mesh.o \
       $(OBJDIR)/meshManager.o \
       $(OBJDIR)/shaderProgramManager.o \
