@@ -45,6 +45,9 @@
     <ClCompile Include="..\..\src\shaderProgramManager.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\helpers.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\data\shaders\test.vshader">
@@ -78,6 +81,9 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="..\..\src\managers.hh">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\..\src\helpers.hh">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>
