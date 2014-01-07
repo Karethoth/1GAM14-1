@@ -194,10 +194,10 @@ int main( int argc, char **argv )
 	auto wall = std::make_shared<Entity>( "WallEntity" );
 	wall->SetMeshName( "WallMesh" );
 	wall->SetShaderName( "TestShader" );
-	wall->SetLocation( glm::vec3( -40.0, 0.0, 0.0 ) );
+	wall->SetLocation( glm::vec3( 0.0, 0.0, 0.0 ) );
 	wall->SetRotation( glm::quat( glm::vec3(
 		ToRadians( -90.f ),
-		ToRadians( 180.f ),
+		ToRadians( -90.f ),
 		0.0 )
 	) );
 	ground->AddChild( wall );
@@ -207,10 +207,10 @@ int main( int argc, char **argv )
 	auto secondWall = std::make_shared<Entity>( "WallEntity2" );
 	secondWall->SetMeshName( "WallMesh" );
 	secondWall->SetShaderName( "TestShader" );
-	secondWall->SetLocation( glm::vec3( 0.0, 0.0, 0.0 ) );
+	secondWall->SetLocation( glm::vec3( 0.0, 0.0, -10.0 ) );
 	secondWall->SetRotation( glm::quat( glm::vec3(
-		ToRadians( -90.f ),
-		ToRadians( -90.f ),
+		ToRadians( 90.f ),
+		0.0,
 		0.0 )
 	) );
 	ground->AddChild( secondWall );

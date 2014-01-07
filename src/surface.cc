@@ -13,10 +13,10 @@ Surface::Surface()
 Surface::Surface( float width, float height )
 {
 	size = vec2( width, height );
-	textureCorners[0] = vec2( 0.0, 1.0 );
-	textureCorners[1] = vec2( 1.0, 1.0 );
-	textureCorners[2] = vec2( 0.0, 0.0 );
-	textureCorners[3] = vec2( 1.0, 0.0 );
+	textureCorners[0] = vec2( 0.0, 0.0 );
+	textureCorners[1] = vec2( 1.0, 0.0 );
+	textureCorners[2] = vec2( 0.0, 1.0 );
+	textureCorners[3] = vec2( 1.0, 1.0 );
 }
 
 
