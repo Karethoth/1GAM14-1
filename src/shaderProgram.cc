@@ -82,7 +82,6 @@ bool ShaderProgram::Load( const Shader& vertexShader,
 	for( auto& attr : attributes )
 	{
 		this->attributes[attr.first] = glGetAttribLocation( program, attr.first.c_str() );
-		std::cout << attr.first << " was bound to " << this->attributes[attr.first] << "\n";
 	}
 
 	return true;
