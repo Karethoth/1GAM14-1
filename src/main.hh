@@ -27,7 +27,7 @@
 #include "entity.hh"
 
 #include "managers.hh"
-
+#include "helpers.hh"
 
 #include <GLFW/glfw3.h>
 #include <iostream>
