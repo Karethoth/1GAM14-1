@@ -53,6 +53,7 @@ bool Mesh::GenerateGLBuffers( const std::string& shaderName )
 
 	glEnableVertexAttribArray( shaderProgram->GetAttribute( "vertexPosition" ) );
 	glEnableVertexAttribArray( shaderProgram->GetAttribute( "vertexNormal" ) );
+	glEnableVertexAttribArray( shaderProgram->GetAttribute( "textureCoord" ) );
 	glBindBuffer( GL_ARRAY_BUFFER, vbo );
 
 	// Vertex position
@@ -73,6 +74,16 @@ bool Mesh::GenerateGLBuffers( const std::string& shaderName )
 	   GL_TRUE,
 	   sizeof( VBOData ),
 	   (void*)sizeof(glm::vec3)
+	);
+
+	// TextureCoord
+	glVertexAttribPointer(
+	   shaderProgram->GetAttribute( "textureCoord" ),
+	   2,
+	   GL_FLOAT,
+	   GL_FALSE,
+	   sizeof( VBOData ),
+	   (void*)(3*sizeof(glm::vec3))
 	);
 
 	glBindVertexArray( 0 );

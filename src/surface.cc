@@ -66,6 +66,8 @@ std::shared_ptr<Mesh> Surface::GenerateMesh( int xSplits, int ySplits )
 				tmp.textCoord = *textCoord;
 			}
 
+			tmp.color = vec3( 0.0, 1.0, 1.0 );
+
 			mesh->vertexBuffer.push_back( tmp );
 		}
 	}

@@ -22,6 +22,8 @@
     <ClCompile Include="..\..\src\shaderProgram.cc" />
     <ClCompile Include="..\..\src\shaderProgramManager.cc" />
     <ClCompile Include="..\..\src\surface.cc" />
+    <ClCompile Include="..\..\src\texture.cc" />
+    <ClCompile Include="..\..\src\textureManager.cc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\data\shaders\test.fshader" />
@@ -36,6 +38,8 @@
     <None Include="..\..\src\shaderProgram.hh" />
     <None Include="..\..\src\shaderProgramManager.hh" />
     <None Include="..\..\src\templateManager.hh" />
+    <None Include="..\..\src\texture.hh" />
+    <None Include="..\..\src\textureManager.hh" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\mesh.hh" />

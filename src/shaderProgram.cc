@@ -37,8 +37,6 @@ bool ShaderProgram::Load( const Shader& vertexShader,
 		return false;
 	}
 
-	this->attributes = attributes;
-
 	// Attach the shaders
 	glAttachShader( program, vertexShader.Get() );
 	glAttachShader( program, fragmentShader.Get() );
@@ -78,6 +76,13 @@ bool ShaderProgram::Load( const Shader& vertexShader,
 		glDeleteProgram( program );
 		program = 0;
 		return false;
+	}
+
+	// Check out how the attributes were bound actually
+	for( auto& attr : attributes )
+	{
+		this->attributes[attr.first] = glGetAttribLocation( program, attr.first.c_str() );
+		std::cout << attr.first << " was bound to " << this->attributes[attr.first] << "\n";
 	}
 
 	return true;

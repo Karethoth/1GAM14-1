@@ -1,4 +1,5 @@
 attribute vec3 vertexPosition;
+attribute vec2 textureCoord;
 attribute vec3 vertexNormal;
 
 uniform mat4 M;
@@ -7,6 +8,7 @@ uniform mat4 P;
 uniform vec3 worldCenter;
 
 varying vec3 normal;
+varying vec2 vTextureCoord;
 
 
 /* Credit for this function goes to:
@@ -42,5 +44,6 @@ void main()
 
 	gl_Position = P * V * v;
 	normal = (M*vec4(vertexNormal,0) ).xyz;
+	vTextureCoord = textureCoord;
 }
 

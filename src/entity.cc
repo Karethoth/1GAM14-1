@@ -68,8 +68,13 @@ void Entity::Render()
 		// Use the vertex array object of the mesh
 		glBindVertexArray( mesh->vao );
 		const GLint modelUniform  = shader->GetUniform( "M" );
+		const GLint samplerUniform  = shader->GetUniform( "textureSampler" );
 
 		glUniformMatrix4fv( modelUniform, 1, GL_FALSE, &modelMatrix[0][0] );
+
+		glActiveTexture( GL_TEXTURE0 );
+		glBindTexture( GL_TEXTURE_2D, textureManager.Get( "TestTexture" )->textureId );
+		glUniform1i( samplerUniform, 0 );
 
 		// Draw the elements
 		glDrawElements(

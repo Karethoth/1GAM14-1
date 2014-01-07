@@ -48,6 +48,12 @@
     <ClCompile Include="..\..\src\helpers.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\texture.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\textureManager.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\data\shaders\test.vshader">
@@ -84,6 +90,12 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="..\..\src\helpers.hh">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\..\src\texture.hh">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\..\src\textureManager.hh">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>
