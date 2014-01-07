@@ -18,10 +18,7 @@ double ToRadians( double degrees )
 
 float Cross( const glm::vec2& a, const glm::vec2& b )
 {
-	glm::vec3 v1( a.x, a.y, 0.0f );
-	glm::vec3 v2( b.x, b.y, 0.0f );
-
-	return ( v1, v2 ).z;
+	return a.x * b.y - a.y * b.x;;
 }
 
 
@@ -60,6 +57,5 @@ std::shared_ptr<glm::vec2> Intersection( const glm::vec2& a,
 		glm::vec2 point;
 		return std::make_shared<glm::vec2>( a + t * bOffset );
 	}
-
 	return std::shared_ptr<glm::vec2>( nullptr );
 }
