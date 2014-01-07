@@ -25,6 +25,7 @@ struct WindowInfo
 
 // Global managers, at least for now
 MeshManager meshManager;
+TextureManager textureManager;
 ShaderProgramManager shaderManager;
 
 
