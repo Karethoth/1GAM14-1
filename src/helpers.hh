@@ -4,6 +4,7 @@
 
 #include "../deb/glm/glm.hpp"
 #include <memory>
+#include <vector>
 
 
 float  ToRadians( float degrees );
@@ -23,6 +24,9 @@ std::shared_ptr<glm::vec2> Intersection( const glm::vec2& a,
 
 
 float Noise2D( float x, float y );
+
+std::shared_ptr<std::vector<float>> NoiseArray( int width=10, int height=10,
+                                                int startX=0, int startY=0 );
 
 #endif
 

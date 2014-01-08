@@ -1,5 +1,6 @@
 #include "helpers.hh"
 
+
 const double piDivided = 3.141592653589793 / 180.0;
 
 
@@ -66,6 +67,39 @@ float Noise2D( float x, float y )
 {
 	int n = (int)x + (int)y * 57;
 	n = (n<<13) ^ n;
-	return ( 1.0 - ( (n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0);   
+	return static_cast<float>( 1.0 - ( (n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0 );   
+}
+
+
+std::shared_ptr<std::vector<float>> NoiseArray( int width, int height,
+                                                int startX, int startY )
+{
+	auto noiseArray = std::make_shared<std::vector<float>>();
+
+	int stepX = 1;
+	int stepY = 1;
+
+	if( width < 0 )
+	{
+		stepX = -1;
+	}
+
+	if( height < 0 )
+	{
+		stepY = -1;
+	}
+
+	for( int y = 0; y < height; y += stepY )
+	{
+		for( int x = 0; x < width; x += stepX )
+		{
+			noiseArray->push_back(
+				Noise2D( static_cast<float>( startX + x ),
+				         static_cast<float>( startY + y ) )
+			);
+		}
+	}
+
+	return noiseArray;
 }
 

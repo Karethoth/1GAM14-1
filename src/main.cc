@@ -217,26 +217,20 @@ int main( int argc, char **argv )
 
 
 	// Test texture manager
-	GLubyte pixels[4*3] =
 	{
-		255,   0,   0,
-		  0, 255,   0,
-		  0,   0, 255,
-		255, 255,   0
-	};
+		auto pixelArray = NoiseArray( 3, 9*9 );
+		glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
 
-	glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+		auto texture = std::make_shared<Texture>( "TestTexture" );
 
-	auto texture = std::make_shared<Texture>( "TestTexture" );
+		glBindTexture( GL_TEXTURE_2D, texture->textureId );
+		glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, 9, 9, 0, GL_RGB,
+					  GL_FLOAT, &pixelArray.get()[0][0] );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
 
-	glBindTexture( GL_TEXTURE_2D, texture->textureId );
-	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, 2, 2, 0, GL_RGB,
-	              GL_UNSIGNED_BYTE, pixels );
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
-
-	textureManager.Add( "TestTexture", texture );
-
+		textureManager.Add( "TestTexture", texture );
+	}
 
 	//glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 	glLineWidth( 2.0 );
