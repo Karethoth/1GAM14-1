@@ -178,6 +178,7 @@ int main( int argc, char **argv )
 	// and the wanted shader
 	auto ground = std::make_shared<Entity>( "GroundSurfaceEntity" );
 	ground->SetMeshName( "GroundSurfaceMesh" );
+	ground->SetTextureName( "TestTexture" );
 	ground->SetShaderName( "TestShader" );
 	ground->SetLocation( glm::vec3( -20.0, 0.0, -20.0 ) );
 
@@ -218,6 +219,21 @@ int main( int argc, char **argv )
 
 	// Test texture manager
 	{
+		// Generate the default texture
+		auto pixelArray = NoiseArray( 3, 4 );
+		glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+
+		auto texture = std::make_shared<Texture>( "DefaultTexture" );
+
+		glBindTexture( GL_TEXTURE_2D, texture->textureId );
+		glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, 2, 2, 0, GL_RGB,
+					  GL_FLOAT, &pixelArray.get()[0][0] );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+
+		textureManager.Add( "DefaultTexture", texture );
+	}
+	{
 		auto pixelArray = NoiseArray( 3, 9*9 );
 		glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
 
@@ -233,7 +249,7 @@ int main( int argc, char **argv )
 	}
 
 	//glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-	glLineWidth( 2.0 );
+	//glLineWidth( 2.0 );
 
 	glEnable( GL_CULL_FACE );
 	glEnable( GL_DEPTH_TEST );
@@ -242,6 +258,7 @@ int main( int argc, char **argv )
 	// We need to know how long has been since the last update
 	auto time = glfwGetTime();
 	auto deltaTime = time;
+
 
 	/* Main loop */
 	while( !glfwWindowShouldClose( window ) )

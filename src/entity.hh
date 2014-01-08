@@ -14,6 +14,9 @@ class Entity : public Node
 	void SetMeshName( std::string newMeshName );
 	std::string GetMeshName();
 
+	void SetTextureName( std::string newTextureName );
+	std::string GetTextureName();
+
 	void SetShaderName( std::string newShaderName );
 	std::string GetShaderName();
 
@@ -22,6 +25,7 @@ class Entity : public Node
 
  private:
 	std::string meshName;
+	std::string textureName;
 	std::string shaderName;
 };
 

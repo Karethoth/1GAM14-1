@@ -33,6 +33,19 @@ std::string Entity::GetMeshName()
 
 
 
+void Entity::SetTextureName( std::string newTextureName )
+{
+	textureName = newTextureName;
+}
+
+
+std::string Entity::GetTextureName()
+{
+	return textureName;
+}
+
+
+
 void Entity::SetShaderName( std::string newShaderName )
 {
 	shaderName = newShaderName;
@@ -50,12 +63,18 @@ static glm::mat4 modelMatrix;
 
 void Entity::Render()
 {
-	auto mesh = meshManager.Get( meshName );
-	auto shader = shaderManager.Get( shaderName );
+	auto mesh    = meshManager.Get( meshName );
+	auto texture = textureManager.Get( textureName );
+	auto shader  = shaderManager.Get( shaderName );
 
 	if( !parent )
 	{
 		modelMatrix = glm::mat4( 1.0 );
+	}
+
+	if( !texture )
+	{
+		texture = textureManager.Get( "DefaultTexture" );
 	}
 
 	auto savedMatrix = modelMatrix;
@@ -63,7 +82,7 @@ void Entity::Render()
 	modelMatrix =  modelMatrix * glm::toMat4( GetRotation() );
 	modelMatrix = glm::translate( modelMatrix, GetLocation() );
 
-	if( mesh && shader )
+	if( mesh && texture && shader )
 	{
 		// Use the vertex array object of the mesh
 		glBindVertexArray( mesh->vao );
@@ -73,7 +92,7 @@ void Entity::Render()
 		glUniformMatrix4fv( modelUniform, 1, GL_FALSE, &modelMatrix[0][0] );
 
 		glActiveTexture( GL_TEXTURE0 );
-		glBindTexture( GL_TEXTURE_2D, textureManager.Get( "TestTexture" )->textureId );
+		glBindTexture( GL_TEXTURE_2D, texture->textureId );
 		glUniform1i( samplerUniform, 0 );
 
 		// Draw the elements
