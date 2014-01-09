@@ -10,8 +10,8 @@ void main()
 
   vec3 norm = normalize( normal );
   vec3 lightDir = normalize( lightDirection );
-  float cosTheta = clamp( dot( norm, lightDir  ), 0.4, 1.0 );
+  float cosTheta = clamp( dot( norm, lightDir  ), 0.6, 1.0 );
 
-  gl_FragColor = color * cosTheta;
+  gl_FragColor = vec4( color.rgb * cosTheta, color.a );
 }
 

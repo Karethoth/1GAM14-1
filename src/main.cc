@@ -113,6 +113,15 @@ int main( int argc, char **argv )
 		std::cerr << "Failed to load fragment shader!\n";
 	}
 
+	if( !textureManager.Load( std::string( "data/images/pebbles_Diffuse.png" ) ) )
+	{
+		std::cerr << "Failed to load image!\n";
+	}
+
+	if( !textureManager.Load( std::string( "data/images/redbrick_Diffuse.png" ) ) )
+	{
+		std::cerr << "Failed to load image!\n";
+	}
 
 	// Construct list of attributes and their locations
 	std::map<std::string, GLuint> attributes;
@@ -178,7 +187,7 @@ int main( int argc, char **argv )
 	// and the wanted shader
 	auto ground = std::make_shared<Entity>( "GroundSurfaceEntity" );
 	ground->SetMeshName( "GroundSurfaceMesh" );
-	ground->SetTextureName( "TestTexture" );
+	ground->SetTextureName( "data/images/pebbles_Diffuse.png" );
 	ground->SetShaderName( "TestShader" );
 	ground->SetPosition( glm::vec3( -20.0, 0.0, -20.0 ) );
 
@@ -188,6 +197,14 @@ int main( int argc, char **argv )
 
 	// Repeat process for a wall
 	Surface wallSurface( 40, 10 );
+	glm::vec2 corners[] =
+	{
+		glm::vec2( 5.0, 1.0 ),
+		glm::vec2( 0.0, 1.0 ),
+		glm::vec2( 5.0, 0.0 ),
+		glm::vec2( 0.0, 0.0 )
+	};
+	wallSurface.SetTextureCorners( corners );
 	auto wallMesh = wallSurface.GenerateMesh( 10, 5 );
 	wallMesh->name = "WallMesh";
 	wallMesh->GenerateGLBuffers( "TestShader" );
@@ -195,6 +212,7 @@ int main( int argc, char **argv )
 	auto wall = std::make_shared<Entity>( "WallEntity" );
 	wall->SetMeshName( "WallMesh" );
 	wall->SetShaderName( "TestShader" );
+	wall->SetTextureName( "data/images/redbrick_Diffuse.png" );
 	wall->SetPosition( glm::vec3( 0.0, 0.0, 0.0 ) );
 	wall->SetRotation( glm::quat( glm::vec3(
 		ToRadians( -90.f ),
@@ -207,6 +225,7 @@ int main( int argc, char **argv )
 	// And another wall Entity!
 	auto secondWall = std::make_shared<Entity>( "WallEntity2" );
 	secondWall->SetMeshName( "WallMesh" );
+	secondWall->SetTextureName( "data/images/redbrick_Diffuse.png" );
 	secondWall->SetShaderName( "TestShader" );
 	secondWall->SetPosition( glm::vec3( 0.0, 0.0, -10.0 ) );
 	secondWall->SetRotation( glm::quat( glm::vec3(
@@ -248,12 +267,15 @@ int main( int argc, char **argv )
 		textureManager.Add( "TestTexture", texture );
 	}
 
+
 	//glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 	//glLineWidth( 2.0 );
-
 	glEnable( GL_CULL_FACE );
 	glEnable( GL_DEPTH_TEST );
 	glDepthFunc( GL_LESS );
+
+	glEnable( GL_BLEND );
+	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
 	// We need to know how long has been since the last update
 	auto time = glfwGetTime();
