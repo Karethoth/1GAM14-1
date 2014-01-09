@@ -25,12 +25,12 @@ class Node
 	std::string GetName();
 
 	void SetScale( glm::vec3 newScale );
-	void SetLocation( glm::vec3 newLocation );
+	void SetPosition( glm::vec3 newPosition );
 	void SetRotation( glm::quat newRotation );
 
 	glm::vec3 GetScale() const;
-	glm::vec3 GetLocation() const;
-	glm::vec3 GetWorldLocation() const;
+	glm::vec3 GetPosition() const;
+	glm::vec3 GetWorldPosition() const;
 	glm::quat GetRotation() const;
 	glm::quat GetWorldRotation() const;
 
@@ -54,9 +54,9 @@ class Node
 	std::string name;
 
 	glm::vec3 scale;
-	glm::vec3 location;
+	glm::vec3 position;
 	glm::quat rotation;
-	glm::vec3 worldLocation;
+	glm::vec3 worldPosition;
 	glm::quat worldRotation;
 };
 

@@ -80,7 +80,7 @@ void Entity::Render()
 	auto savedMatrix = modelMatrix;
 
 	modelMatrix =  modelMatrix * glm::toMat4( GetRotation() );
-	modelMatrix = glm::translate( modelMatrix, GetLocation() );
+	modelMatrix = glm::translate( modelMatrix, GetPosition() );
 
 	if( mesh && texture && shader )
 	{

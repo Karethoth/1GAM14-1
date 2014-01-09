@@ -13,7 +13,7 @@ Node::Node( std::string name ) : name( name )
 	parent = nullptr;
 
 	SetScale( vec3( 1.f ) );
-	SetLocation( vec3( 0.f ) );
+	SetPosition( vec3( 0.f ) );
 	SetRotation( quat( glm::vec3( 0.0, 0.0, 0.0 ) ) );
 }
 
@@ -21,9 +21,9 @@ Node::Node( std::string name ) : name( name )
 Node::Node( const Node& other )
 {
 	name = other.name;
-	location = other.location;
+	position = other.position;
 	rotation = other.rotation;
-	worldLocation = other.worldLocation;
+	worldPosition = other.worldPosition;
 	worldRotation = other.worldRotation;
 	parent = other.parent;
 	children = other.children;
@@ -53,9 +53,9 @@ Node::~Node()
 void Node::Swap( Node& first, Node& second )
 {
 	std::swap( first.name, second.name );
-	std::swap( first.location, second.location );
+	std::swap( first.position, second.position );
 	std::swap( first.rotation, second.rotation );
-	std::swap( first.worldLocation, second.worldLocation );
+	std::swap( first.worldPosition, second.worldPosition );
 	std::swap( first.worldRotation, second.worldRotation );
 	std::swap( first.parent, second.parent );
 	std::swap( first.children, second.children );
@@ -70,9 +70,9 @@ void Node::SetScale( vec3 newScale )
 
 
 
-void Node::SetLocation( vec3 newLocation )
+void Node::SetPosition( vec3 newPosition )
 {
-	location = newLocation;
+	position = newPosition;
 	UpdateWorldInfo();
 }
 
@@ -105,16 +105,16 @@ vec3 Node::GetScale() const
 
 
 
-vec3 Node::GetLocation() const
+vec3 Node::GetPosition() const
 {
-	return location;
+	return position;
 }
 
 
 
-vec3 Node::GetWorldLocation() const
+vec3 Node::GetWorldPosition() const
 {
-	return worldLocation;
+	return worldPosition;
 }
 
 
@@ -149,12 +149,12 @@ void Node::UpdateWorldInfo()
 	// Update this node
 	if( parent )
 	{
-		worldLocation = location;
+		worldPosition = position;
 		worldRotation = rotation;
 	}
 	else
 	{
-		worldLocation = location;
+		worldPosition = position;
 		worldRotation = rotation;
 	}
 

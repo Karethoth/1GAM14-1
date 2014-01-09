@@ -146,7 +146,7 @@ int main( int argc, char **argv )
 
 	// Create the camera
 	auto camera = std::make_shared<Camera>();
-	camera->SetLocation( glm::vec3( 0.f, 8.f, -20.f ) );
+	camera->SetPosition( glm::vec3( 0.f, 8.f, -20.f ) );
 	camera->SetTarget( glm::vec3( 0.0, 1.0, 0.0 ) );
 	glm::vec3 cameraRot( 0.0, 0.0, 0.0 );
 	camera->SetRotation( glm::normalize( glm::quat( cameraRot ) ) );
@@ -158,7 +158,7 @@ int main( int argc, char **argv )
 	// Generate Node that acts as the "center" of the world.
 	// (vertices that are affected by it, rotate around it)
 	auto worldCenter = std::make_shared<Node>( "WorldCenter" );
-	worldCenter->SetLocation( glm::vec3( 0.0, -40.0, 0.0 ) );
+	worldCenter->SetPosition( glm::vec3( 0.0, -40.0, 0.0 ) );
 	rootNode.AddChild( worldCenter );
 
 
@@ -180,7 +180,7 @@ int main( int argc, char **argv )
 	ground->SetMeshName( "GroundSurfaceMesh" );
 	ground->SetTextureName( "TestTexture" );
 	ground->SetShaderName( "TestShader" );
-	ground->SetLocation( glm::vec3( -20.0, 0.0, -20.0 ) );
+	ground->SetPosition( glm::vec3( -20.0, 0.0, -20.0 ) );
 
 	// Give the entity to the root node
 	rootNode.AddChild( ground );
@@ -195,7 +195,7 @@ int main( int argc, char **argv )
 	auto wall = std::make_shared<Entity>( "WallEntity" );
 	wall->SetMeshName( "WallMesh" );
 	wall->SetShaderName( "TestShader" );
-	wall->SetLocation( glm::vec3( 0.0, 0.0, 0.0 ) );
+	wall->SetPosition( glm::vec3( 0.0, 0.0, 0.0 ) );
 	wall->SetRotation( glm::quat( glm::vec3(
 		ToRadians( -90.f ),
 		ToRadians( -90.f ),
@@ -208,7 +208,7 @@ int main( int argc, char **argv )
 	auto secondWall = std::make_shared<Entity>( "WallEntity2" );
 	secondWall->SetMeshName( "WallMesh" );
 	secondWall->SetShaderName( "TestShader" );
-	secondWall->SetLocation( glm::vec3( 0.0, 0.0, -10.0 ) );
+	secondWall->SetPosition( glm::vec3( 0.0, 0.0, -10.0 ) );
 	secondWall->SetRotation( glm::quat( glm::vec3(
 		ToRadians( 90.f ),
 		0.0,
@@ -260,12 +260,13 @@ int main( int argc, char **argv )
 	auto deltaTime = time;
 
 
+	glClearColor( 0.3f, 0.3f, 1.0f, 1.0f );
+
 	/* Main loop */
 	while( !glfwWindowShouldClose( window ) )
 	{
 		deltaTime = glfwGetTime()-time;
 		time = glfwGetTime();
-
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 		glUseProgram( shaderProgram->Get() );
@@ -284,7 +285,7 @@ int main( int argc, char **argv )
 		// Upload uniforms to GPU
 		glUniformMatrix4fv( viewUniform,  1, GL_FALSE, &(*viewMat)[0][0] );
 		glUniformMatrix4fv( projUniform,  1, GL_FALSE, &(*projectionMat)[0][0] );
-		glUniform3fv( worldCenterUniform, 1, &worldCenter->GetLocation()[0] );
+		glUniform3fv( worldCenterUniform, 1, &worldCenter->GetPosition()[0] );
 		glUniform3fv( lightDirectionUniform, 1, &glm::normalize( glm::vec3( 0.0, 1.0, 1.0 ) )[0] );
 
 

@@ -25,7 +25,7 @@ std::shared_ptr<mat4> Camera::GetViewMatrix()
 {
 	auto view = std::make_shared<mat4>(
 		glm::lookAt(
-			GetWorldLocation(),
+			GetWorldPosition(),
 			target,
 			GetWorldRotation() * upVector
 		)
