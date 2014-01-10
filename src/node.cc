@@ -149,8 +149,8 @@ void Node::UpdateWorldInfo()
 	// Update this node
 	if( parent )
 	{
-		worldPosition = position;
-		worldRotation = rotation;
+		worldPosition = parent->GetRotation() * position;
+		worldRotation = parent->GetRotation() * rotation;
 	}
 	else
 	{
