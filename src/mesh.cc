@@ -37,6 +37,13 @@ Mesh::~Mesh()
 bool Mesh::GenerateGLBuffers( const std::string& shaderName )
 {
 	auto shaderProgram = shaderManager.Get( shaderName );
+	if( !shaderProgram )
+	{
+		std::cerr << "Error Mesh::GenerateGLBuffers(): Shader '"
+		          << shaderName << "' wasn't found!\n";
+		return false;
+	}
+
 	glBindVertexArray( vao );
 
 	glBindBuffer( GL_ARRAY_BUFFER, vbo );

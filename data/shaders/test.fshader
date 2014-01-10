@@ -31,6 +31,5 @@ void main()
 		materialDiffuseColor * lightColor * lightPower * cosTheta / (distance * distance) +
 		materialSpecularColor * lightColor * lightPower * pow( cosAlpha, 5 ) / (distance * distance),
 		1.0 );
-
 }
 

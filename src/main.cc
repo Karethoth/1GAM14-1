@@ -23,6 +23,14 @@ struct WindowInfo
 } windowInfo;
 
 
+// Important nodes and entities
+Node rootNode;
+std::shared_ptr<Node>   light;
+std::shared_ptr<Node>   worldCenter;
+std::shared_ptr<Camera> camera;
+std::shared_ptr<Entity> ground;
+
+
 // Global managers, at least for now
 MeshManager meshManager;
 TextureManager textureManager;
@@ -53,6 +61,178 @@ static void GLFWFrameBufferSizeCallback( GLFWwindow* window, int width, int heig
 
 	glViewport( 0, 0, width, height );
 	windowInfo.UpdateRatio();
+}
+
+
+// Loader and initializer functions
+bool LoadShaders()
+{
+	Shader vShader( GL_VERTEX_SHADER );
+	Shader fShader( GL_FRAGMENT_SHADER );
+
+	if( !vShader.LoadFromFile( "data/shaders/test.vshader" ) )
+	{
+		std::cerr << "Failed to load vertex shader!\n";
+		return false;
+	}
+
+	if( !fShader.LoadFromFile( "data/shaders/test.fshader" ) )
+	{
+		std::cerr << "Failed to load fragment shader!\n";
+		return false;
+	}
+
+	// Construct list of attributes and their locations
+	std::map<std::string, GLuint> attributes;
+	attributes["vertexPosition"] = 0;
+	attributes["vertexNormal"]   = 1;
+	attributes["textureCoord"]   = 2;
+
+
+	// Create the shader and pass the shaders and the attribute list to it.
+	auto shaderProgram = std::make_shared<ShaderProgram>();
+	if( !shaderProgram->Load( vShader, fShader, attributes ) )
+	{
+		std::cerr << "Error: Compiling or linking the shader program has failed.\n";
+		return false;
+	}
+
+	// Give the shaderProgram to the manager
+	shaderManager.Add( "DefaultShader", shaderProgram );
+
+	return true;
+}
+
+
+
+bool LoadTextures()
+{
+	if( !textureManager.Load( "data/images/pebbles_Diffuse.png" ) )
+	{
+		return false;
+	}
+
+	if( !textureManager.Load( "data/images/redbrick_Diffuse.png" ) )
+	{
+		return false;
+	}
+
+
+	// Generate the default texture
+	auto pixelArray = NoiseArray( 3, 9*9 );
+	glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+
+	auto texture = std::make_shared<Texture>( "DefaultTexture" );
+
+	glBindTexture( GL_TEXTURE_2D, texture->textureId );
+	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, 9, 9, 0, GL_RGB,
+					GL_FLOAT, &pixelArray.get()[0][0] );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+
+	textureManager.Add( "DefaultTexture", texture );
+
+
+	return true;
+}
+
+
+
+bool CreateScene()
+{
+	// Create the camera
+	camera = std::make_shared<Camera>();
+	camera->SetPosition( glm::vec3( 0.f, 14.f, -15.f ) );
+	camera->SetTarget( glm::vec3( 0.0, 0.0, 0.0 ) );
+	glm::vec3 cameraRot( 0.0, 0.0, 0.0 );
+	camera->SetRotation( glm::normalize( glm::quat( cameraRot ) ) );
+	camera->SetRatio( windowInfo.ratio );
+	camera->SetFOV( 45.f );
+	rootNode.AddChild( camera );
+
+
+	// Generate Node that acts as the "center" of the world.
+	// (vertices that are affected by it, rotate around it)
+	worldCenter = std::make_shared<Node>( "WorldCenter" );
+	worldCenter->SetPosition( glm::vec3( 0.0, -40.0, 0.0 ) );
+	rootNode.AddChild( worldCenter );
+
+
+	// Test mesh generation from a surface
+	Surface groundSurface( 40, 40 );
+	glm::vec2 corners[] =
+	{
+		glm::vec2( 2.0, 2.0 ),
+		glm::vec2( 0.0, 2.0 ),
+		glm::vec2( 2.0, 0.0 ),
+		glm::vec2( 0.0, 0.0 )
+	};
+	groundSurface.SetTextureCorners( corners );
+	auto groundSurfaceMesh = groundSurface.GenerateMesh( 10, 10 );
+
+	// Give name to the mesh and generate
+	// the OpenGL arrays and buffers
+	groundSurfaceMesh->name = "GroundSurfaceMesh";
+	groundSurfaceMesh->GenerateGLBuffers( "DefaultShader" );
+
+	// Give the mesh to the mesh manager
+	meshManager.Add( "GroundSurfaceMesh", groundSurfaceMesh );
+
+	// Generate entity and set it to use the ground surface mesh
+	// and the wanted shader
+	ground = std::make_shared<Entity>( "GroundSurfaceEntity" );
+	ground->SetMeshName( "GroundSurfaceMesh" );
+	ground->SetTextureName( "data/images/pebbles_Diffuse.png" );
+	ground->SetShaderName( "DefaultShader" );
+	ground->SetPosition( glm::vec3( -20.0, 0.0, -20.0 ) );
+
+	// Give the entity to the root node
+	rootNode.AddChild( ground );
+
+
+	// Repeat process for a wall
+	Surface wallSurface( 40, 10 );
+	corners[0] = glm::vec2( 0.0, 0.0 );
+	corners[1] = glm::vec2( 5.0, 0.0 );
+	corners[2] = glm::vec2( 0.0, 1.0 );
+	corners[3] = glm::vec2( 5.0, 1.0 );
+	wallSurface.SetTextureCorners( corners );
+	auto wallMesh = wallSurface.GenerateMesh( 10, 5 );
+	wallMesh->name = "WallMesh";
+	wallMesh->GenerateGLBuffers( "DefaultShader" );
+	meshManager.Add( "WallMesh", wallMesh );
+	auto wall = std::make_shared<Entity>( "WallEntity" );
+	wall->SetMeshName( "WallMesh" );
+	wall->SetShaderName( "DefaultShader" );
+	wall->SetTextureName( "data/images/redbrick_Diffuse.png" );
+	wall->SetPosition( glm::vec3( 0.0, 0.0, 0.0 ) );
+	wall->SetRotation( glm::quat( glm::vec3(
+		ToRadians( -90.f ),
+		ToRadians( -90.f ),
+		0.0 )
+	) );
+	ground->AddChild( wall );
+
+
+	// And another wall Entity!
+	auto secondWall = std::make_shared<Entity>( "WallEntity2" );
+	secondWall->SetMeshName( "WallMesh" );
+	secondWall->SetTextureName( "data/images/redbrick_Diffuse.png" );
+	secondWall->SetShaderName( "DefaultShader" );
+	secondWall->SetPosition( glm::vec3( 0.0, 0.0, -10.0 ) );
+	secondWall->SetRotation( glm::quat( glm::vec3(
+		ToRadians( 90.f ),
+		0.0,
+		0.0 )
+	) );
+	ground->AddChild( secondWall );
+
+
+	// Create a Node to hold position of the light
+	light = std::make_shared<Node>( "TestLight" );
+	light->SetPosition( glm::vec3( -5.0, 5.0, -5.0 ) );
+	ground->AddChild( light );
+	return true;
 }
 
 
@@ -99,166 +279,42 @@ int main( int argc, char **argv )
 		exit( EXIT_FAILURE );
 	}
 
-	/* Shader testing */
-	Shader vShader( GL_VERTEX_SHADER );
-	Shader fShader( GL_FRAGMENT_SHADER );
 
-	if( !vShader.LoadFromFile( "data/shaders/test.vshader" ) )
+	// Create the root node
+	rootNode = Node( "RootNode" );
+
+
+	// Load Shaders
+	if( !LoadShaders() )
 	{
-		std::cerr << "Failed to load vertex shader!\n";
+		std::cerr << "Failed to load shaders!\n";
+		return -1;
 	}
 
-	if( !fShader.LoadFromFile( "data/shaders/test.fshader" ) )
+	// Load textures
+	if( !LoadTextures() )
 	{
-		std::cerr << "Failed to load fragment shader!\n";
+		std::cerr << "Failed to load textures!\n";
+		return -1;
 	}
 
-	if( !textureManager.Load( "data/images/pebbles_Diffuse.png" ) )
+	// Create the scene
+	if( !CreateScene() )
 	{
-		std::cerr << "Failed to load image!\n";
+		std::cerr << "Failed to create the scene!\n";
+		return -1;
 	}
 
-	if( !textureManager.Load( "data/images/redbrick_Diffuse.png" ) )
-	{
-		std::cerr << "Failed to load image!\n";
-	}
 
-	// Construct list of attributes and their locations
-	std::map<std::string, GLuint> attributes;
-	attributes["vertexPosition"] = 0;
-	attributes["vertexNormal"]   = 1;
-	attributes["textureCoord"]   = 2;
-
-
-	// Create the shader and pass the shaders and the attribute list to it.
-	auto shaderProgram = std::make_shared<ShaderProgram>();
-	if( !shaderProgram->Load( vShader, fShader, attributes ) )
-	{
-		std::cerr << "Error: Compiling or linking the shader program has failed.\n";
-		return 1;
-	}
-
-	// Give the shaderProgram to the manager
-	shaderManager.Add( "TestShader", shaderProgram );
-
-
-	// Get uniform locations
+	// Get the needed uniform locations
+	auto shaderProgram = shaderManager.Get( "DefaultShader" );
 	const GLint viewUniform          = shaderProgram->GetUniform( "V" );
 	const GLint projUniform          = shaderProgram->GetUniform( "P" );
 	const GLint worldCenterUniform   = shaderProgram->GetUniform( "worldCenter" );
 	const GLint lightPositionUniform = shaderProgram->GetUniform( "lightPosition" );
 
 
-	// Create the root node
-	Node rootNode( "RootNode" );
-
-
-	// Create the camera
-	auto camera = std::make_shared<Camera>();
-	camera->SetPosition( glm::vec3( 0.f, 14.f, -15.f ) );
-	camera->SetTarget( glm::vec3( 0.0, 0.0, 0.0 ) );
-	glm::vec3 cameraRot( 0.0, 0.0, 0.0 );
-	camera->SetRotation( glm::normalize( glm::quat( cameraRot ) ) );
-	camera->SetRatio( windowInfo.ratio );
-	camera->SetFOV( 45.f );
-	rootNode.AddChild( camera );
-
-
-	// Generate Node that acts as the "center" of the world.
-	// (vertices that are affected by it, rotate around it)
-	auto worldCenter = std::make_shared<Node>( "WorldCenter" );
-	worldCenter->SetPosition( glm::vec3( 0.0, -40.0, 0.0 ) );
-	rootNode.AddChild( worldCenter );
-
-
-	// Test mesh generation from a surface
-	Surface groundSurface( 40, 40 );
-	auto groundSurfaceMesh = groundSurface.GenerateMesh( 10, 10 );
-
-	// Give name to the mesh and generate
-	// the OpenGL arrays and buffers
-	groundSurfaceMesh->name = "GroundSurfaceMesh";
-	groundSurfaceMesh->GenerateGLBuffers( "TestShader" );
-
-	// Give the mesh to the mesh manager
-	meshManager.Add( "GroundSurfaceMesh", groundSurfaceMesh );
-
-	// Generate entity and set it to use the ground surface mesh
-	// and the wanted shader
-	auto ground = std::make_shared<Entity>( "GroundSurfaceEntity" );
-	ground->SetMeshName( "GroundSurfaceMesh" );
-	ground->SetTextureName( "data/images/pebbles_Diffuse.png" );
-	ground->SetShaderName( "TestShader" );
-	ground->SetPosition( glm::vec3( -20.0, 0.0, -20.0 ) );
-
-	// Give the entity to the root node
-	rootNode.AddChild( ground );
-
-
-	// Repeat process for a wall
-	Surface wallSurface( 40, 10 );
-	glm::vec2 corners[] =
-	{
-		glm::vec2( 5.0, 1.0 ),
-		glm::vec2( 0.0, 1.0 ),
-		glm::vec2( 5.0, 0.0 ),
-		glm::vec2( 0.0, 0.0 )
-	};
-	wallSurface.SetTextureCorners( corners );
-	auto wallMesh = wallSurface.GenerateMesh( 10, 5 );
-	wallMesh->name = "WallMesh";
-	wallMesh->GenerateGLBuffers( "TestShader" );
-	meshManager.Add( "WallMesh", wallMesh );
-	auto wall = std::make_shared<Entity>( "WallEntity" );
-	wall->SetMeshName( "WallMesh" );
-	wall->SetShaderName( "TestShader" );
-	wall->SetTextureName( "data/images/redbrick_Diffuse.png" );
-	wall->SetPosition( glm::vec3( 0.0, 0.0, 0.0 ) );
-	wall->SetRotation( glm::quat( glm::vec3(
-		ToRadians( -90.f ),
-		ToRadians( -90.f ),
-		0.0 )
-	) );
-	ground->AddChild( wall );
-
-
-	// And another wall Entity!
-	auto secondWall = std::make_shared<Entity>( "WallEntity2" );
-	secondWall->SetMeshName( "WallMesh" );
-	secondWall->SetTextureName( "data/images/redbrick_Diffuse.png" );
-	secondWall->SetShaderName( "TestShader" );
-	secondWall->SetPosition( glm::vec3( 0.0, 0.0, -10.0 ) );
-	secondWall->SetRotation( glm::quat( glm::vec3(
-		ToRadians( 90.f ),
-		0.0,
-		0.0 )
-	) );
-	ground->AddChild( secondWall );
-
-
-	// Create a Node to hold position of the light
-	auto light = std::make_shared<Node>( "TestLight" );
-	light->SetPosition( glm::vec3( -5.0, 5.0, -5.0 ) );
-	ground->AddChild( light );
-
-
-	// Generate the default texture
-	{
-		auto pixelArray = NoiseArray( 3, 9*9 );
-		glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
-
-		auto texture = std::make_shared<Texture>( "DefaultTexture" );
-
-		glBindTexture( GL_TEXTURE_2D, texture->textureId );
-		glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, 9, 9, 0, GL_RGB,
-					  GL_FLOAT, &pixelArray.get()[0][0] );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
-
-		textureManager.Add( "DefaultTexture", texture );
-	}
-
-
+	// Set some GL settings up
 	//glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 	//glLineWidth( 2.0 );
 	glEnable( GL_CULL_FACE );
@@ -268,12 +324,15 @@ int main( int argc, char **argv )
 	glEnable( GL_BLEND );
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
+
 	// We need to know how long has been since the last update
 	auto time = glfwGetTime();
 	auto deltaTime = time;
 
 
+	// Set the clear color
 	glClearColor( 0.3f, 0.3f, 1.0f, 1.0f );
+
 
 	/* Main loop */
 	while( !glfwWindowShouldClose( window ) )
@@ -309,6 +368,7 @@ int main( int argc, char **argv )
 		glfwSwapBuffers( window );
 		glfwPollEvents();
 	}
+
 
     glDisableVertexAttribArray( shaderProgram->GetAttribute( "textureCoord" ) );
     glDisableVertexAttribArray( shaderProgram->GetAttribute( "vertexNormal" ) );
