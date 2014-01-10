@@ -1,5 +1,5 @@
 #include "textureManager.hh"
-#include <png/png.h>
+#include <png.h>
 #include <iostream>
 
 
@@ -9,15 +9,23 @@ TextureManager::~TextureManager()
 
 
 
-bool TextureManager::Load( std::string &textureFile )
+bool TextureManager::Load( const std::string& textureFile )
 {
     png_infop   info_ptr;
     png_structp png_ptr;
 
 	FILE *file;
+
+	// Ugly, I know.
+#ifdef _WIN32
 	errno_t err = fopen_s( &file, textureFile.c_str(), "rb" );
 	if( err )
 	{
+#else
+	file = fopen( textureFile.c_str(), "rb" );
+	if( !file )
+	{
+#endif
         return false;
     }
 
@@ -50,7 +58,6 @@ bool TextureManager::Load( std::string &textureFile )
     png_uint_32 width = png_get_image_width( png_ptr, info_ptr );
     png_uint_32 height = png_get_image_height( png_ptr, info_ptr );
 
-    png_uint_32 bitdepth  = png_get_bit_depth( png_ptr, info_ptr );
     png_uint_32 channels  = png_get_channels( png_ptr, info_ptr );
     png_uint_32 colorType = png_get_color_type( png_ptr, info_ptr );
 

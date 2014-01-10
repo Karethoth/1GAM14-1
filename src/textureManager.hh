@@ -11,7 +11,7 @@ class TextureManager : public TemplateManager<Texture>
  public:
 	virtual ~TextureManager();
 
-	virtual bool Load( std::string &textureFile );
+	virtual bool Load( const std::string& textureFile );
 };
 
 

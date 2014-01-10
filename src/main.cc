@@ -113,12 +113,12 @@ int main( int argc, char **argv )
 		std::cerr << "Failed to load fragment shader!\n";
 	}
 
-	if( !textureManager.Load( std::string( "data/images/pebbles_Diffuse.png" ) ) )
+	if( !textureManager.Load( "data/images/pebbles_Diffuse.png" ) )
 	{
 		std::cerr << "Failed to load image!\n";
 	}
 
-	if( !textureManager.Load( std::string( "data/images/redbrick_Diffuse.png" ) ) )
+	if( !textureManager.Load( "data/images/redbrick_Diffuse.png" ) )
 	{
 		std::cerr << "Failed to load image!\n";
 	}

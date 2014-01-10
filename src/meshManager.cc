@@ -5,7 +5,7 @@ MeshManager::~MeshManager()
 {
 }
 
-bool MeshManager::Load( std::string &meshFile )
+bool MeshManager::Load( const std::string& meshFile )
 {
 	// yup, doesn't do a thing.
 	return true;

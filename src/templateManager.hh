@@ -17,22 +17,22 @@ class TemplateManager
 	}
 
 
-	virtual bool Load( std::string& ) = 0;
+	virtual bool Load( const std::string& ) = 0;
 
 
-	virtual void Add( const std::string &key, const std::shared_ptr<T> &item )
+	virtual void Add( const std::string& key, const std::shared_ptr<T> &item )
 	{
 		items[key] = item;
 	}
 
 
-	virtual std::shared_ptr<T> Get( const std::string &key )
+	virtual std::shared_ptr<T> Get( const std::string& key )
 	{
 		return items[key];
 	}
 
 
-	virtual std::shared_ptr<T> Remove( const std::string &key )
+	virtual std::shared_ptr<T> Remove( const std::string& key )
 	{
 		std::shared_ptr<T> ret = items[key];
 		items.erase( key );

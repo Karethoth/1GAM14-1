@@ -7,7 +7,7 @@ ShaderProgramManager::~ShaderProgramManager()
 
 
 
-bool ShaderProgramManager::Load( std::string &programFile )
+bool ShaderProgramManager::Load( const std::string& programFile )
 {
 	return true;
 }

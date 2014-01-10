@@ -4,7 +4,7 @@ BINDIR = ../bin
 
 DIRS = $(OBJDIR) $(BINDIR)
 
-LIBS = -lGL -lGLU -lGLEW -lglfw3 -lX11 -lXxf86vm -lXrandr -lpthread -lXi
+LIBS = -lGL -lGLU -lGLEW -lglfw3 -lX11 -lXxf86vm -lXrandr -lpthread -lXi -lpng
 
 CC = g++ -g
 
