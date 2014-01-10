@@ -143,10 +143,10 @@ int main( int argc, char **argv )
 
 
 	// Get uniform locations
-	const GLint viewUniform           = shaderProgram->GetUniform( "V" );
-	const GLint projUniform           = shaderProgram->GetUniform( "P" );
-	const GLint worldCenterUniform    = shaderProgram->GetUniform( "worldCenter" );
-	const GLint lightDirectionUniform = shaderProgram->GetUniform( "lightDirection" );
+	const GLint viewUniform          = shaderProgram->GetUniform( "V" );
+	const GLint projUniform          = shaderProgram->GetUniform( "P" );
+	const GLint worldCenterUniform   = shaderProgram->GetUniform( "worldCenter" );
+	const GLint lightPositionUniform = shaderProgram->GetUniform( "lightPosition" );
 
 
 	// Create the root node
@@ -155,12 +155,12 @@ int main( int argc, char **argv )
 
 	// Create the camera
 	auto camera = std::make_shared<Camera>();
-	camera->SetPosition( glm::vec3( 0.f, 8.f, -20.f ) );
-	camera->SetTarget( glm::vec3( 0.0, 1.0, 0.0 ) );
+	camera->SetPosition( glm::vec3( 0.f, 14.f, -15.f ) );
+	camera->SetTarget( glm::vec3( 0.0, 0.0, 0.0 ) );
 	glm::vec3 cameraRot( 0.0, 0.0, 0.0 );
 	camera->SetRotation( glm::normalize( glm::quat( cameraRot ) ) );
 	camera->SetRatio( windowInfo.ratio );
-	camera->SetFOV( 60.f );
+	camera->SetFOV( 45.f );
 	rootNode.AddChild( camera );
 
 
@@ -236,27 +236,18 @@ int main( int argc, char **argv )
 	ground->AddChild( secondWall );
 
 
-	// Test texture manager
-	{
-		// Generate the default texture
-		auto pixelArray = NoiseArray( 3, 4 );
-		glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+	// Create a Node to hold position of the light
+	auto light = std::make_shared<Node>( "TestLight" );
+	light->SetPosition( glm::vec3( -5.0, 5.0, -5.0 ) );
+	ground->AddChild( light );
 
-		auto texture = std::make_shared<Texture>( "DefaultTexture" );
 
-		glBindTexture( GL_TEXTURE_2D, texture->textureId );
-		glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, 2, 2, 0, GL_RGB,
-					  GL_FLOAT, &pixelArray.get()[0][0] );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
-
-		textureManager.Add( "DefaultTexture", texture );
-	}
+	// Generate the default texture
 	{
 		auto pixelArray = NoiseArray( 3, 9*9 );
 		glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
 
-		auto texture = std::make_shared<Texture>( "TestTexture" );
+		auto texture = std::make_shared<Texture>( "DefaultTexture" );
 
 		glBindTexture( GL_TEXTURE_2D, texture->textureId );
 		glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, 9, 9, 0, GL_RGB,
@@ -264,7 +255,7 @@ int main( int argc, char **argv )
 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
 
-		textureManager.Add( "TestTexture", texture );
+		textureManager.Add( "DefaultTexture", texture );
 	}
 
 
@@ -308,7 +299,7 @@ int main( int argc, char **argv )
 		glUniformMatrix4fv( viewUniform,  1, GL_FALSE, &(*viewMat)[0][0] );
 		glUniformMatrix4fv( projUniform,  1, GL_FALSE, &(*projectionMat)[0][0] );
 		glUniform3fv( worldCenterUniform, 1, &worldCenter->GetPosition()[0] );
-		glUniform3fv( lightDirectionUniform, 1, &glm::normalize( glm::vec3( 0.0, 1.0, 1.0 ) )[0] );
+		glUniform3fv( lightPositionUniform, 1, &light->GetWorldPosition()[0] );
 
 
 		// Render the current scene

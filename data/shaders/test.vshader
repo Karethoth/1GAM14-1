@@ -6,9 +6,13 @@ uniform mat4 M;
 uniform mat4 V;
 uniform mat4 P;
 uniform vec3 worldCenter;
+uniform vec3 lightPosition;
 
 varying vec3 normal;
+varying vec3 vPosition;
 varying vec2 vTextureCoord;
+varying vec3 vLightDirection;
+varying vec3 vEyeDirection;
 
 
 /* Credit for this function goes to:
@@ -42,8 +46,14 @@ void main()
 
 	v = worldSurfaceRotation * v;
 
+	vEyeDirection = vec3( 0, 0, 0 ) - (V * v).xyz;
+
+	vec3 lightPos = (V * worldSurfaceRotation * vec4( lightPosition, 1 )).xyz;
+	vLightDirection = lightPos + vEyeDirection;
+
+	vPosition = v;
 	gl_Position = P * V * v;
-	normal = (M*vec4(vertexNormal,0) ).xyz;
+	normal = (V*M*vec4(vertexNormal,0) ).xyz;
 	vTextureCoord = textureCoord;
 }
 

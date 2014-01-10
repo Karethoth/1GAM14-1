@@ -1,17 +1,36 @@
 varying vec3 normal;
+varying vec3 vPosition;
 varying vec2 vTextureCoord;
+varying vec3 vLightDirection;
+varying vec3 vEyeDirection;
 
-uniform vec3 lightDirection;
+uniform vec3      lightPosition;
 uniform sampler2D textureSampler;
+
 
 void main()
 {
-  vec4 color = texture2D( textureSampler, vTextureCoord );
+	vec3 lightColor = vec3( 1, 1, 1 );
+	float lightPower = 50.0;
 
-  vec3 norm = normalize( normal );
-  vec3 lightDir = normalize( lightDirection );
-  float cosTheta = clamp( dot( norm, lightDir  ), 0.6, 1.0 );
+	vec3 materialDiffuseColor = texture2D( textureSampler, vTextureCoord ).rgb;
+	vec3 materialAmbientColor = vec3( 0.1, 0.1, 0.1 ) * materialDiffuseColor;
+	vec3 materialSpecularColor = vec3( 0.3, 0.3, 0.3 );
 
-  gl_FragColor = vec4( color.rgb * cosTheta, color.a );
+	float distance = length( lightPosition - vPosition );
+
+	vec3 norm = normalize( normal );
+	vec3 l = normalize( vLightDirection );
+	float cosTheta = clamp( dot( norm, l ), 0.0, 1.0 );
+
+	vec3 E = normalize( vEyeDirection );
+	vec3 R = reflect( -l, norm );
+	float cosAlpha = clamp( dot( E, R ), 2,1 );
+
+	gl_FragColor = vec4( materialAmbientColor +
+		materialDiffuseColor * lightColor * lightPower * cosTheta / (distance * distance) +
+		materialSpecularColor * lightColor * lightPower * pow( cosAlpha, 5 ) / (distance * distance),
+		1.0 );
+
 }
 
