@@ -51,7 +51,7 @@ void main()
 	vec3 lightPos = (V * worldSurfaceRotation * vec4( lightPosition, 1 )).xyz;
 	vLightDirection = lightPos + vEyeDirection;
 
-	vPosition = v;
+	vPosition = v.xyz;
 	gl_Position = P * V * v;
 	normal = (V*M*vec4(vertexNormal,0) ).xyz;
 	vTextureCoord = textureCoord;

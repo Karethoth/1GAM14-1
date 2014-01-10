@@ -11,9 +11,10 @@ uniform sampler2D textureSampler;
 void main()
 {
 	vec3 lightColor = vec3( 1, 1, 1 );
-	float lightPower = 50.0;
+	float lightPower = 10.0;
 
-	vec3 materialDiffuseColor = texture2D( textureSampler, vTextureCoord ).rgb;
+	vec4 color = texture2D( textureSampler, vTextureCoord );
+	vec3 materialDiffuseColor = color.rgb;
 	vec3 materialAmbientColor = vec3( 0.1, 0.1, 0.1 ) * materialDiffuseColor;
 	vec3 materialSpecularColor = vec3( 0.3, 0.3, 0.3 );
 
@@ -29,7 +30,7 @@ void main()
 
 	gl_FragColor = vec4( materialAmbientColor +
 		materialDiffuseColor * lightColor * lightPower * cosTheta / (distance * distance) +
-		materialSpecularColor * lightColor * lightPower * pow( cosAlpha, 5 ) / (distance * distance),
-		1.0 );
+		materialSpecularColor * lightColor * lightPower * cosAlpha / (distance * distance),
+		color.a );
 }
 
