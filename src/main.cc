@@ -112,6 +112,11 @@ bool LoadTextures()
 		return false;
 	}
 
+	if( !textureManager.Load( "data/images/tree.png" ) )
+	{
+		return false;
+	}
+
 	if( !textureManager.Load( "data/images/redbrick_Diffuse.png" ) )
 	{
 		return false;
@@ -205,10 +210,10 @@ bool CreateScene()
 	wall->SetMeshName( "WallMesh" );
 	wall->SetShaderName( "DefaultShader" );
 	wall->SetTextureName( "data/images/redbrick_Diffuse.png" );
-	wall->SetPosition( glm::vec3( 0.0, 0.0, 0.0 ) );
+	wall->SetPosition( glm::vec3( 0.0, 0.0, -10.0 ) );
 	wall->SetRotation( glm::quat( glm::vec3(
-		ToRadians( -90.f ),
-		ToRadians( -90.f ),
+		ToRadians( 90.f ),
+		0.0,
 		0.0 )
 	) );
 	ground->AddChild( wall );
@@ -219,13 +224,32 @@ bool CreateScene()
 	secondWall->SetMeshName( "WallMesh" );
 	secondWall->SetTextureName( "data/images/redbrick_Diffuse.png" );
 	secondWall->SetShaderName( "DefaultShader" );
-	secondWall->SetPosition( glm::vec3( 0.0, 0.0, -10.0 ) );
+	secondWall->SetPosition( glm::vec3( -40.0, 0.0, -10.0 ) );
 	secondWall->SetRotation( glm::quat( glm::vec3(
 		ToRadians( 90.f ),
-		0.0,
+		ToRadians( 90.f ),
 		0.0 )
 	) );
 	ground->AddChild( secondWall );
+
+
+	// Create a tree to test textures with alpha layer
+	Surface squareSurface( 5, 5 );
+	auto squareMesh = squareSurface.GenerateMesh( 2, 2 );
+	squareMesh->name = "SquareMesh";
+	squareMesh->GenerateGLBuffers( "DefaultShader" );
+	meshManager.Add( "SquareMesh", squareMesh );
+	auto tree = std::make_shared<Entity>( "Tree" );
+	tree->SetMeshName( "SquareMesh" );
+	tree->SetTextureName( "data/images/tree.png" );
+	tree->SetShaderName( "DefaultShader" );
+	tree->SetPosition( glm::vec3( -4.0, 15.0, -4.5 ) );
+	tree->SetRotation( glm::quat( glm::vec3(
+		ToRadians( 90.f ),
+		ToRadians( 45.f ),
+		0.0 )
+	) );
+	ground->AddChild( tree );
 
 
 	// Create a Node to hold position of the light
