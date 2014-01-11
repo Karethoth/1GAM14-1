@@ -367,16 +367,18 @@ int main( int argc, char **argv )
 
 		glUseProgram( shaderProgram->Get() );
 
-		// Camera handling and matrix stuff
-		camera->SetRatio( windowInfo.ratio );
-		auto projectionMat = camera->GetProjectionMatrix();
-		auto viewMat = camera->GetViewMatrix();
 
 		// Rotate the ground
 		ground->SetRotation( glm::normalize( glm::quat( glm::vec3( 0.f, deltaTime, 0.f) ) * ground->GetRotation() ) );
 
+
 		// Update the node tree
 		rootNode.UpdateWorldInfo();
+
+		// Camera handling and matrix stuff
+		camera->SetRatio( windowInfo.ratio );
+		auto projectionMat = camera->GetProjectionMatrix();
+		auto viewMat = camera->GetViewMatrix();
 
 		// Upload uniforms to GPU
 		glUniformMatrix4fv( viewUniform,  1, GL_FALSE, &(*viewMat)[0][0] );
@@ -387,7 +389,6 @@ int main( int argc, char **argv )
 
 		// Render the current scene
 		rootNode.Render();
-
 
 		glfwSwapBuffers( window );
 		glfwPollEvents();
