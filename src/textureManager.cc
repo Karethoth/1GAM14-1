@@ -81,7 +81,7 @@ bool TextureManager::Load( const std::string& textureFile )
 	auto texture = std::make_shared<Texture>( textureFile );
 
 	glBindTexture( GL_TEXTURE_2D, texture->textureId );
-	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,
+	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,
 	              colorType == PNG_COLOR_TYPE_RGBA? GL_RGBA : GL_RGB,
 	              GL_UNSIGNED_BYTE, data );
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
