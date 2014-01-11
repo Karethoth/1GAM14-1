@@ -11,7 +11,7 @@ uniform sampler2D textureSampler;
 void main()
 {
 	vec3 lightColor = vec3( 1, 1, 1 );
-	float lightPower = 10.0;
+	float lightPower = 40.0;
 
 	vec4 color = texture2D( textureSampler, vTextureCoord );
 	vec3 materialDiffuseColor = color.rgb;
