@@ -25,6 +25,7 @@ OBJS=\
       $(OBJDIR)/textureManager.o \
       $(OBJDIR)/shaderProgramManager.o \
       $(OBJDIR)/entity.o \
+      $(OBJDIR)/character.o \
       $(OBJDIR)/surface.o \
       $(OBJDIR)/main.o
 
