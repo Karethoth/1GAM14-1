@@ -29,7 +29,7 @@ bool TextureManager::Load( const std::string& filepath,
 	if( err )
 	{
 #else
-	file = fopen( textureFile.c_str(), "rb" );
+	file = fopen( filepath.c_str(), "rb" );
 	if( !file )
 	{
 #endif
