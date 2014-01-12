@@ -107,17 +107,17 @@ bool LoadShaders()
 
 bool LoadTextures()
 {
-	if( !textureManager.Load( "data/images/pebbles_Diffuse.png" ) )
+	if( !textureManager.Load( "data/images/pebbles_Diffuse.png", "pebbles" ) )
 	{
 		return false;
 	}
 
-	if( !textureManager.Load( "data/images/tree.png" ) )
+	if( !textureManager.Load( "data/images/tree.png", "tree" ) )
 	{
 		return false;
 	}
 
-	if( !textureManager.Load( "data/images/redbrick_Diffuse.png" ) )
+	if( !textureManager.Load( "data/images/redbrick_Diffuse.png", "bricks" ) )
 	{
 		return false;
 	}
@@ -191,7 +191,7 @@ bool CreateScene()
 	// and the wanted shader
 	auto ground = std::make_shared<Entity>( "GroundSurfaceEntity" );
 	ground->SetMeshName( "GroundSurfaceMesh" );
-	ground->SetTextureName( "data/images/pebbles_Diffuse.png" );
+	ground->SetTextureName( "pebbles" );
 	ground->SetShaderName( "DefaultShader" );
 	ground->SetPosition( glm::vec3( -20.0, 0.0, -20.0 ) );
 
@@ -214,7 +214,7 @@ bool CreateScene()
 	auto wall = std::make_shared<Entity>( "WallEntity" );
 	wall->SetMeshName( "WallMesh" );
 	wall->SetShaderName( "DefaultShader" );
-	wall->SetTextureName( "data/images/redbrick_Diffuse.png" );
+	wall->SetTextureName( "bricks" );
 	wall->SetPosition( glm::vec3( -20.0, 0.0, 20.0 ) );
 	wall->SetRotation( glm::quat( glm::vec3(
 		ToRadians( -90.f ),
@@ -227,7 +227,7 @@ bool CreateScene()
 	// And another wall entity!
 	auto secondWall = std::make_shared<Entity>( "WallEntity2" );
 	secondWall->SetMeshName( "WallMesh" );
-	secondWall->SetTextureName( "data/images/redbrick_Diffuse.png" );
+	secondWall->SetTextureName( "bricks" );
 	secondWall->SetShaderName( "DefaultShader" );
 	secondWall->SetPosition( glm::vec3( 20.0, 0.0, 20.0 ) );
 	secondWall->SetRotation( glm::quat( glm::vec3(
@@ -246,7 +246,7 @@ bool CreateScene()
 	meshManager.Add( "SquareMesh", squareMesh );
 	auto tree = std::make_shared<Entity>( "Tree" );
 	tree->SetMeshName( "SquareMesh" );
-	tree->SetTextureName( "data/images/tree.png" );
+	tree->SetTextureName( "tree" );
 	tree->SetShaderName( "DefaultShader" );
 	tree->SetPosition( glm::vec3( 15.0, 4.9, 10.0 ) );
 	tree->SetRotation( glm::quat( glm::vec3(
