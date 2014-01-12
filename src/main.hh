@@ -4,13 +4,14 @@
 
 
 #ifdef _WIN32
-	#pragma comment(lib, "libpng16.lib")
 	#pragma comment(lib, "GLFW3.lib")
 	#pragma comment(lib, "opengl32.lib")
 	#pragma comment(lib, "glu32.lib")
 	#ifdef _DEBUG
+		#pragma comment(lib, "libpng16d.lib")
 		#pragma comment(lib, "glew32sd.lib")
 	#else
+		#pragma comment(lib, "libpng16.lib")
 		#pragma comment(lib, "glew32s.lib")
 	#endif
 
