@@ -25,10 +25,11 @@ struct WindowInfo
 
 // Important nodes and entities
 Node rootNode;
-std::shared_ptr<Node>   light;
-std::shared_ptr<Node>   world;
-std::shared_ptr<Node>   worldCenter;
-std::shared_ptr<Camera> camera;
+std::shared_ptr<Node>      light;
+std::shared_ptr<Node>      world;
+std::shared_ptr<Node>      worldCenter;
+std::shared_ptr<Camera>    camera;
+std::shared_ptr<Character> player;
 
 
 // Global managers, at least for now
@@ -36,7 +37,13 @@ MeshManager meshManager;
 TextureManager textureManager;
 ShaderProgramManager shaderManager;
 
-
+struct
+{
+	bool up;
+	bool down;
+	bool left;
+	bool right;
+} keysDown = {false, false, false, false};
 
 // Callbacks for GLFW events
 static void GLFWErrorCallback( int error, const char* description )
@@ -51,6 +58,23 @@ static void GLFWKeyCallback( GLFWwindow* window,
 {
 	if( key == GLFW_KEY_ESCAPE && action == GLFW_PRESS )
 		glfwSetWindowShouldClose( window, GL_TRUE );
+
+	if( key == GLFW_KEY_UP )
+	{
+		keysDown.up = !(!action);
+	}
+	if( key == GLFW_KEY_DOWN )
+	{
+		keysDown.down = !(!action);
+	}
+	if( key == GLFW_KEY_LEFT )
+	{
+		keysDown.left = !(!action);
+	}
+	if( key == GLFW_KEY_RIGHT )
+	{
+		keysDown.right = !(!action);
+	}
 }
 
 
@@ -220,10 +244,10 @@ bool CreateScene()
 	wall->SetMeshName( "WallMesh" );
 	wall->SetShaderName( "DefaultShader" );
 	wall->SetTextureName( "bricks" );
-	wall->SetPosition( glm::vec3( -20.0, 0.0, 20.0 ) );
+	wall->SetPosition( glm::vec3( 20.0, 0.0, -20.0 ) );
 	wall->SetRotation( glm::quat( glm::vec3(
 		ToRadians( -90.f ),
-		ToRadians( 0.f ),
+		ToRadians( 180.f ),
 		0.0 )
 	) );
 	world->AddChild( wall );
@@ -234,10 +258,10 @@ bool CreateScene()
 	secondWall->SetMeshName( "WallMesh" );
 	secondWall->SetTextureName( "bricks" );
 	secondWall->SetShaderName( "DefaultShader" );
-	secondWall->SetPosition( glm::vec3( 20.0, 0.0, 20.0 ) );
+	secondWall->SetPosition( glm::vec3( -20.0, 0.0, -20.0 ) );
 	secondWall->SetRotation( glm::quat( glm::vec3(
 		ToRadians( -90.f ),
-		ToRadians( 90.f ),
+		ToRadians( -90.f ),
 		0.0 )
 	) );
 	world->AddChild( secondWall );
@@ -253,10 +277,10 @@ bool CreateScene()
 	tree->SetMeshName( "SquareMesh" );
 	tree->SetTextureName( "tree" );
 	tree->SetShaderName( "DefaultShader" );
-	tree->SetPosition( glm::vec3( 15.0, 4.9, 10.0 ) );
+	tree->SetPosition( glm::vec3( -15.0, 4.9, -10.0 ) );
 	tree->SetRotation( glm::quat( glm::vec3(
 		ToRadians( 90.f ),
-		ToRadians( 225.f ),
+		ToRadians( 45.f ),
 		0.0 )
 	) );
 	world->AddChild( tree );
@@ -271,7 +295,7 @@ bool CreateScene()
 
 	// Create a Node to hold position of the light
 	light = std::make_shared<Node>( "TestLight" );
-	light->SetPosition( glm::vec3( 10.0, 8.0, 10.0 ) );
+	light->SetPosition( glm::vec3( -10.0, 8.0, -10.0 ) );
 	world->AddChild( light );
 	return true;
 }
@@ -346,7 +370,7 @@ int main( int argc, char **argv )
 		return -1;
 	}
 
-	auto player = std::make_shared<Character>( "Player" );
+	player = std::make_shared<Character>( "Player" );
 	player->SetPosition( glm::vec3( 0.0, 0.0, 0.0 ) );
 	world->AddChild( player );
 
@@ -388,15 +412,25 @@ int main( int argc, char **argv )
 		glUseProgram( shaderProgram->Get() );
 
 
-		// Rotate the world
-		world->SetRotation( glm::normalize( glm::quat( glm::vec3( 0.f, deltaTime, 0.f) ) * world->GetRotation() ) );
+		// Handle input
+		glm::vec3 move( 0.f );
+		if( keysDown.up )
+			move += glm::vec3( 0.0, 0.0, -deltaTime*10 );
+		if( keysDown.down )
+			move += glm::vec3( 0.0, 0.0, deltaTime*10 );
+		if( keysDown.left )
+			move += glm::vec3( -deltaTime*10, 0.0, 0.0 );
+		if( keysDown.right )
+			move += glm::vec3( deltaTime*10, 0.0, 0.0 );
+
+		player->SetPosition( player->GetPosition() + move );
 
 
 		// Update the node tree
 		rootNode.UpdateWorldInfo();
 
 
-		camera->SetPosition( player->GetPosition() + glm::vec3( 0.f, 14.f, -15.f ) );
+		camera->SetPosition( player->GetPosition() + glm::vec3( 0.f, 14.f, 15.f ) );
 		camera->SetTarget( player->GetPosition() );
 
 		worldCenter->SetPosition( player->GetPosition() + glm::vec3( 0.f, -50.f, 0.f ) );
