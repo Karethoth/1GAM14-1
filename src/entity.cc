@@ -58,8 +58,6 @@ std::string Entity::GetShaderName()
 }
 
 
-static glm::mat4 modelMatrix;
-
 
 void Entity::Render()
 {
@@ -67,29 +65,25 @@ void Entity::Render()
 	auto texture = textureManager.Get( textureName );
 	auto shader  = shaderManager.Get( shaderName );
 
-	if( !parent )
-	{
-		modelMatrix = glm::mat4( 1.0 );
-	}
 
 	if( !texture )
 	{
 		texture = textureManager.Get( "DefaultTexture" );
 	}
 
-	auto savedMatrix = modelMatrix;
-
-	modelMatrix =  modelMatrix * glm::toMat4( GetRotation() );
-	modelMatrix = glm::translate( modelMatrix, GetPosition() );
-
 	if( mesh && texture && shader )
 	{
+		glm::mat4 rot = glm::toMat4( GetWorldRotation() );
+		glm::mat4 trans = glm::translate(glm::mat4(1.0f), GetWorldPosition());
+
+		glm::mat4 final = trans * rot;
+
 		// Use the vertex array object of the mesh
 		glBindVertexArray( mesh->vao );
 		const GLint modelUniform  = shader->GetUniform( "M" );
 		const GLint samplerUniform  = shader->GetUniform( "textureSampler" );
 
-		glUniformMatrix4fv( modelUniform, 1, GL_FALSE, &modelMatrix[0][0] );
+		glUniformMatrix4fv( modelUniform, 1, GL_FALSE, &final[0][0] );
 
 		glActiveTexture( GL_TEXTURE0 );
 		glBindTexture( GL_TEXTURE_2D, texture->textureId );
@@ -126,7 +120,5 @@ void Entity::Render()
 			entityChild->Render();
 		}
 	}
-
-	modelMatrix = savedMatrix;
 }
 

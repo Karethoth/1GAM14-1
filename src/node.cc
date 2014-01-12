@@ -147,16 +147,21 @@ void Node::Render()
 // Used to update worldLocation and worldPosition
 void Node::UpdateWorldInfo()
 {
-	// Update this node
+	worldRotation = rotation;
+	worldPosition = position;
+
 	if( parent )
 	{
-		worldPosition = parent->GetRotation() * position;
-		worldRotation = parent->GetRotation() * rotation;
+		worldRotation = parent->GetWorldRotation() * rotation;
+
+		worldPosition = parent->GetWorldPosition() +
+		                parent->GetWorldRotation() * position;
 	}
-	else
+
+	if( GetName() == "GroundSurfaceEntity" )
 	{
-		worldPosition = position;
-		worldRotation = rotation;
+		std::cout << "GroundSurfaceEntity:\n";
+		std::cout << worldPosition.x << "," << worldPosition.y << "," << worldPosition.z << "\n";
 	}
 
 	// Update children

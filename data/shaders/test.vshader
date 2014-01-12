@@ -48,7 +48,7 @@ void main()
 
 	vEyeDirection = vec3( 0, 0, 0 ) - (V * v).xyz;
 
-	vec3 lightPos = (V * worldSurfaceRotation * vec4( lightPosition, 1 )).xyz;
+	vec3 lightPos = (V * vec4( lightPosition, 1 )).xyz;
 	vLightDirection = lightPos + vEyeDirection;
 
 	vPosition = v.xyz;

@@ -26,9 +26,9 @@ struct WindowInfo
 // Important nodes and entities
 Node rootNode;
 std::shared_ptr<Node>   light;
+std::shared_ptr<Node>   world;
 std::shared_ptr<Node>   worldCenter;
 std::shared_ptr<Camera> camera;
-std::shared_ptr<Entity> ground;
 
 
 // Global managers, at least for now
@@ -145,6 +145,10 @@ bool LoadTextures()
 
 bool CreateScene()
 {
+	// Create the world node
+	world = std::make_shared<Node>( "World" );
+	rootNode.AddChild( world );
+
 	// Create the camera
 	camera = std::make_shared<Camera>();
 	camera->SetPosition( glm::vec3( 0.f, 14.f, -15.f ) );
@@ -160,7 +164,7 @@ bool CreateScene()
 	// (vertices that are affected by it, rotate around it)
 	worldCenter = std::make_shared<Node>( "WorldCenter" );
 	worldCenter->SetPosition( glm::vec3( 0.0, -40.0, 0.0 ) );
-	rootNode.AddChild( worldCenter );
+	world->AddChild( worldCenter );
 
 
 	// Test mesh generation from a surface
@@ -185,14 +189,15 @@ bool CreateScene()
 
 	// Generate entity and set it to use the ground surface mesh
 	// and the wanted shader
-	ground = std::make_shared<Entity>( "GroundSurfaceEntity" );
+	auto ground = std::make_shared<Entity>( "GroundSurfaceEntity" );
 	ground->SetMeshName( "GroundSurfaceMesh" );
 	ground->SetTextureName( "data/images/pebbles_Diffuse.png" );
 	ground->SetShaderName( "DefaultShader" );
 	ground->SetPosition( glm::vec3( -20.0, 0.0, -20.0 ) );
 
-	// Give the entity to the root node
-	rootNode.AddChild( ground );
+
+	// Give the entity to the world node
+	world->AddChild( ground );
 
 
 	// Repeat process for a wall
@@ -210,27 +215,27 @@ bool CreateScene()
 	wall->SetMeshName( "WallMesh" );
 	wall->SetShaderName( "DefaultShader" );
 	wall->SetTextureName( "data/images/redbrick_Diffuse.png" );
-	wall->SetPosition( glm::vec3( 0.0, 0.0, -10.0 ) );
+	wall->SetPosition( glm::vec3( -20.0, 0.0, 20.0 ) );
 	wall->SetRotation( glm::quat( glm::vec3(
-		ToRadians( 90.f ),
-		0.0,
+		ToRadians( -90.f ),
+		ToRadians( 0.f ),
 		0.0 )
 	) );
-	ground->AddChild( wall );
+	world->AddChild( wall );
 
 
-	// And another wall Entity!
+	// And another wall entity!
 	auto secondWall = std::make_shared<Entity>( "WallEntity2" );
 	secondWall->SetMeshName( "WallMesh" );
 	secondWall->SetTextureName( "data/images/redbrick_Diffuse.png" );
 	secondWall->SetShaderName( "DefaultShader" );
-	secondWall->SetPosition( glm::vec3( -40.0, 0.0, -10.0 ) );
+	secondWall->SetPosition( glm::vec3( 20.0, 0.0, 20.0 ) );
 	secondWall->SetRotation( glm::quat( glm::vec3(
-		ToRadians( 90.f ),
+		ToRadians( -90.f ),
 		ToRadians( 90.f ),
 		0.0 )
 	) );
-	ground->AddChild( secondWall );
+	world->AddChild( secondWall );
 
 
 	// Create a tree to test textures with alpha layer
@@ -243,19 +248,19 @@ bool CreateScene()
 	tree->SetMeshName( "SquareMesh" );
 	tree->SetTextureName( "data/images/tree.png" );
 	tree->SetShaderName( "DefaultShader" );
-	tree->SetPosition( glm::vec3( -4.0, 15.0, -4.5 ) );
+	tree->SetPosition( glm::vec3( 15.0, 4.9, 10.0 ) );
 	tree->SetRotation( glm::quat( glm::vec3(
 		ToRadians( 90.f ),
-		ToRadians( 45.f ),
+		ToRadians( 225.f ),
 		0.0 )
 	) );
-	ground->AddChild( tree );
+	world->AddChild( tree );
 
 
 	// Create a Node to hold position of the light
 	light = std::make_shared<Node>( "TestLight" );
-	light->SetPosition( glm::vec3( -5.0, 5.0, -5.0 ) );
-	ground->AddChild( light );
+	light->SetPosition( glm::vec3( 10.0, 8.0, 10.0 ) );
+	world->AddChild( light );
 	return true;
 }
 
@@ -368,8 +373,8 @@ int main( int argc, char **argv )
 		glUseProgram( shaderProgram->Get() );
 
 
-		// Rotate the ground
-		ground->SetRotation( glm::normalize( glm::quat( glm::vec3( 0.f, deltaTime, 0.f) ) * ground->GetRotation() ) );
+		// Rotate the world
+		world->SetRotation( glm::normalize( glm::quat( glm::vec3( 0.f, deltaTime, 0.f) ) * world->GetRotation() ) );
 
 
 		// Update the node tree
@@ -385,7 +390,6 @@ int main( int argc, char **argv )
 		glUniformMatrix4fv( projUniform,  1, GL_FALSE, &(*projectionMat)[0][0] );
 		glUniform3fv( worldCenterUniform, 1, &worldCenter->GetPosition()[0] );
 		glUniform3fv( lightPositionUniform, 1, &light->GetWorldPosition()[0] );
-
 
 		// Render the current scene
 		rootNode.Render();
