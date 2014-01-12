@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\camera.cc" />
+    <ClCompile Include="..\..\src\character.cc" />
     <ClCompile Include="..\..\src\entity.cc" />
     <ClCompile Include="..\..\src\helpers.cc" />
     <ClCompile Include="..\..\src\main.cc" />
@@ -29,6 +30,7 @@
     <None Include="..\..\data\shaders\test.fshader" />
     <None Include="..\..\data\shaders\test.vshader" />
     <None Include="..\..\src\camera.hh" />
+    <None Include="..\..\src\character.hh" />
     <None Include="..\..\src\entity.hh" />
     <None Include="..\..\src\helpers.hh" />
     <None Include="..\..\src\main.hh" />

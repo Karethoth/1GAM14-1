@@ -122,6 +122,11 @@ bool LoadTextures()
 		return false;
 	}
 
+	if( !textureManager.Load( "data/images/defaultTorso.png", "DefaultTorso" ) )
+	{
+		return false;
+	}
+
 
 	// Generate the default texture
 	auto pixelArray = NoiseArray( 3, 9*9 );
@@ -167,7 +172,7 @@ bool CreateScene()
 	world->AddChild( worldCenter );
 
 
-	// Test mesh generation from a surface
+	// Generate ground surface
 	Surface groundSurface( 40, 40 );
 	glm::vec2 corners[] =
 	{
@@ -257,6 +262,13 @@ bool CreateScene()
 	world->AddChild( tree );
 
 
+	// Generate the torso mesh
+	Surface torsoSurface( 2, 2 );
+	auto torsoMesh = torsoSurface.GenerateMesh( 2, 2 );
+	torsoMesh->name = "MediumTorsoMesh";
+	torsoMesh->GenerateGLBuffers( "DefaultShader" );
+	meshManager.Add( "MediumTorsoMesh", torsoMesh );
+
 	// Create a Node to hold position of the light
 	light = std::make_shared<Node>( "TestLight" );
 	light->SetPosition( glm::vec3( 10.0, 8.0, 10.0 ) );
@@ -334,6 +346,9 @@ int main( int argc, char **argv )
 		return -1;
 	}
 
+	auto player = std::make_shared<Character>( "Player" );
+	player->SetPosition( glm::vec3( 0.0, 0.0, 0.0 ) );
+	world->AddChild( player );
 
 	// Get the needed uniform locations
 	auto shaderProgram = shaderManager.Get( "DefaultShader" );
@@ -379,6 +394,12 @@ int main( int argc, char **argv )
 
 		// Update the node tree
 		rootNode.UpdateWorldInfo();
+
+
+		camera->SetPosition( player->GetPosition() + glm::vec3( 0.f, 14.f, -15.f ) );
+		camera->SetTarget( player->GetPosition() );
+
+		worldCenter->SetPosition( player->GetPosition() + glm::vec3( 0.f, -50.f, 0.f ) );
 
 		// Camera handling and matrix stuff
 		camera->SetRatio( windowInfo.ratio );

@@ -54,6 +54,9 @@
     <ClCompile Include="..\..\src\textureManager.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\character.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\data\shaders\test.vshader">
@@ -69,9 +72,6 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="..\..\src\camera.hh">
-      <Filter>Header Files</Filter>
-    </None>
-    <None Include="..\..\src\entity.hh">
       <Filter>Header Files</Filter>
     </None>
     <None Include="..\..\src\templateManager.hh">
@@ -96,6 +96,12 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="..\..\src\textureManager.hh">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\..\src\entity.hh">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\..\src\character.hh">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>

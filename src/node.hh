@@ -35,29 +35,27 @@ class Node
 	glm::quat GetWorldRotation() const;
 
 	virtual void Render();
-	void UpdateWorldInfo();
+	virtual void UpdateWorldInfo();
 
 	void AddChild( const std::shared_ptr<Node>& child );
 	void EraseChild( const std::shared_ptr<Node>& child );
 
 	std::vector<std::shared_ptr<Node>> GetChildren();
 
-
- protected:
 	void SetParent( Node* parent );
 
+
+ protected:
 	Node* parent;
 	std::vector<std::shared_ptr<Node>> children;
 
-
- private:
 	std::string name;
-
 	glm::vec3 scale;
 	glm::vec3 position;
 	glm::quat rotation;
 	glm::vec3 worldPosition;
 	glm::quat worldRotation;
+
 };
 
 #endif

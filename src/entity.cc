@@ -9,8 +9,9 @@
 
 Entity::Entity( std::string entityName ) : Node( entityName )
 {
-	meshName   = "defaultMesh";
-	shaderName = "defaultShader";
+	meshName    = "DefaultMesh";
+	shaderName  = "DefaultShader";
+	textureName = "DefaultTexture";
 }
 
 

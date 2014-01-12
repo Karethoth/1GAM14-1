@@ -27,6 +27,7 @@
 #include "mesh.hh"
 #include "surface.hh"
 #include "entity.hh"
+#include "character.hh"
 
 #include "managers.hh"
 #include "helpers.hh"
