@@ -415,9 +415,9 @@ int main( int argc, char **argv )
 		// Handle input
 		glm::vec3 move( 0.f );
 		if( keysDown.up )
-			move += glm::vec3( 0.0, 0.0, -deltaTime*10 );
+			move += glm::vec3( 0.0, 0.0, -deltaTime*10*2.0/3.0 );
 		if( keysDown.down )
-			move += glm::vec3( 0.0, 0.0, deltaTime*10 );
+			move += glm::vec3( 0.0, 0.0, deltaTime*10*2.0/3.0  );
 		if( keysDown.left )
 			move += glm::vec3( -deltaTime*10, 0.0, 0.0 );
 		if( keysDown.right )
