@@ -191,15 +191,15 @@ bool CreateScene()
 	// Generate Node that acts as the "center" of the world.
 	// (vertices that are affected by it, rotate around it)
 	worldCenter = std::make_shared<Node>( "WorldCenter" );
-	worldCenter->SetPosition( glm::vec3( 0.0, -40.0, 0.0 ) );
+	worldCenter->SetPosition( glm::vec3( 0.0, -20.0, 0.0 ) );
 
 
 	// Generate ground surface
 	Surface groundSurface( 40, 40 );
 	glm::vec2 corners[] =
 	{
-		glm::vec2( 2.0, 4.0 ),
-		glm::vec2( 0.0, 4.0 ),
+		glm::vec2( 2.0, 3.0 ),
+		glm::vec2( 0.0, 3.0 ),
 		glm::vec2( 2.0, 0.0 ),
 		glm::vec2( 0.0, 0.0 )
 	};
@@ -415,15 +415,19 @@ int main( int argc, char **argv )
 		// Handle input
 		glm::vec3 move( 0.f );
 		if( keysDown.up )
-			move += glm::vec3( 0.0, 0.0, -deltaTime*10*2.0/3.0 );
+			move += glm::vec3( 0.0, 0.0, -2.0/2.5 );
 		if( keysDown.down )
-			move += glm::vec3( 0.0, 0.0, deltaTime*10*2.0/3.0  );
+			move += glm::vec3( 0.0, 0.0, 2.0/2.5 );
 		if( keysDown.left )
-			move += glm::vec3( -deltaTime*10, 0.0, 0.0 );
+			move += glm::vec3( -1, 0.0, 0.0 );
 		if( keysDown.right )
-			move += glm::vec3( deltaTime*10, 0.0, 0.0 );
+			move += glm::vec3( 1, 0.0, 0.0 );
 
-		player->SetPosition( player->GetPosition() + move );
+		if( glm::length( move ) > 0 )
+		{
+			move = glm::normalize( move ) * 15.f * (float)deltaTime;
+			player->SetPosition( player->GetPosition() + move );
+		}
 
 		// Update the node tree
 		rootNode.UpdateWorldInfo();
