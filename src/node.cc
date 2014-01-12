@@ -158,12 +158,6 @@ void Node::UpdateWorldInfo()
 		                parent->GetWorldRotation() * position;
 	}
 
-	if( GetName() == "GroundSurfaceEntity" )
-	{
-		std::cout << "GroundSurfaceEntity:\n";
-		std::cout << worldPosition.x << "," << worldPosition.y << "," << worldPosition.z << "\n";
-	}
-
 	// Update children
 	for( auto& child : children )
 	{
