@@ -3,9 +3,18 @@
 #include "../deb/glm/gtx/quaternion.hpp"
 
 #include <iostream>
+#include <algorithm>
 #include <string>
 
 using namespace glm;
+
+
+static bool ZCompare( const std::shared_ptr<Node>& a,
+                      const std::shared_ptr<Node>& b )
+{
+	return (a->GetWorldPosition().z < b->GetWorldPosition().z);
+}
+
 
 
 Node::Node( std::string name ) : name( name )
@@ -163,6 +172,9 @@ void Node::UpdateWorldInfo()
 	{
 		child->UpdateWorldInfo();
 	}
+
+	// Sort children
+	std::sort( children.begin(), children.end(), ZCompare );
 }
 
 
