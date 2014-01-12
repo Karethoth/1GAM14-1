@@ -180,28 +180,26 @@ bool CreateScene()
 
 	// Create the camera
 	camera = std::make_shared<Camera>();
-	camera->SetPosition( glm::vec3( 0.f, 14.f, -15.f ) );
+	camera->SetPosition( glm::vec3( 0.f, 10.f, 15.f ) );
 	camera->SetTarget( glm::vec3( 0.0, 0.0, 0.0 ) );
 	glm::vec3 cameraRot( 0.0, 0.0, 0.0 );
 	camera->SetRotation( glm::normalize( glm::quat( cameraRot ) ) );
 	camera->SetRatio( windowInfo.ratio );
 	camera->SetFOV( 45.f );
-	rootNode.AddChild( camera );
 
 
 	// Generate Node that acts as the "center" of the world.
 	// (vertices that are affected by it, rotate around it)
 	worldCenter = std::make_shared<Node>( "WorldCenter" );
 	worldCenter->SetPosition( glm::vec3( 0.0, -40.0, 0.0 ) );
-	world->AddChild( worldCenter );
 
 
 	// Generate ground surface
 	Surface groundSurface( 40, 40 );
 	glm::vec2 corners[] =
 	{
-		glm::vec2( 2.0, 2.0 ),
-		glm::vec2( 0.0, 2.0 ),
+		glm::vec2( 2.0, 4.0 ),
+		glm::vec2( 0.0, 4.0 ),
 		glm::vec2( 2.0, 0.0 ),
 		glm::vec2( 0.0, 0.0 )
 	};
@@ -372,6 +370,8 @@ int main( int argc, char **argv )
 
 	player = std::make_shared<Character>( "Player" );
 	player->SetPosition( glm::vec3( 0.0, 0.0, 0.0 ) );
+	player->AddChild( camera );
+	player->AddChild( worldCenter );
 	world->AddChild( player );
 
 	// Get the needed uniform locations
@@ -425,15 +425,10 @@ int main( int argc, char **argv )
 
 		player->SetPosition( player->GetPosition() + move );
 
-
 		// Update the node tree
 		rootNode.UpdateWorldInfo();
 
-
-		camera->SetPosition( player->GetPosition() + glm::vec3( 0.f, 14.f, 15.f ) );
-		camera->SetTarget( player->GetPosition() );
-
-		worldCenter->SetPosition( player->GetPosition() + glm::vec3( 0.f, -50.f, 0.f ) );
+		camera->SetTarget( player->GetWorldPosition() );
 
 		// Camera handling and matrix stuff
 		camera->SetRatio( windowInfo.ratio );
@@ -443,7 +438,7 @@ int main( int argc, char **argv )
 		// Upload uniforms to GPU
 		glUniformMatrix4fv( viewUniform,  1, GL_FALSE, &(*viewMat)[0][0] );
 		glUniformMatrix4fv( projUniform,  1, GL_FALSE, &(*projectionMat)[0][0] );
-		glUniform3fv( worldCenterUniform, 1, &worldCenter->GetPosition()[0] );
+		glUniform3fv( worldCenterUniform, 1, &worldCenter->GetWorldPosition()[0] );
 		glUniform3fv( lightPositionUniform, 1, &light->GetWorldPosition()[0] );
 
 		// Render the current scene

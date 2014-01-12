@@ -44,7 +44,9 @@ void main()
 
 	mat4 worldSurfaceRotation = rotationMatrix( vec3( 1.0, 0.0, 0.0 ), rads );
 
+	v = v - vec4( worldCenter, 0.0 );
 	v = worldSurfaceRotation * v;
+	v = v + vec4( worldCenter, 0.0 );
 
 	vEyeDirection = vec3( 0, 0, 0 ) - (V * v).xyz;
 
