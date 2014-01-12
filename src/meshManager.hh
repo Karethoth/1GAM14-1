@@ -12,7 +12,8 @@ class MeshManager : public TemplateManager<Mesh>
 	virtual ~MeshManager();
 
 	// Doesn't do a thing.
-	virtual bool Load( const std::string& meshFile );
+	virtual bool Load( const std::string& filepath );
+	virtual bool Load( const std::string& filepath, const std::string& key );
 };
 
 

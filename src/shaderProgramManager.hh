@@ -11,7 +11,8 @@ class ShaderProgramManager : public TemplateManager<ShaderProgram>
  public:
 	virtual ~ShaderProgramManager();
 
-	virtual bool Load( const std::string& programFile );
+	virtual bool Load( const std::string& filepath );
+	virtual bool Load( const std::string& filepath, const std::string& key );
 };
 
 

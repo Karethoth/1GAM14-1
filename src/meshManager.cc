@@ -5,9 +5,16 @@ MeshManager::~MeshManager()
 {
 }
 
-bool MeshManager::Load( const std::string& meshFile )
+
+bool MeshManager::Load( const std::string& filepath )
 {
-	// yup, doesn't do a thing.
-	return true;
+	return Load( filepath, filepath );
 }
+
+
+bool MeshManager::Load( const std::string& filepath,
+                        const std::string& key )
+{
+	return false;
+};
 

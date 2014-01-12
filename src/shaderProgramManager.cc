@@ -7,8 +7,15 @@ ShaderProgramManager::~ShaderProgramManager()
 
 
 
-bool ShaderProgramManager::Load( const std::string& programFile )
+bool ShaderProgramManager::Load( const std::string& filepath )
 {
-	return true;
+	return Load( filepath, filepath );
 }
+
+
+bool ShaderProgramManager::Load( const std::string& filepath,
+                                 const std::string& key )
+{
+	return false;
+};
 

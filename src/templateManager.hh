@@ -17,7 +17,8 @@ class TemplateManager
 	}
 
 
-	virtual bool Load( const std::string& ) = 0;
+	virtual bool Load( const std::string& filepath ) = 0;
+	virtual bool Load( const std::string& filepath, const std::string& key ) = 0;
 
 
 	virtual void Add( const std::string& key, const std::shared_ptr<T> &item )
