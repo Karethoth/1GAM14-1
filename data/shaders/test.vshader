@@ -42,7 +42,7 @@ void main()
 	float deltaY = worldCenter.y + v.y;
 	float rads = deltaZ/deltaY;
 
-	mat4 worldSurfaceRotation = rotationMatrix( vec3( 1.0, 0.0, 0.0 ), rads/5 );
+	mat4 worldSurfaceRotation = rotationMatrix( vec3( 1.0, 0.0, 0.0 ), rads/5.0 );
 
 	v = v - vec4( worldCenter, 0.0 );
 	v = worldSurfaceRotation * v;
