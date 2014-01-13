@@ -146,6 +146,11 @@ bool LoadTextures()
 		return false;
 	}
 
+	if( !textureManager.Load( "data/images/defaultHead.png", "DefaultHead" ) )
+	{
+		return false;
+	}
+
 	if( !textureManager.Load( "data/images/defaultTorso.png", "DefaultTorso" ) )
 	{
 		return false;
@@ -280,6 +285,14 @@ bool CreateScene()
 		0.0 )
 	) );
 	world->AddChild( tree );
+
+
+	// Generate the head mesh
+	Surface headSurface( 2, 2 );
+	auto headMesh = headSurface.GenerateMesh( 1, 1 );
+	headMesh->name = "HeadMesh";
+	headMesh->GenerateGLBuffers( "DefaultShader" );
+	meshManager.Add( "HeadMesh", headMesh );
 
 
 	// Generate the torso mesh

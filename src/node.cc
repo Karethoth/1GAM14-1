@@ -9,8 +9,8 @@
 using namespace glm;
 
 
-static bool ZCompare( const std::shared_ptr<Node>& a,
-                      const std::shared_ptr<Node>& b )
+bool ZCompare( const std::shared_ptr<Node>& a,
+               const std::shared_ptr<Node>& b )
 {
 	return (a->GetWorldPosition().z < b->GetWorldPosition().z);
 }

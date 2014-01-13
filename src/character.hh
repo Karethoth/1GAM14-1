@@ -3,7 +3,6 @@
 #define _CHARACTER_HH_
 
 #include "entity.hh"
-#include <map>
 
 
 class Character : public Node
@@ -17,7 +16,7 @@ class Character : public Node
 
 
  private:
-	std::map<std::string, std::shared_ptr<Entity>> bodyParts;
+	std::vector<std::shared_ptr<Entity>> bodyParts;
 };
 
 #endif
