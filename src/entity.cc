@@ -74,7 +74,7 @@ void Entity::Render()
 
 	if( mesh && texture && shader )
 	{
-		glm::mat4 rot = glm::toMat4( GetWorldRotation() );
+		glm::mat4 rot = glm::toMat4( GetWorldOrientation() );
 		glm::mat4 trans = glm::translate(glm::mat4(1.0f), GetWorldPosition());
 
 		glm::mat4 final = trans * rot;

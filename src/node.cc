@@ -23,7 +23,7 @@ Node::Node( std::string name ) : name( name )
 
 	SetScale( vec3( 1.f ) );
 	SetPosition( vec3( 0.f ) );
-	SetRotation( quat( glm::vec3( 0.0, 0.0, 0.0 ) ) );
+	SetOrientation( quat( glm::vec3( 0.0, 0.0, 0.0 ) ) );
 	UpdateWorldInfo();
 }
 
@@ -32,9 +32,9 @@ Node::Node( const Node& other )
 {
 	name = other.name;
 	position = other.position;
-	rotation = other.rotation;
+	orientation = other.orientation;
 	worldPosition = other.worldPosition;
-	worldRotation = other.worldRotation;
+	worldOrientation = other.worldOrientation;
 	parent = other.parent;
 	children = other.children;
 }
@@ -64,9 +64,9 @@ void Node::Swap( Node& first, Node& second )
 {
 	std::swap( first.name, second.name );
 	std::swap( first.position, second.position );
-	std::swap( first.rotation, second.rotation );
+	std::swap( first.orientation, second.orientation );
 	std::swap( first.worldPosition, second.worldPosition );
-	std::swap( first.worldRotation, second.worldRotation );
+	std::swap( first.worldOrientation, second.worldOrientation );
 	std::swap( first.parent, second.parent );
 	std::swap( first.children, second.children );
 }
@@ -87,9 +87,9 @@ void Node::SetPosition( vec3 newPosition )
 }
 
 
-void Node::SetRotation( quat newRotation )
+void Node::SetOrientation( quat newOrientation )
 {
-	rotation = newRotation;
+	orientation = newOrientation;
 	//UpdateWorldInfo();
 }
 
@@ -128,15 +128,15 @@ vec3 Node::GetWorldPosition() const
 }
 
 
-quat Node::GetRotation() const
+quat Node::GetOrientation() const
 {
-	return rotation;
+	return orientation;
 }
 
 
-quat Node::GetWorldRotation() const
+quat Node::GetWorldOrientation() const
 {
-	return worldRotation;
+	return worldOrientation;
 }
 
 
@@ -156,15 +156,14 @@ void Node::Render()
 // Used to update worldLocation and worldPosition
 void Node::UpdateWorldInfo()
 {
-	worldRotation = rotation;
-	worldPosition = position;
+	worldPosition    = position;
+	worldOrientation = orientation;
 
 	if( parent )
 	{
-		worldRotation = parent->GetWorldRotation() * rotation;
-
-		worldPosition = parent->GetWorldPosition() +
-		                parent->GetWorldRotation() * position;
+		worldPosition    = parent->GetWorldPosition() +
+		                   parent->GetWorldOrientation() * position;
+		worldOrientation = parent->GetWorldOrientation() * orientation;
 	}
 
 	// Update children

@@ -182,8 +182,6 @@ bool CreateScene()
 	camera = std::make_shared<Camera>();
 	camera->SetPosition( glm::vec3( 0.f, 10.f, 15.f ) );
 	camera->SetTarget( glm::vec3( 0.0, 0.0, 0.0 ) );
-	glm::vec3 cameraRot( 0.0, 0.0, 0.0 );
-	camera->SetRotation( glm::normalize( glm::quat( cameraRot ) ) );
 	camera->SetRatio( windowInfo.ratio );
 	camera->SetFOV( 45.f );
 
@@ -243,7 +241,7 @@ bool CreateScene()
 	wall->SetShaderName( "DefaultShader" );
 	wall->SetTextureName( "bricks" );
 	wall->SetPosition( glm::vec3( 20.0, 0.0, -20.0 ) );
-	wall->SetRotation( glm::quat( glm::vec3(
+	wall->SetOrientation( glm::quat( glm::vec3(
 		ToRadians( -90.f ),
 		ToRadians( 180.f ),
 		0.0 )
@@ -257,7 +255,7 @@ bool CreateScene()
 	secondWall->SetTextureName( "bricks" );
 	secondWall->SetShaderName( "DefaultShader" );
 	secondWall->SetPosition( glm::vec3( -20.0, 0.0, -20.0 ) );
-	secondWall->SetRotation( glm::quat( glm::vec3(
+	secondWall->SetOrientation( glm::quat( glm::vec3(
 		ToRadians( -90.f ),
 		ToRadians( -90.f ),
 		0.0 )
@@ -276,7 +274,7 @@ bool CreateScene()
 	tree->SetTextureName( "tree" );
 	tree->SetShaderName( "DefaultShader" );
 	tree->SetPosition( glm::vec3( -15.0, 4.9, -10.0 ) );
-	tree->SetRotation( glm::quat( glm::vec3(
+	tree->SetOrientation( glm::quat( glm::vec3(
 		ToRadians( 90.f ),
 		ToRadians( 45.f ),
 		0.0 )

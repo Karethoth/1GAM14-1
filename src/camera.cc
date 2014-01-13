@@ -27,7 +27,7 @@ std::shared_ptr<mat4> Camera::GetViewMatrix()
 		glm::lookAt(
 			GetWorldPosition(),
 			target,
-			GetWorldRotation() * upVector
+			GetWorldOrientation() * upVector
 		)
 	);
 	return view;

@@ -26,13 +26,13 @@ class Node
 
 	void SetScale( glm::vec3 newScale );
 	void SetPosition( glm::vec3 newPosition );
-	void SetRotation( glm::quat newRotation );
+	void SetOrientation( glm::quat newOrientation );
 
 	glm::vec3 GetScale() const;
 	glm::vec3 GetPosition() const;
 	glm::vec3 GetWorldPosition() const;
-	glm::quat GetRotation() const;
-	glm::quat GetWorldRotation() const;
+	glm::quat GetOrientation() const;
+	glm::quat GetWorldOrientation() const;
 
 	virtual void Render();
 	virtual void UpdateWorldInfo();
@@ -52,10 +52,9 @@ class Node
 	std::string name;
 	glm::vec3 scale;
 	glm::vec3 position;
-	glm::quat rotation;
+	glm::quat orientation;
 	glm::vec3 worldPosition;
-	glm::quat worldRotation;
-
+	glm::quat worldOrientation;
 };
 
 #endif
