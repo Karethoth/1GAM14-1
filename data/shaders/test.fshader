@@ -16,7 +16,7 @@ void main()
 	vec4 color = texture2D( textureSampler, vTextureCoord );
 	vec3 materialDiffuseColor = color.rgb;
 	vec3 materialAmbientColor = vec3( 0.1, 0.1, 0.1 ) * materialDiffuseColor;
-	vec3 materialSpecularColor = vec3( 0.3, 0.3, 0.3 );
+	vec3 materialSpecularColor = vec3( 0.4, 0.4, 0.4 ) * materialDiffuseColor;
 
 	float distance = length( lightPosition - vPosition );
 
