@@ -27,6 +27,7 @@ OBJS=\
       $(OBJDIR)/entity.o \
       $(OBJDIR)/character.o \
       $(OBJDIR)/surface.o \
+      $(OBJDIR)/joystick.o \
       $(OBJDIR)/main.o
 
 
