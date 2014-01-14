@@ -57,6 +57,9 @@
     <ClCompile Include="..\..\src\character.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\joystick.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\data\shaders\test.vshader">
@@ -102,6 +105,9 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="..\..\src\character.hh">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\..\src\joystick.hh">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>
