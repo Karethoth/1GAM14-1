@@ -39,7 +39,7 @@ void main()
 	vec4 v = M * vec4( vertexPosition, 1 );
 
 	float deltaZ = v.z - worldCenter.z;
-	float deltaY = worldCenter.y + v.y;
+	float deltaY = worldCenter.y + v.y/5.0;
 	float rads = deltaZ/deltaY;
 
 	mat4 worldSurfaceRotation = rotationMatrix( vec3( 1.0, 0.0, 0.0 ), rads/5.0 );
