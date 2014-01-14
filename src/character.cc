@@ -7,7 +7,6 @@
 #include <algorithm>
 
 
-
 extern bool ZCompare( const std::shared_ptr<Node>& a,
                       const std::shared_ptr<Node>& b );
 
@@ -72,16 +71,15 @@ void Character::Update( double deltaTime )
 	{
 		glm::vec2 direction = glm::normalize( glm::vec2( velocity.x, velocity.z ) );
 
-		bool towards = false;
-		if( Cross( glm::vec2( 1.0, 0.0 ), direction ) > 0.0 )
+		float degrees = Cross( direction, glm::vec2( 0.0, 1.0 ) ) * 90.f;
+
+		bool towards = true;
+		if( Cross( direction, glm::vec2( 1.0, 0.0 ) ) > 0.0 )
 		{
-			towards = true;
-		}
-		float degrees = Cross( glm::vec2( 0.0, -1.0 ), direction ) * 90.f;
-		if( !towards )
-		{
+			towards = false;
 			degrees *= -1.f;
 		}
+
 		SetOrientation( glm::quat( glm::vec3(
 			0.f,
 			ToRadians( degrees ),
