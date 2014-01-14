@@ -492,7 +492,7 @@ int main( int argc, char **argv )
 			if( xAxis != 0.f || yAxis != 0.f )
 			{
 				joystickInput = true;
-				move = glm::vec3( xAxis, 0.f, -yAxis );
+				move = glm::vec3( xAxis, 0.f, yAxis );
 			}
 		}
 
