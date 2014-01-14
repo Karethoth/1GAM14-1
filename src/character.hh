@@ -12,11 +12,16 @@ class Character : public Node
 	virtual ~Character();
 
 	virtual void Render();
+	virtual void Update( double deltaTime );
 	virtual void UpdateWorldInfo();
+
+	void SetVelocity( glm::vec3 newVelocity );
+	glm::vec3 GetVelocity() const;
 
 
  private:
 	std::vector<std::shared_ptr<Entity>> bodyParts;
+	glm::vec3 velocity;
 };
 
 #endif

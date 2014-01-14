@@ -61,6 +61,11 @@ void Character::Render()
 }
 
 
+void Character::Update( double deltaTime )
+{
+	position += velocity * static_cast<float>( deltaTime );
+}
+
 
 void Character::UpdateWorldInfo()
 {
@@ -89,3 +94,15 @@ void Character::UpdateWorldInfo()
 	std::sort( bodyParts.begin(), bodyParts.end(), ZCompare );
 }
 
+
+
+void Character::SetVelocity( glm::vec3 newVelocity )
+{
+	velocity = newVelocity;
+}
+
+
+glm::vec3 Character::GetVelocity() const
+{
+	return velocity;
+}
