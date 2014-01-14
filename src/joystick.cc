@@ -9,6 +9,9 @@ Joystick::Joystick( int joystickId ) : id( joystickId )
 	glfwGetJoystickAxes( id, &axisCount );
 	glfwGetJoystickButtons( id, &buttonCount );
 
+	axes.resize( axisCount );
+	buttons.resize( buttonCount );
+
 	// Get the start values
 	Update();
 }
@@ -28,6 +31,15 @@ void Joystick::Update()
 	int buttonCountNow;
 	auto axisValues   = glfwGetJoystickAxes( id, &axisCountNow );
 	auto buttonValues = glfwGetJoystickButtons( id, &buttonCountNow );
+
+	if( axisCountNow > axisCount )
+	{
+		axisCountNow = axisCount;
+	}
+	if( buttonCountNow > buttonCount )
+	{
+		buttonCountNow = buttonCount;
+	}
 
 	for( int ind=0; ind < axisCountNow; ++ind )
 	{
