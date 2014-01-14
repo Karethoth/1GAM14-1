@@ -392,6 +392,26 @@ int main( int argc, char **argv )
 	const GLint worldCenterUniform   = shaderProgram->GetUniform( "worldCenter" );
 	const GLint lightPositionUniform = shaderProgram->GetUniform( "lightPosition" );
 
+	// List joysticks
+	std::unique_ptr<Joystick> joystick;
+	for( int joystickId = 0; joystickId <= 15; ++joystickId )
+	{
+		if( !glfwJoystickPresent( joystickId ) )
+		{
+			continue;
+		}
+
+		Joystick* tmpJoystick = new Joystick( joystickId );
+		if( tmpJoystick->GetAxes().size() == 5 )
+		{
+			joystick = std::unique_ptr<Joystick>( tmpJoystick );
+		}
+		else
+		{
+			delete tmpJoystick;
+		}
+	}
+
 
 	// Set some GL settings up
 	//glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
@@ -429,6 +449,7 @@ int main( int argc, char **argv )
 		// Calculate the slowdown from previous velocity
 		glm::vec3 slowDown = player->GetVelocity() * ((float)deltaTime*10);
 
+
 		// Modify the move vector according to the input
 		if( keysDown.up )
 			move += glm::vec3( 0.0, 0.0, -2.0/2.5 );
@@ -439,11 +460,51 @@ int main( int argc, char **argv )
 		if( keysDown.right )
 			move += glm::vec3( 1, 0.0, 0.0 );
 
+
+		// Bool which we use to check if we have any input from joystick
+		bool joystickInput = false;
+
+		// If we have a joystick
+		if( joystick )
+		{
+			// Update joystick and get the axes that count
+			joystick->Update();
+			float xAxis = joystick->GetAxis( 0 );
+			float yAxis = joystick->GetAxis( 1 );
+
+			// Cap the input to zero if it's within the threshold
+			const float threshold = 0.2f;
+			if( xAxis < threshold && xAxis > -threshold )
+				xAxis = 0.f;
+			if( yAxis < threshold && yAxis > -threshold )
+				yAxis = 0.f;
+
+			// If any of the values is outside of the threshold(!0),
+			// we got real input from joystick
+			if( xAxis != 0.f || yAxis != 0.f )
+			{
+				joystickInput = true;
+				move = glm::vec3( xAxis, 0.f, -yAxis );
+			}
+		}
+
 		// If we got movement, we'll normalize it and multiply
 		// it by how hastely we want the character to speed up
-		if( glm::length( move ) > 0 )
+		if( glm::length( move ) > 0.f )
 		{
-			move = glm::normalize( move ) * 4.f;
+			// If we have joystick input we need to check that
+			// the movement vector has length under 1.f.
+			// This is because some joysticks have square movement
+			// area, of which corners could otherwise be used to
+			// move faster than intended. Same foes for the arrow keys.
+			if( joystickInput && glm::length( move ) <= 1.f )
+			{
+				move *= 4.f;
+			}
+			else
+			{
+				move = glm::normalize( move ) * 4.f;
+			}
 		}
 
 		// Calculate the new velocity
