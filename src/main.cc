@@ -464,6 +464,10 @@ int main( int argc, char **argv )
 		// Bool which we use to check if we have any input from joystick
 		bool joystickInput = false;
 
+		// 2nd joystick stick
+		float xLook = 0.f;
+		float yLook = 0.f;
+
 		// If we have a joystick
 		if( joystick )
 		{
@@ -471,6 +475,9 @@ int main( int argc, char **argv )
 			joystick->Update();
 			float xAxis = joystick->GetAxis( 0 );
 			float yAxis = joystick->GetAxis( 1 );
+
+			xLook = joystick->GetAxis( 4 );
+			yLook = -joystick->GetAxis( 3 );
 
 			// Cap the input to zero if it's within the threshold
 			const float threshold = 0.2f;
@@ -480,7 +487,8 @@ int main( int argc, char **argv )
 				yAxis = 0.f;
 
 			// If any of the values is outside of the threshold(!0),
-			// we got real input from joystick
+			// we got real input from joystick. For now this only is
+			// affected by movement. "Looking" doesn't care about it
 			if( xAxis != 0.f || yAxis != 0.f )
 			{
 				joystickInput = true;
@@ -495,8 +503,8 @@ int main( int argc, char **argv )
 			// If we have joystick input we need to check that
 			// the movement vector has length under 1.f.
 			// This is because some joysticks have square movement
-			// area, of which corners could otherwise be used to
-			// move faster than intended. Same foes for the arrow keys.
+			// area, which corners could otherwise be used to move
+			// faster than supposed. Same goes for the arrow keys.
 			if( joystickInput && glm::length( move ) <= 1.f )
 			{
 				move *= 4.f;
@@ -525,7 +533,11 @@ int main( int argc, char **argv )
 		// Update the node tree
 		rootNode.UpdateWorldInfo();
 
-		camera->SetTarget( player->GetWorldPosition() );
+		glm::vec3 cameraTarget = player->GetWorldPosition();
+		cameraTarget.x += xLook * 5.f;
+		cameraTarget.y += yLook * 5.f;
+
+		camera->SetTarget( cameraTarget );
 		camera->SetPosition( player->GetWorldPosition() + glm::vec3( 0.f, 10.f, 15.f ) );
 
 		// Camera handling and matrix stuff
