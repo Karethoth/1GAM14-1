@@ -54,16 +54,40 @@ Character::~Character()
 
 void Character::Render()
 {
+	glDisable( GL_CULL_FACE );
 	for( auto& part : bodyParts )
 	{
 		part->Render();
 	}
+	glEnable( GL_CULL_FACE );
 }
 
 
 void Character::Update( double deltaTime )
 {
 	position += velocity * static_cast<float>( deltaTime );
+
+	// Set orientation
+	if( glm::length( velocity ) > 0.f )
+	{
+		glm::vec2 direction = glm::normalize( glm::vec2( velocity.x, velocity.z ) );
+
+		bool towards = false;
+		if( Cross( glm::vec2( 1.0, 0.0 ), direction ) > 0.0 )
+		{
+			towards = true;
+		}
+		float degrees = Cross( glm::vec2( 0.0, -1.0 ), direction ) * 90.f;
+		if( !towards )
+		{
+			degrees *= -1.f;
+		}
+		SetOrientation( glm::quat( glm::vec3(
+			0.f,
+			ToRadians( degrees ),
+			0.f
+		) ) );
+	}
 }
 
 

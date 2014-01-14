@@ -381,7 +381,7 @@ int main( int argc, char **argv )
 
 	player = std::make_shared<Character>( "Player" );
 	player->SetPosition( glm::vec3( 0.0, 0.0, 0.0 ) );
-	player->AddChild( camera );
+	rootNode.AddChild( camera );
 	player->AddChild( worldCenter );
 	world->AddChild( player );
 
@@ -526,6 +526,7 @@ int main( int argc, char **argv )
 		rootNode.UpdateWorldInfo();
 
 		camera->SetTarget( player->GetWorldPosition() );
+		camera->SetPosition( player->GetWorldPosition() + glm::vec3( 0.f, 10.f, 15.f ) );
 
 		// Camera handling and matrix stuff
 		camera->SetRatio( windowInfo.ratio );
