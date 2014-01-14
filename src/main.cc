@@ -422,9 +422,14 @@ int main( int argc, char **argv )
 
 		glUseProgram( shaderProgram->Get() );
 
+		// Move the character, for now I'll let this snippet be here
+		glm::vec3 move;
+		glm::vec3 newVelocity;
 
-		// Handle input
-		glm::vec3 move( 0.f );
+		// Calculate the slowdown from previous velocity
+		glm::vec3 slowDown = player->GetVelocity() * ((float)deltaTime*10);
+
+		// Modify the move vector according to the input
 		if( keysDown.up )
 			move += glm::vec3( 0.0, 0.0, -2.0/2.5 );
 		if( keysDown.down )
@@ -434,11 +439,27 @@ int main( int argc, char **argv )
 		if( keysDown.right )
 			move += glm::vec3( 1, 0.0, 0.0 );
 
+		// If we got movement, we'll normalize it and multiply
+		// it by how hastely we want the character to speed up
 		if( glm::length( move ) > 0 )
 		{
-			move = glm::normalize( move ) * 15.f * (float)deltaTime;
-			player->SetPosition( player->GetPosition() + move );
+			move = glm::normalize( move ) * 4.f;
 		}
+
+		// Calculate the new velocity
+		newVelocity = player->GetVelocity() + move - slowDown;
+
+		// If the velocity is above the maximum speed,
+		// we'll cap it to it
+		if( glm::length( newVelocity ) > 15.f )
+		{
+			newVelocity = glm::normalize( newVelocity );
+			newVelocity *= 15.f;
+		}
+
+		// Set the velocity
+		player->SetVelocity( newVelocity );
+		player->Update( deltaTime );
 
 		// Update the node tree
 		rootNode.UpdateWorldInfo();
