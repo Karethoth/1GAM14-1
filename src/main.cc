@@ -392,7 +392,7 @@ int main( int argc, char **argv )
 	const GLint worldCenterUniform   = shaderProgram->GetUniform( "worldCenter" );
 	const GLint lightPositionUniform = shaderProgram->GetUniform( "lightPosition" );
 
-	// List joysticks
+	// Check for a supported joystick
 	std::unique_ptr<Joystick> joystick;
 	for( int joystickId = 0; joystickId <= 15; ++joystickId )
 	{
@@ -410,6 +410,12 @@ int main( int argc, char **argv )
 		{
 			delete tmpJoystick;
 		}
+	}
+
+	// If we found a supported joystick, notify about it
+	if( joystick )
+	{
+		std::cout << "Found a joystick: " << joystick->GetName() << "\n";
 	}
 
 
@@ -507,11 +513,11 @@ int main( int argc, char **argv )
 			// faster than supposed. Same goes for the arrow keys.
 			if( joystickInput && glm::length( move ) <= 1.f )
 			{
-				move *= 4.f;
+				move *= 200.f * deltaTime;
 			}
 			else
 			{
-				move = glm::normalize( move ) * 4.f;
+				move = glm::normalize( move ) * 200.f * (float)deltaTime;
 			}
 		}
 

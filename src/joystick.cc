@@ -84,6 +84,18 @@ bool Joystick::Validate()
 
 
 
+int Joystick::GetId()
+{
+	return id;
+}
+
+
+std::string Joystick::GetName()
+{
+	return name;
+}
+
+
 std::vector<float> Joystick::GetAxes()
 {
 	return axes;

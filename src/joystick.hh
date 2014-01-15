@@ -16,6 +16,9 @@ class Joystick
 	void Update();
 	bool Validate();
 
+	int GetId();
+	std::string GetName();
+
 	std::vector<float>         GetAxes();
 	std::vector<unsigned char> GetButtons();
 
