@@ -14,6 +14,8 @@
     <ClCompile Include="..\..\src\camera.cc" />
     <ClCompile Include="..\..\src\character.cc" />
     <ClCompile Include="..\..\src\entity.cc" />
+    <ClCompile Include="..\..\src\gui.cc" />
+    <ClCompile Include="..\..\src\guiElement.cc" />
     <ClCompile Include="..\..\src\helpers.cc" />
     <ClCompile Include="..\..\src\joystick.cc" />
     <ClCompile Include="..\..\src\main.cc" />
@@ -33,6 +35,8 @@
     <None Include="..\..\src\camera.hh" />
     <None Include="..\..\src\character.hh" />
     <None Include="..\..\src\entity.hh" />
+    <None Include="..\..\src\gui.hh" />
+    <None Include="..\..\src\guiElement.hh" />
     <None Include="..\..\src\helpers.hh" />
     <None Include="..\..\src\joystick.hh" />
     <None Include="..\..\src\main.hh" />

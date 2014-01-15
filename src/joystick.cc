@@ -1,4 +1,5 @@
 #include "joystick.hh"
+#include <iostream>
 
 
 Joystick::Joystick( int joystickId ) : id( joystickId )
@@ -49,6 +50,7 @@ void Joystick::Update()
 	for( int ind=0; ind < buttonCountNow; ++ind )
 	{
 		buttons[ind] = buttonValues[ind];
+		std::cout << "Button #" << ind << ": " << buttonValues[ind] << "\n";
 	}
 }
 

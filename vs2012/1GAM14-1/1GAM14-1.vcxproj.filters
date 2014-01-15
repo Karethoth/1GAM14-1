@@ -60,6 +60,12 @@
     <ClCompile Include="..\..\src\joystick.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\gui.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\guiElement.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\data\shaders\test.vshader">
@@ -108,6 +114,12 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="..\..\src\joystick.hh">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\..\src\gui.hh">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\..\src\guiElement.hh">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>
