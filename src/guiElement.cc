@@ -72,3 +72,9 @@ bool GUIElement::PointInArea( const glm::vec2& point )
 	return false;
 }
 
+
+
+void GUIElement::Render()
+{
+}
+

@@ -61,6 +61,8 @@ class GUIElement
 
 	virtual bool PointInArea( const glm::vec2& point );
 
+	virtual void Render();
+
 
  protected:
 	std::vector<std::shared_ptr<GUIElement>> children;
