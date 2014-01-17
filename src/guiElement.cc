@@ -76,5 +76,9 @@ bool GUIElement::PointInArea( const glm::vec2& point )
 
 void GUIElement::Render()
 {
+	for( auto& child : children )
+	{
+		child->Render();
+	}
 }
 

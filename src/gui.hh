@@ -3,7 +3,6 @@
 #define _GUI_HH_
 
 #include "guiElement.hh"
-#include "managers.hh"
 #include <vector>
 
 

@@ -65,13 +65,11 @@ class GUIElement
 
 
  protected:
-	std::vector<std::shared_ptr<GUIElement>> children;
-	std::vector<GUICallback> callbacks;
-
-
- private:
 	glm::vec2 position;
 	glm::vec2 size;
+
+	std::vector<std::shared_ptr<GUIElement>> children;
+	std::vector<GUICallback> callbacks;
 };
 
 #endif
