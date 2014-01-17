@@ -28,9 +28,16 @@ void GUI::Render()
 
 	glUseProgram( shader->Get() );
 
+
 	// For now, let's do it inefficiently
 	GLint projUniform = shader->GetUniform( "P" );
-	glm::mat4 projectionMat = glm::ortho<float>( 0.f, size.x, size.y, 0.f );
+	glm::mat4 projectionMat = glm::ortho<float>(
+		0.f,
+		area.width.value,
+		area.height.value,
+		0.f
+	);
+
 	glUniformMatrix4fv( projUniform, 1, GL_FALSE, &(projectionMat)[0][0] );
 	GLint modelUniform = shader->GetUniform( "M" );
 	glm::mat4 modelMat = glm::translate( glm::mat4( 1.f ), glm::vec3( 0.375, 0.375, 0.0 ) );

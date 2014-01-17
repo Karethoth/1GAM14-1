@@ -8,10 +8,28 @@
 #include <vector>
 
 
+enum GUIMeasureType
+{
+	DIRECT,
+	PERCENTAGE
+};
+
+
+typedef struct sGUIMeasure
+{
+	float          value;
+	GUIMeasureType type;
+	sGUIMeasure( float value=0.f, GUIMeasureType type=DIRECT );
+} GUIMeasure;
+
+
+
 typedef struct sBox2D
 {
-	glm::vec2 point;
-	glm::vec2 size;
+	GUIMeasure x;
+	GUIMeasure y;
+	GUIMeasure width;
+	GUIMeasure height;
 } Box2D;
 
 
@@ -51,8 +69,8 @@ class GUIElement
 	GUIElement();
 	virtual ~GUIElement();
 
-	virtual void SetSize( glm::vec2 newSize );
-	virtual void SetPosition( glm::vec2 newPosition );
+	virtual void SetSize( GUIMeasure width, GUIMeasure height );
+	virtual void SetPosition( GUIMeasure x, GUIMeasure y );
 	virtual void SetArea( const Box2D& newArea );
 
 	virtual void AddChild( const std::shared_ptr<GUIElement>& child );
@@ -65,8 +83,8 @@ class GUIElement
 
 
  protected:
-	glm::vec2 position;
-	glm::vec2 size;
+	Box2D area;
+	Box2D realArea;
 
 	std::vector<std::shared_ptr<GUIElement>> children;
 	std::vector<GUICallback> callbacks;

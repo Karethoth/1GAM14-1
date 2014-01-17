@@ -87,7 +87,8 @@ static void GLFWFrameBufferSizeCallback( GLFWwindow* window, int width, int heig
 {
 	windowInfo.width  = width;
 	windowInfo.height = height;
-	gui.SetSize( glm::vec2( width, height ) );
+	gui.SetSize( static_cast<float>( width ),
+	             static_cast<float>( height ) );
 
 	glViewport( 0, 0, width, height );
 	windowInfo.UpdateRatio();
@@ -349,12 +350,12 @@ bool CreateScene()
 
 
 	// Create the GUI elements.
-	gui.SetSize( glm::vec2( windowInfo.width, windowInfo.height ) );
-	gui.SetPosition( glm::vec2( 0.f ) );
+	gui.SetSize( static_cast<float>( windowInfo.width ),
+	             static_cast<float>( windowInfo.height ) );
 
 	bar = std::make_shared<GUIBar>();
-	bar->SetSize( glm::vec2( 200.f, 20.f ) );
-	bar->SetPosition( glm::vec2( 10.f, 10.f ) );
+	bar->SetSize( 200.f, 20.f );
+	bar->SetPosition( 20.f, 20.f );
 	gui.AddChild( static_cast<std::shared_ptr<GUIElement>>( bar ) );
 
 	return true;
@@ -535,9 +536,9 @@ int main( int argc, char **argv )
 
 
 			float triggerAxis = joystick->GetAxis( 2 );
-			bar->SetSize( glm::vec2( -triggerAxis*200.f + 200.f, 20.f ) );
+			bar->SetSize( triggerAxis * -200.f + 200.f, 20.f );
 
-			xLook = joystick->GetAxis( 4 );
+			xLook =  joystick->GetAxis( 4 );
 			yLook = -joystick->GetAxis( 3 );
 
 			// Cap the input to zero if it's within the threshold

@@ -1,6 +1,12 @@
 #include "guiElement.hh"
 
 
+GUIMeasure::sGUIMeasure( float value, GUIMeasureType type )
+{
+	this->value = value;
+	this->type  = type;
+}
+
 GUIElement::GUIElement()
 {
 }
@@ -12,22 +18,23 @@ GUIElement::~GUIElement()
 
 
 
-void GUIElement::SetSize( glm::vec2 newSize )
+void GUIElement::SetSize( GUIMeasure newWidth, GUIMeasure newHeight )
 {
-	size = newSize;
+	area.width  = newWidth;
+	area.height = newHeight;
 }
 
 
-void GUIElement::SetPosition( glm::vec2 newPosition )
+void GUIElement::SetPosition( GUIMeasure x, GUIMeasure y )
 {
-	position = newPosition;
+	area.x = x;
+	area.y = y;
 }
 
 
 void GUIElement::SetArea( const Box2D& newArea )
 {
-	position = newArea.point;
-	size     = newArea.size;
+	area = newArea;
 }
 
 
@@ -62,10 +69,10 @@ void GUIElement::RemoveCallback( GUICallback callback )
 
 bool GUIElement::PointInArea( const glm::vec2& point )
 {
-	if( point.x >= position.x          &&
-		point.x <  position.x + size.x &&
-		point.y >= position.y          &&
-		point.y <  position.y + size.y )
+	if( point.x >= realArea.x.value                        &&
+		point.x <  realArea.x.value + realArea.width.value &&
+		point.y >= realArea.y.value                        &&
+		point.y <  realArea.y.value + realArea.height.value )
 	{
 		return true;
 	}

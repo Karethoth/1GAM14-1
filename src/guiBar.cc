@@ -20,10 +20,10 @@ void GUIBar::Render()
 {
 	// For now we'll do this in old fashion
 	glBegin( GL_QUADS );
-		glVertex2f( position.x,          position.y );
-		glVertex2f( position.x + size.x, position.y );
-		glVertex2f( position.x + size.x, position.y + size.y );
-		glVertex2f( position.x,          position.y + size.y );
+	glVertex2f( area.x.value,                    area.y.value );
+	glVertex2f( area.x.value + area.width.value, area.y.value );
+	glVertex2f( area.x.value + area.width.value, area.y.value + area.height.value );
+	glVertex2f( area.x.value,                    area.y.value + area.height.value );
 	glEnd();
 }
 
