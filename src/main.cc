@@ -355,7 +355,7 @@ bool CreateScene()
 
 	bar = std::make_shared<GUIBar>();
 	bar->SetSize( 200.f, 20.f );
-	bar->SetPosition( 20.f, 20.f );
+	bar->SetPosition( 0.f, 5.f );
 	gui.AddChild( static_cast<std::shared_ptr<GUIElement>>( bar ) );
 
 	return true;
@@ -536,7 +536,12 @@ int main( int argc, char **argv )
 
 
 			float triggerAxis = joystick->GetAxis( 2 );
-			bar->SetSize( triggerAxis * -200.f + 200.f, 20.f );
+			triggerAxis = triggerAxis*-1.f + 1.f;
+			GUIMeasure w( triggerAxis * 50.f, PERCENTAGE );
+			bar->SetSize(
+				w,
+				20.f
+			);
 
 			xLook =  joystick->GetAxis( 4 );
 			yLook = -joystick->GetAxis( 3 );

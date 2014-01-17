@@ -1,4 +1,5 @@
 #include "guiElement.hh"
+#include <iostream>
 
 
 GUIMeasure::sGUIMeasure( float value, GUIMeasureType type )
@@ -7,8 +8,11 @@ GUIMeasure::sGUIMeasure( float value, GUIMeasureType type )
 	this->type  = type;
 }
 
+
+
 GUIElement::GUIElement()
 {
+	parent = nullptr;
 }
 
 
@@ -18,10 +22,18 @@ GUIElement::~GUIElement()
 
 
 
+Box2D GUIElement::GetRealArea()
+{
+	return realArea;
+}
+
+
+
 void GUIElement::SetSize( GUIMeasure newWidth, GUIMeasure newHeight )
 {
 	area.width  = newWidth;
 	area.height = newHeight;
+	UpdateRealArea();
 }
 
 
@@ -29,18 +41,27 @@ void GUIElement::SetPosition( GUIMeasure x, GUIMeasure y )
 {
 	area.x = x;
 	area.y = y;
+	UpdateRealArea();
 }
 
 
 void GUIElement::SetArea( const Box2D& newArea )
 {
 	area = newArea;
+	UpdateRealArea();
 }
 
+
+void GUIElement::SetParent( GUIElement* newParent )
+{
+	parent = newParent;
+	UpdateRealArea();
+}
 
 
 void GUIElement::AddChild( const std::shared_ptr<GUIElement>& child )
 {
+	child->SetParent( this );
 	children.push_back( child );
 }
 
@@ -77,6 +98,83 @@ bool GUIElement::PointInArea( const glm::vec2& point )
 		return true;
 	}
 	return false;
+}
+
+
+
+void GUIElement::UpdateRealArea()
+{
+	if( !parent )
+	{
+		realArea = area;
+		if( area.x.type      == PERCENTAGE ||
+			area.y.type      == PERCENTAGE ||
+			area.width.type  == PERCENTAGE ||
+			area.height.type == PERCENTAGE )
+		{
+			// Okay, having percentage without a parent
+			// element is... weird. Show a warning.
+			std::cerr << "Warning: Root GUIElement has percentual area!\n";
+		}
+	}
+	else
+	{
+		auto parentArea = parent->GetRealArea();
+		float newX      = parentArea.x.value;
+		float newY      = parentArea.y.value;
+		float newWidth  = 0.f;
+		float newHeight = 0.f;
+
+		// Calculate the position
+		if( area.x.type == PERCENTAGE )
+		{
+			newX += parentArea.width.value / 100.f * area.x.value;
+		}
+		else
+		{
+			newX += area.x.value;
+		}
+
+		if( area.y.type == PERCENTAGE )
+		{
+			newY += parentArea.width.value / 100.f * area.y.value;
+		}
+		else
+		{
+			newY += area.y.value;
+		}
+
+
+		// Calculate the size
+		if( area.width.type == PERCENTAGE )
+		{
+			newWidth = parentArea.width.value / 100.f * area.width.value;
+		}
+		else
+		{
+			newWidth += area.width.value;
+		}
+
+		if( area.height.type == PERCENTAGE )
+		{
+			newHeight = parentArea.height.value / 100.f * area.height.value;
+		}
+		else
+		{
+			newHeight += area.height.value;
+		}
+
+		realArea.x      = newX;
+		realArea.y      = newY;
+		realArea.width  = newWidth;
+		realArea.height = newHeight;
+	}
+
+	// And as usual, update children too
+	for( auto& child : children )
+	{
+		child->UpdateRealArea();
+	}
 }
 
 

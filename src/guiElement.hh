@@ -69,16 +69,20 @@ class GUIElement
 	GUIElement();
 	virtual ~GUIElement();
 
+	virtual Box2D GetRealArea();
+
 	virtual void SetSize( GUIMeasure width, GUIMeasure height );
 	virtual void SetPosition( GUIMeasure x, GUIMeasure y );
 	virtual void SetArea( const Box2D& newArea );
 
+	virtual void SetParent( GUIElement* newParent );
 	virtual void AddChild( const std::shared_ptr<GUIElement>& child );
 	virtual void AddCallback( GUICallback callback );
 	virtual void RemoveCallback( GUICallback callback );
 
 	virtual bool PointInArea( const glm::vec2& point );
 
+	virtual void UpdateRealArea();
 	virtual void Render();
 
 
@@ -86,6 +90,7 @@ class GUIElement
 	Box2D area;
 	Box2D realArea;
 
+	GUIElement *parent;
 	std::vector<std::shared_ptr<GUIElement>> children;
 	std::vector<GUICallback> callbacks;
 };
