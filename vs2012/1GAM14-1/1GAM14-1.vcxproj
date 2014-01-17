@@ -15,6 +15,7 @@
     <ClCompile Include="..\..\src\character.cc" />
     <ClCompile Include="..\..\src\entity.cc" />
     <ClCompile Include="..\..\src\gui.cc" />
+    <ClCompile Include="..\..\src\guiBar.cc" />
     <ClCompile Include="..\..\src\guiElement.cc" />
     <ClCompile Include="..\..\src\helpers.cc" />
     <ClCompile Include="..\..\src\joystick.cc" />
@@ -30,12 +31,15 @@
     <ClCompile Include="..\..\src\textureManager.cc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\data\shaders\gui.fshader" />
+    <None Include="..\..\data\shaders\gui.vshader" />
     <None Include="..\..\data\shaders\test.fshader" />
     <None Include="..\..\data\shaders\test.vshader" />
     <None Include="..\..\src\camera.hh" />
     <None Include="..\..\src\character.hh" />
     <None Include="..\..\src\entity.hh" />
     <None Include="..\..\src\gui.hh" />
+    <None Include="..\..\src\guiBar.hh" />
     <None Include="..\..\src\guiElement.hh" />
     <None Include="..\..\src\helpers.hh" />
     <None Include="..\..\src\joystick.hh" />

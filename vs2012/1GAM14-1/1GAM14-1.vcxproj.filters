@@ -66,6 +66,9 @@
     <ClCompile Include="..\..\src\guiElement.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\guiBar.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\data\shaders\test.vshader">
@@ -121,6 +124,15 @@
     </None>
     <None Include="..\..\src\guiElement.hh">
       <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\..\src\guiBar.hh">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\..\data\shaders\gui.fshader">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\data\shaders\gui.vshader">
+      <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
