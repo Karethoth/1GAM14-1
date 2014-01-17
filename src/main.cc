@@ -37,6 +37,11 @@ MeshManager meshManager;
 TextureManager textureManager;
 ShaderProgramManager shaderManager;
 
+// GUI stuff
+GUI gui;
+std::shared_ptr<GUIBar> bar;
+
+
 struct
 {
 	bool up;
@@ -82,15 +87,18 @@ static void GLFWFrameBufferSizeCallback( GLFWwindow* window, int width, int heig
 {
 	windowInfo.width  = width;
 	windowInfo.height = height;
+	gui.SetSize( glm::vec2( width, height ) );
 
 	glViewport( 0, 0, width, height );
 	windowInfo.UpdateRatio();
 }
 
 
+
 // Loader and initializer functions
 bool LoadShaders()
 {
+	// Compile and link the default 3D shader
 	Shader vShader( GL_VERTEX_SHADER );
 	Shader fShader( GL_FRAGMENT_SHADER );
 
@@ -123,6 +131,38 @@ bool LoadShaders()
 
 	// Give the shaderProgram to the manager
 	shaderManager.Add( "DefaultShader", shaderProgram );
+
+
+
+	// Repeat the process for the GUI shader
+	Shader guiVShader( GL_VERTEX_SHADER );
+	Shader guiFShader( GL_FRAGMENT_SHADER );
+
+	if( !guiVShader.LoadFromFile( "data/shaders/gui.vshader" ) )
+	{
+		std::cerr << "Failed to load vertex shader!\n";
+		return false;
+	}
+
+	if( !guiFShader.LoadFromFile( "data/shaders/gui.fshader" ) )
+	{
+		std::cerr << "Failed to load fragment shader!\n";
+		return false;
+	}
+
+
+	// We'll use the same attributes as previously
+
+	// Create the shader and pass the shaders and the attribute list to it.
+	auto guiShaderProgram = std::make_shared<ShaderProgram>();
+	if( !guiShaderProgram->Load( guiVShader, guiFShader, attributes ) )
+	{
+		std::cerr << "Error: Compiling or linking the shader program has failed.\n";
+		return false;
+	}
+
+	// Give the shaderProgram to the manager
+	shaderManager.Add( "DefaultGUIShader", guiShaderProgram );
 
 	return true;
 }
@@ -306,6 +346,17 @@ bool CreateScene()
 	light = std::make_shared<Node>( "TestLight" );
 	light->SetPosition( glm::vec3( -10.0, 8.0, -10.0 ) );
 	world->AddChild( light );
+
+
+	// Create the GUI elements.
+	gui.SetSize( glm::vec2( windowInfo.width, windowInfo.height ) );
+	gui.SetPosition( glm::vec2( 0.f ) );
+
+	bar = std::make_shared<GUIBar>();
+	bar->SetSize( glm::vec2( 200.f, 20.f ) );
+	bar->SetPosition( glm::vec2( 10.f, 10.f ) );
+	gui.AddChild( static_cast<std::shared_ptr<GUIElement>>( bar ) );
+
 	return true;
 }
 
@@ -482,6 +533,10 @@ int main( int argc, char **argv )
 			float xAxis = joystick->GetAxis( 0 );
 			float yAxis = joystick->GetAxis( 1 );
 
+
+			float triggerAxis = joystick->GetAxis( 2 );
+			bar->SetSize( glm::vec2( -triggerAxis*200.f + 200.f, 20.f ) );
+
 			xLook = joystick->GetAxis( 4 );
 			yLook = -joystick->GetAxis( 3 );
 
@@ -559,6 +614,9 @@ int main( int argc, char **argv )
 
 		// Render the current scene
 		rootNode.Render();
+
+		// Render the user interface
+		gui.Render();
 
 		glfwSwapBuffers( window );
 		glfwPollEvents();

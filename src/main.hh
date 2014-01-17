@@ -30,6 +30,9 @@
 #include "character.hh"
 #include "joystick.hh"
 
+#include "gui.hh"
+#include "guiBar.hh"
+
 #include "managers.hh"
 #include "helpers.hh"
 
