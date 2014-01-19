@@ -10,7 +10,7 @@ CC = g++ -g
 
 CFLAGS = -Wall -std=c++11
 
-TGT = 1401
+TGT = game
 
 
 OBJS=\
