@@ -6,7 +6,7 @@
 #include "collisions.hh"
 
 
-class Entity : public Node, Physical
+class Entity : public Node, public Physical
 {
  public:
 	Entity( std::string entityName="UnnamedEntity" );
@@ -26,7 +26,7 @@ class Entity : public Node, Physical
 	virtual void Render();
 
 	virtual bool CollidesWith( const AABB& otherCollisionBox ) const;
-	virtual const AABB& GetCollisionBox() const;
+	virtual AABB GetCollisionBox() const;
 
 
  protected:

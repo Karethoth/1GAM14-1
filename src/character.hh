@@ -5,7 +5,7 @@
 #include "entity.hh"
 
 
-class Character : public Node, Physical
+class Character : public Node, public Physical
 {
  public:
 	Character( std::string characterName="UnnamedCharacter" );
@@ -18,7 +18,7 @@ class Character : public Node, Physical
 	virtual bool CollidesWith( const AABB& otherCollisionBox ) const;
 
 	void SetCollisionBox( AABB newCollisionBox );
-	virtual const AABB& GetCollisionBox() const;
+	virtual AABB GetCollisionBox() const;
 
 	void SetVelocity( glm::vec3 newVelocity );
 	glm::vec3 GetVelocity() const;

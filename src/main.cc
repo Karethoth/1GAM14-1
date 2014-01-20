@@ -292,6 +292,10 @@ bool CreateScene()
 		ToRadians( 180.f ),
 		0.0 )
 	) );
+	wall->SetCollisionBox( AABB(
+		glm::vec3( -40.f, 0.f, -0.5f ),
+		glm::vec3( 0.f, 10.f, 0.2f )
+	) );
 	world->AddChild( wall );
 
 
@@ -305,6 +309,10 @@ bool CreateScene()
 		ToRadians( -90.f ),
 		ToRadians( -90.f ),
 		0.0 )
+	) );
+	secondWall->SetCollisionBox( AABB(
+		glm::vec3( -0.5f, 0.f, 0.f ),
+		glm::vec3( 0.2f, 10.f, 40.f )
 	) );
 	world->AddChild( secondWall );
 
@@ -322,8 +330,12 @@ bool CreateScene()
 	tree->SetPosition( glm::vec3( -15.0, 4.9, -10.0 ) );
 	tree->SetOrientation( glm::quat( glm::vec3(
 		ToRadians( 90.f ),
-		ToRadians( 45.f ),
+		ToRadians( 0.f ),
 		0.0 )
+	) );
+	tree->SetCollisionBox( AABB(
+		glm::vec3( 0.f, -4.9f, -2.5f ),
+		glm::vec3( 5.f, 0.f, 2.5f )
 	) );
 	world->AddChild( tree );
 
@@ -357,6 +369,14 @@ bool CreateScene()
 	bar->SetSize( 200.f, 20.f );
 	bar->SetPosition( 0.f, 5.f );
 	gui.AddChild( static_cast<std::shared_ptr<GUIElement>>( bar ) );
+
+
+	// Generate list of objects player can bump into
+	auto collidableObjects = std::make_shared<PhysicalList>();
+	collidableObjects->push_back( tree );
+	collidableObjects->push_back( wall );
+	collidableObjects->push_back( secondWall );
+	player->collidableObjects = collidableObjects;
 
 	return true;
 }
@@ -424,6 +444,8 @@ int main( int argc, char **argv )
 		return -1;
 	}
 
+	player = std::make_shared<Character>( "Player" );
+
 	// Create the scene
 	if( !CreateScene() )
 	{
@@ -431,7 +453,6 @@ int main( int argc, char **argv )
 		return -1;
 	}
 
-	player = std::make_shared<Character>( "Player" );
 	player->SetPosition( glm::vec3( 0.0, 0.0, 0.0 ) );
 	player->SetCollisionBox( AABB(
 		glm::vec3( -1.f, 0.f, -1.f ),

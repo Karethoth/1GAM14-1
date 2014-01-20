@@ -65,7 +65,7 @@ void Entity::SetCollisionBox( AABB newCollisionBox )
 }
 
 
-const AABB& Entity::GetCollisionBox() const
+AABB Entity::GetCollisionBox() const
 {
 	return collisionBox + worldPosition;
 }
@@ -139,7 +139,7 @@ void Entity::Render()
 
 bool Entity::CollidesWith( const AABB& otherCollisionBox ) const
 {
-	if( AABBToAABBCollision( collisionBox+worldPosition, otherCollisionBox ) )
+	if( AABBToAABBCollision( GetCollisionBox(), otherCollisionBox ) )
 	{
 		return true;
 	}

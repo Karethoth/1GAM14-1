@@ -70,11 +70,31 @@ void Character::Update( double deltaTime )
 	glm::vec3 step = velocity * static_cast<float>( deltaTime );
 
 	// Check for collisions and set orientation
-	if( glm::length( step ) > 0.f )
+	if( glm::length( step ) > 0.01f )
 	{
 		position += step;
 		UpdateWorldInfo();
-		if( CollidesWith( AABB( glm::vec3(10.f, -5.f, 5.f), glm::vec3(15.f, 5.f, 10.f ) ) ) )
+		auto myAABB = GetCollisionBox();
+
+		bool collision = false;
+		if( collidableObjects )
+		{
+			for( auto& collidable : *collidableObjects )
+			{
+				if( !collidable )
+				{
+					continue;
+				}
+
+				if( collidable->CollidesWith( myAABB ) )
+				{
+					collision = true;
+					break;
+				}
+			}
+		}
+
+		if( collision )
 		{
 			position -= step;
 		}
@@ -143,7 +163,7 @@ void Character::SetCollisionBox( AABB newCollisionBox )
 }
 
 
-const AABB& Character::GetCollisionBox() const
+AABB Character::GetCollisionBox() const
 {
 	return collisionBox + worldPosition;
 };
