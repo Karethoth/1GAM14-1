@@ -1,8 +1,30 @@
 #include "collisions.hh"
 
-
-sAABB::sAABB( const glm::vec3& minimum, const glm::vec3& maximum ) : min( minimum ), max( maximum )
+inline float Min( const float& a, const float& b )
 {
+	return a <= b ? a : b;
+}
+
+
+inline float Max( const float& a, const float& b )
+{
+	return a >= b ? a : b;
+}
+
+
+
+sAABB::sAABB( const glm::vec3& minimum, const glm::vec3& maximum )
+{
+	min = glm::vec3(
+		Min( minimum.x, maximum.x ),
+		Min( minimum.y, maximum.y ),
+		Min( minimum.z, maximum.z )
+	);
+	max = glm::vec3(
+		Max( minimum.x, maximum.x ),
+		Max( minimum.y, maximum.y ),
+		Max( minimum.z, maximum.z )
+	);
 }
 
 
