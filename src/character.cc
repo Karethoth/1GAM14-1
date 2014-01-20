@@ -74,29 +74,51 @@ void Character::Update( double deltaTime )
 	{
 		position += step;
 		UpdateWorldInfo();
-		auto myAABB = GetCollisionBox();
 
-		bool collision = false;
-		if( collidableObjects )
+		bool collision = true;
+		bool tryX = true;
+		bool tryZ = false;
+
+		while( collision )
 		{
-			for( auto& collidable : *collidableObjects )
+			auto myAABB = GetCollisionBox();
+			collision = false;
+			if( collidableObjects )
 			{
-				if( !collidable )
+				for( auto& collidable : *collidableObjects )
 				{
-					continue;
-				}
+					if( !collidable )
+					{
+						continue;
+					}
 
-				if( collidable->CollidesWith( myAABB ) )
-				{
-					collision = true;
-					break;
+					if( collidable->CollidesWith( myAABB ) )
+					{
+						collision = true;
+						break;
+					}
 				}
 			}
-		}
 
-		if( collision )
-		{
-			position -= step;
+			if( collision )
+			{
+				if( tryX )
+				{
+					position = oldPosition + glm::vec3( step.x, step.y, 0.f );
+					tryX = false;
+					tryZ = true;
+				}
+				else if( tryZ )
+				{
+					position = oldPosition + glm::vec3( 0.f, step.y, step.z );
+					tryZ = false;
+				}
+				else
+				{
+					position = oldPosition;
+				}
+				UpdateWorldInfo();
+			}
 		}
 
 		glm::vec2 direction = glm::normalize( glm::vec2( velocity.x, velocity.z ) );
@@ -116,7 +138,6 @@ void Character::Update( double deltaTime )
 			0.f
 		) ) );
 	}
-	UpdateWorldInfo();
 }
 
 

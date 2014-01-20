@@ -294,7 +294,7 @@ bool CreateScene()
 	) );
 	wall->SetCollisionBox( AABB(
 		glm::vec3( -40.f, 0.f, -0.5f ),
-		glm::vec3( 0.f, 10.f, 0.2f )
+		glm::vec3( 0.f, 10.f, 0.0f )
 	) );
 	world->AddChild( wall );
 
@@ -312,7 +312,7 @@ bool CreateScene()
 	) );
 	secondWall->SetCollisionBox( AABB(
 		glm::vec3( -0.5f, 0.f, 0.f ),
-		glm::vec3( 0.2f, 10.f, 40.f )
+		glm::vec3( 0.0f, 10.f, 40.f )
 	) );
 	world->AddChild( secondWall );
 
