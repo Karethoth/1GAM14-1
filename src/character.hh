@@ -15,9 +15,10 @@ class Character : public Node, Physical
 	virtual void Update( double deltaTime );
 	virtual void UpdateWorldInfo();
 
-	virtual bool CollidesWith( const AABB& otherCollisionBox );
+	virtual bool CollidesWith( const AABB& otherCollisionBox ) const;
 
 	void SetCollisionBox( AABB newCollisionBox );
+	virtual const AABB& GetCollisionBox() const;
 
 	void SetVelocity( glm::vec3 newVelocity );
 	glm::vec3 GetVelocity() const;

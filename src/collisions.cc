@@ -6,19 +6,19 @@ sAABB::sAABB( const glm::vec3& minimum, const glm::vec3& maximum ) : min( minimu
 }
 
 
-sAABB AABB::operator + ( const glm::vec3& translation )
+sAABB AABB::operator + ( const glm::vec3& translation ) const
 {
 	return( AABB( min+translation, max+translation ) );
 }
 
 
-sAABB AABB::operator - ( const glm::vec3& translation )
+sAABB AABB::operator - ( const glm::vec3& translation ) const
 {
 	return( AABB( min-translation, max-translation ) );
 }
 
 
-sAABB AABB::operator * ( const glm::vec3& scale )
+sAABB AABB::operator * ( const glm::vec3& scale ) const
 {
 	return( AABB( min*scale, max*scale ) );
 }

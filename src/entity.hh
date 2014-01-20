@@ -25,7 +25,8 @@ class Entity : public Node, Physical
 
 	virtual void Render();
 
-	virtual bool CollidesWith( const AABB& otherCollisionBox );
+	virtual bool CollidesWith( const AABB& otherCollisionBox ) const;
+	virtual const AABB& GetCollisionBox() const;
 
 
  protected:

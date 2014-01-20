@@ -129,7 +129,7 @@ void Character::UpdateWorldInfo()
 
 
 
-bool Character::CollidesWith( const AABB& otherCollisionBox )
+bool Character::CollidesWith( const AABB& otherCollisionBox ) const
 {
 	// For now, we won't be checking collision with children
 	return AABBToAABBCollision( collisionBox+worldPosition, otherCollisionBox );
@@ -141,6 +141,12 @@ void Character::SetCollisionBox( AABB newCollisionBox )
 {
 	collisionBox = newCollisionBox;
 }
+
+
+const AABB& Character::GetCollisionBox() const
+{
+	return collisionBox + worldPosition;
+};
 
 
 
