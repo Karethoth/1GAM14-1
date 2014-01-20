@@ -5,6 +5,7 @@
 #include "../deb/glm/gtx/quaternion.hpp"
 
 #include <algorithm>
+#include <iostream>
 
 
 extern bool ZCompare( const std::shared_ptr<Node>& a,
@@ -66,15 +67,18 @@ void Character::Update( double deltaTime )
 {
 	// Calculate new position
 	glm::vec3 oldPosition = position;
-	position += velocity * static_cast<float>( deltaTime );
+	glm::vec3 step = velocity * static_cast<float>( deltaTime );
 
-	// Check if we have a collision
-	bool collision = false;
-
-
-	// Set orientation
-	if( glm::length( velocity ) > 0.f )
+	// Check for collisions and set orientation
+	if( glm::length( step ) > 0.f )
 	{
+		position += step;
+		UpdateWorldInfo();
+		if( CollidesWith( AABB( glm::vec3(10.f, -5.f, 5.f), glm::vec3(15.f, 5.f, 10.f ) ) ) )
+		{
+			position -= step;
+		}
+
 		glm::vec2 direction = glm::normalize( glm::vec2( velocity.x, velocity.z ) );
 
 		float degrees = Cross( direction, glm::vec2( 0.0, 1.0 ) ) * 90.f;
@@ -92,6 +96,7 @@ void Character::Update( double deltaTime )
 			0.f
 		) ) );
 	}
+	UpdateWorldInfo();
 }
 
 

@@ -433,6 +433,10 @@ int main( int argc, char **argv )
 
 	player = std::make_shared<Character>( "Player" );
 	player->SetPosition( glm::vec3( 0.0, 0.0, 0.0 ) );
+	player->SetCollisionBox( AABB(
+		glm::vec3( -1.f, 0.f, -1.f ),
+		glm::vec3(  0.f, 5.f, 1.f )
+	) );
 	rootNode.AddChild( camera );
 	player->AddChild( worldCenter );
 	world->AddChild( player );
