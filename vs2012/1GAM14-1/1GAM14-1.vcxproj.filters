@@ -69,6 +69,9 @@
     <ClCompile Include="..\..\src\guiBar.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\collisions.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\data\shaders\test.vshader">
@@ -133,6 +136,9 @@
     </None>
     <None Include="..\..\data\shaders\gui.vshader">
       <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\src\collisions.hh">
+      <Filter>Header Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
