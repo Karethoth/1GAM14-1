@@ -3,9 +3,10 @@
 #define _ENTITY_HH_
 
 #include "node.hh"
+#include "collisions.hh"
 
 
-class Entity : public Node
+class Entity : public Node, Physical
 {
  public:
 	Entity( std::string entityName="UnnamedEntity" );
@@ -20,7 +21,15 @@ class Entity : public Node
 	void SetShaderName( std::string newShaderName );
 	std::string GetShaderName();
 
+	void SetCollisionBox( AABB newCollisionBox );
+
 	virtual void Render();
+
+	virtual bool CollidesWith( const AABB& otherCollisionBox );
+
+
+ protected:
+	AABB collisionBox;
 
 
  private:

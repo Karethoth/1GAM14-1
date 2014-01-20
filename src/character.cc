@@ -64,7 +64,13 @@ void Character::Render()
 
 void Character::Update( double deltaTime )
 {
+	// Calculate new position
+	glm::vec3 oldPosition = position;
 	position += velocity * static_cast<float>( deltaTime );
+
+	// Check if we have a collision
+	bool collision = false;
+
 
 	// Set orientation
 	if( glm::length( velocity ) > 0.f )
@@ -118,6 +124,21 @@ void Character::UpdateWorldInfo()
 
 
 
+bool Character::CollidesWith( const AABB& otherCollisionBox )
+{
+	// For now, we won't be checking collision with children
+	return AABBToAABBCollision( collisionBox+worldPosition, otherCollisionBox );
+}
+
+
+
+void Character::SetCollisionBox( AABB newCollisionBox )
+{
+	collisionBox = newCollisionBox;
+}
+
+
+
 void Character::SetVelocity( glm::vec3 newVelocity )
 {
 	velocity = newVelocity;
@@ -128,3 +149,4 @@ glm::vec3 Character::GetVelocity() const
 {
 	return velocity;
 }
+

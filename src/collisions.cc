@@ -1,6 +1,30 @@
 #include "collisions.hh"
 
 
+sAABB::sAABB( const glm::vec3& minimum, const glm::vec3& maximum ) : min( minimum ), max( maximum )
+{
+}
+
+
+sAABB AABB::operator + ( const glm::vec3& translation )
+{
+	return( AABB( min+translation, max+translation ) );
+}
+
+
+sAABB AABB::operator - ( const glm::vec3& translation )
+{
+	return( AABB( min-translation, max-translation ) );
+}
+
+
+sAABB AABB::operator * ( const glm::vec3& scale )
+{
+	return( AABB( min*scale, max*scale ) );
+}
+
+
+
 bool AABBToAABBCollision( const AABB& a, const AABB& b )
 {
 	return (

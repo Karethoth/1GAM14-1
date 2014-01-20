@@ -59,6 +59,12 @@ std::string Entity::GetShaderName()
 }
 
 
+void Entity::SetCollisionBox( AABB newCollisionBox )
+{
+	collisionBox = newCollisionBox;
+}
+
+
 
 void Entity::Render()
 {
@@ -121,5 +127,32 @@ void Entity::Render()
 			entityChild->Render();
 		}
 	}
+}
+
+
+
+bool Entity::CollidesWith( const AABB& otherCollisionBox )
+{
+	if( AABBToAABBCollision( collisionBox+worldPosition, otherCollisionBox ) )
+	{
+		return true;
+	}
+
+	// If this doesn't collide, check the children too
+	for( auto& child : children )
+	{
+		auto entityChild = std::dynamic_pointer_cast<Entity>( child );
+		if( !entityChild )
+		{
+			continue;
+		}
+
+		if( entityChild->CollidesWith( otherCollisionBox ) )
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
