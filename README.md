@@ -22,9 +22,7 @@
 - Compile!
 
 ### Linux
-- Go to the project root directory and punch in command:
-  - ```Shell
-    make -C linux```
+- Go to the project root directory and punch in command: ```make -C linux```
 - The resulting binary can be found from the bin-directory.
 - No installation script is provided. Yet.
 
