@@ -41,6 +41,9 @@ ShaderProgramManager shaderManager;
 GUI gui;
 std::shared_ptr<GUIBar> bar;
 
+// FreeType library
+FT_Library ftLibrary;
+
 
 struct
 {
@@ -383,6 +386,18 @@ bool CreateScene()
 
 
 
+bool InitializeFreeType()
+{
+	if( FT_Init_FreeType( &ftLibrary ) )
+	{
+		return false;
+	}
+
+	return true;
+}
+
+
+
 int main( int argc, char **argv )
 {
 	GLFWwindow* window;
@@ -423,6 +438,13 @@ int main( int argc, char **argv )
 	{
 		std::cerr << "Couldn't initialize GLEW\n";
 		exit( EXIT_FAILURE );
+	}
+
+
+	if( !InitializeFreeType() )
+	{
+		std::cerr << "Failed to initialize FreeType!\n";
+		return -1;
 	}
 
 

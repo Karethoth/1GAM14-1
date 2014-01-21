@@ -8,9 +8,11 @@
 	#pragma comment(lib, "opengl32.lib")
 	#pragma comment(lib, "glu32.lib")
 	#ifdef _DEBUG
+		#pragma comment(lib, "freetype252_D.lib")
 		#pragma comment(lib, "libpng16d.lib")
 		#pragma comment(lib, "glew32sd.lib")
 	#else
+		#pragma comment(lib, "freetype252.lib")
 		#pragma comment(lib, "libpng16.lib")
 		#pragma comment(lib, "glew32s.lib")
 	#endif
@@ -37,6 +39,10 @@
 #include "helpers.hh"
 
 #include <GLFW/glfw3.h>
+
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 #include <iostream>
 #include <memory>
 
