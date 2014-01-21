@@ -29,6 +29,7 @@ void GUIBar::Render()
 	glActiveTexture( GL_TEXTURE0 );
 	glBindTexture( GL_TEXTURE_2D, texture->textureId );
 	glUniform1i( shaderManager.Get( "DefaultGUIShader" )->GetUniform( "textureSampler" ), 0 );
+	glUniform1f( shaderManager.Get( "DefaultGUIShader" )->GetUniform( "alpha" ), 1.f );
 
 	float textureScale = 0.2f;
 	float ratio = realArea.width.value / realArea.height.value;

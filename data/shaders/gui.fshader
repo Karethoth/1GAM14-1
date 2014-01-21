@@ -1,5 +1,5 @@
 uniform sampler2D textureSampler;
-uniform float alpha = 1.f;
+uniform float alpha;
 varying vec2 textureCoord;
 
 
