@@ -7,6 +7,7 @@
 
 GUIBar::GUIBar()
 {
+	alpha = 0.2f;
 }
 
 
@@ -29,7 +30,7 @@ void GUIBar::Render()
 	glActiveTexture( GL_TEXTURE0 );
 	glBindTexture( GL_TEXTURE_2D, texture->textureId );
 	glUniform1i( shaderManager.Get( "DefaultGUIShader" )->GetUniform( "textureSampler" ), 0 );
-	glUniform1f( shaderManager.Get( "DefaultGUIShader" )->GetUniform( "alpha" ), 1.f );
+	glUniform1f( shaderManager.Get( "DefaultGUIShader" )->GetUniform( "alpha" ), alpha );
 
 	float textureScale = 0.2f;
 	float ratio = realArea.width.value / realArea.height.value;
@@ -46,5 +47,19 @@ void GUIBar::Render()
 		glTexCoord2f( 0.f, textureHeight );
 		glVertex2f( realArea.x.value,                        realArea.y.value + realArea.height.value );
 	glEnd();
+}
+
+
+
+void GUIBar::HandleEvent( const GUIEvent& event )
+{
+	if( event.type == GUIEventType::MOUSE_SCROLL && PointInArea( event.point ) )
+	{
+		alpha += event.scroll.y / 10.f;
+		if( alpha > 1.f )
+			alpha = 1.f;
+		else if( alpha < 0.f )
+			alpha = 0.f;
+	}
 }
 

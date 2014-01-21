@@ -54,8 +54,12 @@ typedef struct sGUIEvent
 {
 	std::shared_ptr<GUIElement> element;
 	GUIEventType type;
-	unsigned int value;
+	int          button;
+	int          scancode;
+	int          value;
+	int          mods;
 	glm::vec2    point;
+	glm::vec2    scroll;
 } GUIEvent;
 
 
@@ -75,11 +79,14 @@ class GUIElement
 	virtual void SetPosition( GUIMeasure x, GUIMeasure y );
 	virtual void SetArea( const Box2D& newArea );
 
+	virtual void SetAlpha( float newAlpha );
+
 	virtual void SetParent( GUIElement* newParent );
 	virtual void AddChild( const std::shared_ptr<GUIElement>& child );
 	virtual void AddCallback( GUICallback callback );
 	virtual void RemoveCallback( GUICallback callback );
 
+	virtual void HandleEvent( const GUIEvent& event );
 	virtual bool PointInArea( const glm::vec2& point );
 
 	virtual void UpdateRealArea();
@@ -89,6 +96,8 @@ class GUIElement
  protected:
 	Box2D area;
 	Box2D realArea;
+
+	float alpha;
 
 	GUIElement *parent;
 	std::vector<std::shared_ptr<GUIElement>> children;

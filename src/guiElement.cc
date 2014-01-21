@@ -13,6 +13,7 @@ GUIMeasure::sGUIMeasure( float value, GUIMeasureType type )
 GUIElement::GUIElement()
 {
 	parent = nullptr;
+	alpha  = 1.f;
 }
 
 
@@ -52,6 +53,12 @@ void GUIElement::SetArea( const Box2D& newArea )
 }
 
 
+void GUIElement::SetAlpha( float newAlpha )
+{
+	alpha = newAlpha;
+}
+
+
 void GUIElement::SetParent( GUIElement* newParent )
 {
 	parent = newParent;
@@ -83,6 +90,16 @@ void GUIElement::RemoveCallback( GUICallback callback )
 			continue;
 		}
 		it = callbacks.erase( it );
+	}
+}
+
+
+
+void GUIElement::HandleEvent( const GUIEvent& event )
+{
+	for( auto& child : children )
+	{
+		child->HandleEvent( event );
 	}
 }
 

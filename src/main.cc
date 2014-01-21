@@ -98,6 +98,62 @@ static void GLFWFrameBufferSizeCallback( GLFWwindow* window, int width, int heig
 }
 
 
+static void GLFWMouseButtonCallback( GLFWwindow* window, int button, int action, int mods )
+{
+	GUIEvent event;
+
+	if( action )
+	{
+		event.type = GUIEventType::MOUSE_DOWN;
+	}
+	else
+	{
+		event.type = GUIEventType::MOUSE_UP;
+	}
+
+	double xPos;
+	double yPos;
+	glfwGetCursorPos( window, &xPos, &yPos );
+	event.point = glm::vec2( static_cast<float>( xPos ),
+	                         static_cast<float>( yPos ) );
+
+	event.button = button;
+	event.value  = action;
+	event.mods   = mods;
+
+	gui.HandleEvent( event );
+}
+
+
+static void GLFWMouseMoveCallback( GLFWwindow* window, double xPos, double yPos )
+{
+	GUIEvent event;
+	event.type  = GUIEventType::MOUSE_MOVE;
+	event.point = glm::vec2( static_cast<float>( xPos ),
+	                         static_cast<float>( yPos ) );
+
+	gui.HandleEvent( event );
+}
+
+
+static void GLFWMouseScrollCallback( GLFWwindow* window, double xOffset, double yOffset )
+{
+	GUIEvent event;
+
+	event.type   = GUIEventType::MOUSE_SCROLL;
+	event.scroll = glm::vec2( static_cast<float>( xOffset ),
+	                          static_cast<float>( yOffset ) );
+
+	double xPos;
+	double yPos;
+	glfwGetCursorPos( window, &xPos, &yPos );
+	event.point = glm::vec2( static_cast<float>( xPos ),
+	                         static_cast<float>( yPos ) );
+
+	gui.HandleEvent( event );
+}
+
+
 
 // Loader and initializer functions
 bool LoadShaders()
@@ -430,6 +486,9 @@ int main( int argc, char **argv )
 	}
 
 	glfwMakeContextCurrent( window );
+	glfwSetMouseButtonCallback( window, GLFWMouseButtonCallback );
+	glfwSetCursorPosCallback( window, GLFWMouseMoveCallback );
+	glfwSetScrollCallback( window, GLFWMouseScrollCallback );
 	glfwSetKeyCallback( window, GLFWKeyCallback );
 	glfwSetFramebufferSizeCallback( window, GLFWFrameBufferSizeCallback );
 
