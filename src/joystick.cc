@@ -101,43 +101,47 @@ bool Joystick::Validate()
 
 
 
-int Joystick::GetId()
+int Joystick::GetId() const
 {
 	return id;
 }
 
 
-std::string Joystick::GetName()
+std::string Joystick::GetName() const
 {
 	return name;
 }
 
 
-std::vector<float> Joystick::GetAxes()
+std::vector<float> Joystick::GetAxes() const
 {
 	return axes;
 }
 
 
-std::vector<unsigned char> Joystick::GetButtons()
+std::vector<unsigned char> Joystick::GetButtons() const
 {
 	return buttons;
 }
 
 
-float Joystick::GetAxis( int index )
+float Joystick::GetAxis( int index ) const
 {
 	if( static_cast<unsigned int>( index ) >= axes.size() )
+	{
 		return 0.f;
+	}
 
 	return axes[index];
 }
 
 
-unsigned char Joystick::GetButton( int index )
+unsigned char Joystick::GetButton( int index ) const
 {
 	if( static_cast<unsigned int>( index ) >= buttons.size() )
+	{
 		return GL_FALSE;
+	}
 
 	return buttons[index];
 }

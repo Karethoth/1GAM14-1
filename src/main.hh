@@ -45,6 +45,6 @@
 
 #include <iostream>
 #include <memory>
-
+#include <future>
 
 #endif

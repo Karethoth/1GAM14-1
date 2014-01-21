@@ -49,14 +49,14 @@ class Joystick
 	void Update();
 	bool Validate();
 
-	int GetId();
-	std::string GetName();
+	int GetId() const;
+	std::string GetName() const;
 
-	std::vector<float>         GetAxes();
-	std::vector<unsigned char> GetButtons();
+	std::vector<float>         GetAxes() const;
+	std::vector<unsigned char> GetButtons() const;
 
-	float         GetAxis( int index );
-	unsigned char GetButton( int index );
+	float         GetAxis( int index ) const;
+	unsigned char GetButton( int index ) const;
 
 	void AddEventHandler( JoystickEventHandler handler );
 

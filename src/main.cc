@@ -170,6 +170,14 @@ static void JoystickCallback( const Joystick& joystick, const JoystickEvent& eve
 			joystickYInverted = !joystickYInverted;
 		}
 	}
+	else if( event.type == PLUGGED_IN )
+	{
+		std::cout << "Joystick '" << joystick.GetName() << "' plugged in!\n";
+	}
+	else if( event.type == PLUGGED_OUT )
+	{
+		std::cout << "Joystick '" << joystick.GetName() << "' plugged out!\n";
+	}
 }
 
 
@@ -184,6 +192,9 @@ void CheckJoystick()
 			return;
 		}
 
+		JoystickEvent event;
+		event.type = PLUGGED_OUT;
+		JoystickCallback( *joystick, event );
 		joystick.release();
 	}
 
@@ -200,6 +211,7 @@ void CheckJoystick()
 		if( tmpJoystick->GetAxes().size() == 5 )
 		{
 			joystick = std::unique_ptr<Joystick>( tmpJoystick );
+			break;
 		}
 		else
 		{
@@ -211,7 +223,9 @@ void CheckJoystick()
 	if( joystick )
 	{
 		joystick->AddEventHandler( JoystickCallback );
-		std::cout << "Found a joystick: " << joystick->GetName() << "\n";
+		JoystickEvent event;
+		event.type = PLUGGED_IN;
+		JoystickCallback( *joystick, event );
 	}
 }
 
@@ -613,8 +627,6 @@ int main( int argc, char **argv )
 	const GLint lightPositionUniform = shaderProgram->GetUniform( "lightPosition" );
 
 
-	CheckJoystick();
-
 
 	// Set some GL settings up
 	//glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
@@ -635,6 +647,8 @@ int main( int argc, char **argv )
 	// Set the clear color
 	glClearColor( 0.3f, 0.3f, 1.0f, 1.0f );
 
+	// Counter for checking joystick
+	float joystickCheckTime = 0.f;
 
 	/* Main loop */
 	while( !glfwWindowShouldClose( window ) )
@@ -663,6 +677,13 @@ int main( int argc, char **argv )
 		if( keysDown.right )
 			move += glm::vec3( 1, 0.0, 0.0 );
 
+		// Check joystick when it's time
+		joystickCheckTime -= deltaTime;
+		if( joystickCheckTime <= 0.f )
+		{
+			std::async( std::launch::async, CheckJoystick );
+			joystickCheckTime = 2.f;
+		}
 
 		// Bool which we use to check if we have any input from joystick
 		bool joystickInput = false;
