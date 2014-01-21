@@ -10,6 +10,7 @@
 - GLEW
 - GLFW3
 - libPNG
+- FreeType 2.5.2
 
 
 ## Compiling
