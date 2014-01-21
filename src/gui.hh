@@ -4,6 +4,7 @@
 
 #include "guiElement.hh"
 #include <vector>
+#include <string>
 
 
 class GUI : public GUIElement

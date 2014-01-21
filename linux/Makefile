@@ -25,7 +25,9 @@ OBJS=\
       $(OBJDIR)/textureManager.o \
       $(OBJDIR)/shaderProgramManager.o \
       $(OBJDIR)/guiElement.o \
+      $(OBJDIR)/guiBar.o \
       $(OBJDIR)/gui.o \
+      $(OBJDIR)/collisions.o \
       $(OBJDIR)/entity.o \
       $(OBJDIR)/character.o \
       $(OBJDIR)/surface.o \
