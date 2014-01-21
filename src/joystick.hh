@@ -7,6 +7,39 @@
 #include <string>
 
 
+enum JoysticEventType
+{
+	UNDEFINED_JOYSTICK_EVENT = 0,
+	AXIS_CHANGE,
+	BUTTON_STATE_CHANGE,
+	PLUGGED_IN,
+	PLUGGED_OUT
+};
+
+
+enum JoysticButtonState
+{
+	RELEASE = 0,
+	PRESS
+};
+
+
+typedef struct SJoysticEvent
+{
+	JoysticEventType   type;
+	JoysticButtonState buttonState;
+	int                index;
+	float              axisValue;
+} JoystickEvent;
+
+
+
+class Joystick;
+typedef void (*JoystickEventHandler)( const Joystick& joystick,
+                                       const JoystickEvent& event );
+
+
+
 class Joystick
 {
  public:
@@ -25,14 +58,21 @@ class Joystick
 	float         GetAxis( int index );
 	unsigned char GetButton( int index );
 
+	void AddEventHandler( JoystickEventHandler handler );
+
+
+ protected:
+	void DispatchEvent( const JoystickEvent& event );
+
 
  private:
-	 std::string name;
-	 int id;
-	 int axisCount;
-	 int buttonCount;
-	 std::vector<float>         axes;
-	 std::vector<unsigned char> buttons;
+	std::string name;
+	int id;
+	int axisCount;
+	int buttonCount;
+	std::vector<float>         axes;
+	std::vector<unsigned char> buttons;
+	std::vector<JoystickEventHandler> eventHandlers;
 };
 
 #endif

@@ -36,7 +36,7 @@ typedef struct sBox2D
 
 enum GUIEventType
 {
-	UNDEFINED=0,
+	UNDEFINED_GUI_EVENT = 0,
 	MOUSE_DOWN,
 	MOUSE_UP,
 	MOUSE_MOVE,

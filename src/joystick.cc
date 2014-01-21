@@ -42,13 +42,29 @@ void Joystick::Update()
 		buttonCountNow = buttonCount;
 	}
 
+	JoystickEvent event;
+	event.type = AXIS_CHANGE;
 	for( int ind=0; ind < axisCountNow; ++ind )
 	{
+		if( axes[ind] != axisValues[ind] )
+		{
+			event.index = ind;
+			event.axisValue = axisValues[ind];
+			DispatchEvent( event );
+		}
 		axes[ind] = axisValues[ind];
 	}
 
+	event.type = BUTTON_STATE_CHANGE;
+	event.axisValue = 0.f;
 	for( int ind=0; ind < buttonCountNow; ++ind )
 	{
+		if( buttons[ind] != buttonValues[ind] )
+		{
+			event.index = ind;
+			event.buttonState = buttonValues[ind] ? PRESS : RELEASE;
+			DispatchEvent( event );
+		}
 		buttons[ind] = buttonValues[ind];
 	}
 }
@@ -124,5 +140,22 @@ unsigned char Joystick::GetButton( int index )
 		return GL_FALSE;
 
 	return buttons[index];
+}
+
+
+
+void Joystick::AddEventHandler( JoystickEventHandler handler )
+{
+	eventHandlers.push_back( handler );
+}
+
+
+
+void Joystick::DispatchEvent( const JoystickEvent& event )
+{
+	for( auto& handler : eventHandlers )
+	{
+		handler( *this, event );
+	}
 }
 

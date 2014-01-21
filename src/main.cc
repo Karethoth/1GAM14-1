@@ -41,6 +41,10 @@ ShaderProgramManager shaderManager;
 GUI gui;
 std::shared_ptr<GUIBar> bar;
 
+// We want to keep track of possible joystick
+std::unique_ptr<Joystick> joystick;
+bool joystickYInverted = false;
+
 // FreeType library
 FT_Library ftLibrary;
 
@@ -151,6 +155,64 @@ static void GLFWMouseScrollCallback( GLFWwindow* window, double xOffset, double 
 	                         static_cast<float>( yPos ) );
 
 	gui.HandleEvent( event );
+}
+
+
+
+static void JoystickCallback( const Joystick& joystick, const JoystickEvent& event )
+{
+	if( event.type == BUTTON_STATE_CHANGE &&
+		event.buttonState == PRESS )
+	{
+		// Xbox 360 controller, left stick press
+		if( event.index == 0x08 )
+		{
+			joystickYInverted = !joystickYInverted;
+		}
+	}
+}
+
+
+
+void CheckJoystick()
+{
+	if( joystick )
+	{
+		// If we got a joystick that's fine, return
+		if( joystick->Validate() )
+		{
+			return;
+		}
+
+		joystick.release();
+	}
+
+
+	// Check for a supported joystick
+	for( int joystickId = 0; joystickId <= 15; ++joystickId )
+	{
+		if( !glfwJoystickPresent( joystickId ) )
+		{
+			continue;
+		}
+
+		Joystick* tmpJoystick = new Joystick( joystickId );
+		if( tmpJoystick->GetAxes().size() == 5 )
+		{
+			joystick = std::unique_ptr<Joystick>( tmpJoystick );
+		}
+		else
+		{
+			delete tmpJoystick;
+		}
+	}
+
+	// If we found a supported joystick, notify about it
+	if( joystick )
+	{
+		joystick->AddEventHandler( JoystickCallback );
+		std::cout << "Found a joystick: " << joystick->GetName() << "\n";
+	}
 }
 
 
@@ -550,31 +612,8 @@ int main( int argc, char **argv )
 	const GLint worldCenterUniform   = shaderProgram->GetUniform( "worldCenter" );
 	const GLint lightPositionUniform = shaderProgram->GetUniform( "lightPosition" );
 
-	// Check for a supported joystick
-	std::unique_ptr<Joystick> joystick;
-	for( int joystickId = 0; joystickId <= 15; ++joystickId )
-	{
-		if( !glfwJoystickPresent( joystickId ) )
-		{
-			continue;
-		}
 
-		Joystick* tmpJoystick = new Joystick( joystickId );
-		if( tmpJoystick->GetAxes().size() == 5 )
-		{
-			joystick = std::unique_ptr<Joystick>( tmpJoystick );
-		}
-		else
-		{
-			delete tmpJoystick;
-		}
-	}
-
-	// If we found a supported joystick, notify about it
-	if( joystick )
-	{
-		std::cout << "Found a joystick: " << joystick->GetName() << "\n";
-	}
+	CheckJoystick();
 
 
 	// Set some GL settings up
@@ -640,6 +679,10 @@ int main( int argc, char **argv )
 			float xAxis = joystick->GetAxis( 0 );
 			float yAxis = joystick->GetAxis( 1 );
 
+			if( joystickYInverted )
+			{
+				yAxis *= -1.f;
+			}
 
 			float triggerAxis = joystick->GetAxis( 2 );
 			triggerAxis = triggerAxis*-1.f + 1.f;
