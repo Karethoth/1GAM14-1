@@ -154,6 +154,21 @@ void Joystick::AddEventHandler( JoystickEventHandler handler )
 }
 
 
+void Joystick::RemoveEventHandler( JoystickEventHandler handler )
+{
+	std::vector<JoystickEventHandler>::iterator it;
+	for( it = eventHandlers.begin(); it != eventHandlers.end(); )
+	{
+		if( *it != handler )
+		{
+			++it;
+			continue;
+		}
+		it = eventHandlers.erase( it );
+	}
+}
+
+
 
 void Joystick::DispatchEvent( const JoystickEvent& event )
 {

@@ -7,6 +7,9 @@
 #include <string>
 
 
+class Joystick;
+
+
 enum JoysticEventType
 {
 	UNDEFINED_JOYSTICK_EVENT = 0,
@@ -34,7 +37,6 @@ typedef struct SJoysticEvent
 
 
 
-class Joystick;
 typedef void (*JoystickEventHandler)( const Joystick& joystick,
                                        const JoystickEvent& event );
 
@@ -59,6 +61,7 @@ class Joystick
 	unsigned char GetButton( int index ) const;
 
 	void AddEventHandler( JoystickEventHandler handler );
+	void RemoveEventHandler( JoystickEventHandler handler );
 
 
  protected:
