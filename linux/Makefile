@@ -10,7 +10,8 @@ CC = g++ -g
 
 CFLAGS = -Wall -std=c++11
 
-TGT = game
+TGT    = game
+TGTDIR = ..
 
 
 OBJS=\
@@ -28,6 +29,7 @@ OBJS=\
       $(OBJDIR)/guiBar.o \
       $(OBJDIR)/gui.o \
       $(OBJDIR)/scene.o \
+      $(OBJDIR)/testScene.o \
       $(OBJDIR)/collisions.o \
       $(OBJDIR)/entity.o \
       $(OBJDIR)/character.o \
@@ -36,10 +38,11 @@ OBJS=\
       $(OBJDIR)/main.o
 
 
-all: $(TGT)
+all: $(TGTDIR)/$(TGT)
 
  
-$(TGT): $(DIRS) $(BINDIR)/$(TGT)
+$(TGTDIR)/$(TGT): $(DIRS) $(BINDIR)/$(TGT)
+	cp $(BINDIR)/$(TGT) $(TGTDIR)/$(TGT)
 	@echo "$@ up to date"
 
 
@@ -58,7 +61,7 @@ $(OBJDIR):
 clean:
 	rm -rf $(OBJDIR)
 	rm -rf $(BINDIR)
-	rm -rf $(TGT)
+	rm -rf $(TGTDIR)/$(TGT)
 
 fresh: clean all
 
