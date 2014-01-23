@@ -51,9 +51,11 @@ void GUIBar::Render()
 
 
 
-void GUIBar::HandleEvent( const GUIEvent& event )
+void GUIBar::HandleInputEvent( const InputEvent& event )
 {
-	if( event.type == GUIEventType::MOUSE_SCROLL && PointInArea( event.point ) )
+	if( event.type    == MOUSE_INPUT  &&
+	    event.subType == MOUSE_SCROLL &&
+	    PointInArea( event.point ) )
 	{
 		alpha += event.scroll.y / 10.f;
 		if( alpha > 1.f )

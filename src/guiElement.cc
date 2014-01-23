@@ -95,11 +95,11 @@ void GUIElement::RemoveCallback( GUICallback callback )
 
 
 
-void GUIElement::HandleEvent( const GUIEvent& event )
+void GUIElement::HandleInputEvent( const InputEvent& event )
 {
 	for( auto& child : children )
 	{
-		child->HandleEvent( event );
+		child->HandleInputEvent( event );
 	}
 }
 

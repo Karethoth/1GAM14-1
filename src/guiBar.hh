@@ -13,7 +13,7 @@ class GUIBar : public GUIElement
 	virtual ~GUIBar();
 
 	virtual void Render();
-	virtual void HandleEvent( const GUIEvent& event );
+	virtual void HandleInputEvent( const InputEvent& event );
 };
 
 #endif

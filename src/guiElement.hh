@@ -4,6 +4,7 @@
 
 
 #include "../deb/glm/glm.hpp"
+#include "input.hh"
 #include <memory>
 #include <vector>
 
@@ -34,32 +35,21 @@ typedef struct sBox2D
 
 
 
+// Forward declare the GUIElement.
+class GUIElement;
+
+
 enum GUIEventType
 {
 	UNDEFINED_GUI_EVENT = 0,
-	MOUSE_DOWN,
-	MOUSE_UP,
-	MOUSE_MOVE,
-	MOUSE_SCROLL,
-	KEY_DOWN,
-	KEY_UP
+	ELEMENT_SELECTED
 };
-
-
-// Forward declare the GUIElement.
-class GUIElement;
 
 
 typedef struct sGUIEvent
 {
 	std::shared_ptr<GUIElement> element;
 	GUIEventType type;
-	int          button;
-	int          scancode;
-	int          value;
-	int          mods;
-	glm::vec2    point;
-	glm::vec2    scroll;
 } GUIEvent;
 
 
@@ -86,7 +76,7 @@ class GUIElement
 	virtual void AddCallback( GUICallback callback );
 	virtual void RemoveCallback( GUICallback callback );
 
-	virtual void HandleEvent( const GUIEvent& event );
+	virtual void HandleInputEvent( const InputEvent& event );
 	virtual bool PointInArea( const glm::vec2& point );
 
 	virtual void UpdateRealArea();
