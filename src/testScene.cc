@@ -47,6 +47,11 @@ TestScene::TestScene()
 	projUniform          = shaderProgram->GetUniform( "P" );
 	worldCenterUniform   = shaderProgram->GetUniform( "worldCenter" );
 	lightPositionUniform = shaderProgram->GetUniform( "lightPosition" );
+
+	upKey = false;
+	downKey = false;
+	rightKey = false;
+	leftKey = false;
 }
 
 
@@ -249,6 +254,14 @@ void TestScene::Tick( double deltaTime )
 		// Calculate the slowdown from previous velocity
 		glm::vec3 slowDown = player->GetVelocity() * ((float)deltaTime*10);
 
+		if( upKey )
+			move += glm::vec3( 0.0, 0.0, -2.0/2.5 );
+		if( downKey )
+			move += glm::vec3( 0.0, 0.0, 2.0/2.5 );
+		if( leftKey )
+			move += glm::vec3( -1, 0.0, 0.0 );
+		if( rightKey )
+			move += glm::vec3( 1, 0.0, 0.0 );
 
 		// Bool which we use to check if we have any input from joystick
 		bool joystickInput = false;
@@ -364,6 +377,28 @@ void TestScene::Tick( double deltaTime )
 
 void TestScene::HandleInputEvent( const InputEvent& event )
 {
+	if( event.type == KEYBOARD_INPUT )
+	{
+		switch( event.index )
+		{
+		 case GLFW_KEY_UP:
+			upKey = event.subType == KEY_DOWN;
+			break;
+
+		 case GLFW_KEY_DOWN:
+			downKey = event.subType == KEY_DOWN;
+			break;
+
+		 case GLFW_KEY_RIGHT:
+			rightKey = event.subType == KEY_DOWN;
+			break;
+
+		 case GLFW_KEY_LEFT:
+			leftKey = event.subType == KEY_DOWN;
+			break;
+		}
+	}
+
 	gui.HandleInputEvent( event );
 }
 

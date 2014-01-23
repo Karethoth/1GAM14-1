@@ -45,6 +45,8 @@ class TestScene : public Scene
 	GLint projUniform;
 	GLint worldCenterUniform;
 	GLint lightPositionUniform;
+
+	bool upKey, downKey, rightKey, leftKey;
 };
 
 

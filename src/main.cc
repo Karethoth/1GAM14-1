@@ -31,10 +31,25 @@ static void GLFWKeyCallback( GLFWwindow* window,
                              int key, int scancode,
                              int action, int mods )
 {
+	// TODO: Get rid of this ESCAPE key handling here, and
+	//       let Scene handle it by itself as it sees fit
 	if( key == GLFW_KEY_ESCAPE && action == GLFW_PRESS )
 		glfwSetWindowShouldClose( window, GL_TRUE );
 
-	// TODO: Generate event and send it to the current scene
+	InputEvent event;
+	event.type = KEYBOARD_INPUT;
+
+	event.subType     = action ? KEY_DOWN : KEY_UP;
+	event.index       = key;
+	event.scancode    = scancode;
+	event.buttonValue = action;
+	event.mods        = mods;
+
+	auto scene = sceneStack.Top();
+	if( scene )
+	{
+		scene->HandleInputEvent( event );
+	}
 }
 
 
