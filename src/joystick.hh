@@ -10,7 +10,7 @@
 class Joystick;
 
 
-enum JoysticEventType
+enum JoystickEventType
 {
 	UNDEFINED_JOYSTICK_EVENT = 0,
 	AXIS_CHANGE,
@@ -20,25 +20,25 @@ enum JoysticEventType
 };
 
 
-enum JoysticButtonState
+enum JoystickButtonState
 {
 	RELEASE = 0,
 	PRESS
 };
 
 
-typedef struct SJoysticEvent
+struct JoystickEvent
 {
-	JoysticEventType   type;
-	JoysticButtonState buttonState;
+	JoystickEventType   type;
+	JoystickButtonState buttonState;
 	int                index;
 	float              axisValue;
-} JoystickEvent;
+};
 
 
 
 typedef void (*JoystickEventHandler)( const Joystick& joystick,
-                                       const JoystickEvent& event );
+                                      const JoystickEvent& event );
 
 
 

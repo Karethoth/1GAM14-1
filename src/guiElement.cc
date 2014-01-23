@@ -2,7 +2,7 @@
 #include <iostream>
 
 
-GUIMeasure::sGUIMeasure( float value, GUIMeasureType type )
+GUIMeasure::GUIMeasure( float value, GUIMeasureType type )
 {
 	this->value = value;
 	this->type  = type;

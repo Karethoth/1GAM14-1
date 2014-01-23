@@ -16,22 +16,22 @@ enum GUIMeasureType
 };
 
 
-typedef struct sGUIMeasure
+struct GUIMeasure
 {
 	float          value;
 	GUIMeasureType type;
-	sGUIMeasure( float value=0.f, GUIMeasureType type=DIRECT );
-} GUIMeasure;
+	GUIMeasure( float value=0.f, GUIMeasureType type=DIRECT );
+};
 
 
 
-typedef struct sBox2D
+struct Box2D
 {
 	GUIMeasure x;
 	GUIMeasure y;
 	GUIMeasure width;
 	GUIMeasure height;
-} Box2D;
+};
 
 
 
@@ -46,11 +46,11 @@ enum GUIEventType
 };
 
 
-typedef struct sGUIEvent
+struct GUIEvent
 {
 	std::shared_ptr<GUIElement> element;
 	GUIEventType type;
-} GUIEvent;
+};
 
 
 typedef void (*GUICallback)(const GUIEvent&);

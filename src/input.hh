@@ -32,7 +32,7 @@ enum InputEventSubType
 
 
 
-typedef struct sInputEvent
+struct InputEvent
 {
 	// Event type info
 	InputEventType    type;
@@ -53,7 +53,7 @@ typedef struct sInputEvent
 	// Joystick
 	float axisValue;
 
-} InputEvent;
+};
 
 
 #endif
