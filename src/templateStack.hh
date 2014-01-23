@@ -8,24 +8,18 @@
 template<typename T>
 class TemplateStack
 {
-	protected:
-	std::vector< std::shared_ptr<T> > stack;
-
-
-	public:
+ public:
 	virtual ~TemplateStack()
 	{
 		stack.clear();
 	}
 
 
-
-	virtual bool Push( std::shared_ptr<T> item )
+	virtual bool Push( const std::shared_ptr<T>& item )
 	{
-		stack.insert( stack.begin(), item );
+		stack.push_back( item );
 		return true;
 	}
-
 
 
 	virtual std::shared_ptr<T> Get( unsigned int index )
@@ -34,13 +28,22 @@ class TemplateStack
 	}
 
 
-
 	virtual std::shared_ptr<T> Pop()
 	{
-		std::shared_ptr<T> ret = stack.front();
-		stack.clear();
+		auto ret = stack.back();
+		stack.pop_back();
 		return ret;
 	}
+
+
+	virtual std::shared_ptr<T> Top()
+	{
+		return stack.back();
+	}
+
+
+ protected:
+	std::vector<std::shared_ptr<T>> stack;
 };
 
 #endif
