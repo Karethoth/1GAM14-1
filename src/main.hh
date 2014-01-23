@@ -33,12 +33,16 @@
 #include "joystick.hh"
 
 #include "scene.hh"
+#include "testScene.hh"
 
 #include "gui.hh"
 #include "guiBar.hh"
 
 #include "managers.hh"
 #include "helpers.hh"
+
+#include "input.hh"
+
 
 #include <GLFW/glfw3.h>
 

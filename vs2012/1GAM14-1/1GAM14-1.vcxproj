@@ -29,6 +29,7 @@
     <ClCompile Include="..\..\src\shaderProgram.cc" />
     <ClCompile Include="..\..\src\shaderProgramManager.cc" />
     <ClCompile Include="..\..\src\surface.cc" />
+    <ClCompile Include="..\..\src\testScene.cc" />
     <ClCompile Include="..\..\src\texture.cc" />
     <ClCompile Include="..\..\src\textureManager.cc" />
   </ItemGroup>
@@ -45,6 +46,7 @@
     <None Include="..\..\src\guiBar.hh" />
     <None Include="..\..\src\guiElement.hh" />
     <None Include="..\..\src\helpers.hh" />
+    <None Include="..\..\src\input.hh" />
     <None Include="..\..\src\joystick.hh" />
     <None Include="..\..\src\main.hh" />
     <None Include="..\..\src\managers.hh" />
@@ -55,6 +57,7 @@
     <None Include="..\..\src\shaderProgramManager.hh" />
     <None Include="..\..\src\templateManager.hh" />
     <None Include="..\..\src\templateStack.hh" />
+    <None Include="..\..\src\testScene.hh" />
     <None Include="..\..\src\texture.hh" />
     <None Include="..\..\src\textureManager.hh" />
   </ItemGroup>
