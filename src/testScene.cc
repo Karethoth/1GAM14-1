@@ -364,5 +364,6 @@ void TestScene::Tick( double deltaTime )
 
 void TestScene::HandleInputEvent( const InputEvent& event )
 {
+	gui.HandleInputEvent( event );
 }
 
