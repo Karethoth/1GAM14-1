@@ -5,6 +5,8 @@
 #include <memory>
 
 
+class Scene;
+
 typedef TemplateStack<std::shared_ptr<Scene>> SceneStack;
 typedef std::shared_ptr<SceneStack>           SceneStackPtr;
 

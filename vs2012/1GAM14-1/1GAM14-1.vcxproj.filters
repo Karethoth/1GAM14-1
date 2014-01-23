@@ -72,6 +72,9 @@
     <ClCompile Include="..\..\src\collisions.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\scene.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\data\shaders\test.vshader">
@@ -138,6 +141,12 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="..\..\src\collisions.hh">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\..\src\scene.hh">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\..\src\templateStack.hh">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>

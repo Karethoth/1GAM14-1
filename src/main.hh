@@ -32,6 +32,8 @@
 #include "character.hh"
 #include "joystick.hh"
 
+#include "scene.hh"
+
 #include "gui.hh"
 #include "guiBar.hh"
 

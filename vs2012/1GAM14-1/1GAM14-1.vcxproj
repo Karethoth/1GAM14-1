@@ -24,6 +24,7 @@
     <ClCompile Include="..\..\src\mesh.cc" />
     <ClCompile Include="..\..\src\meshManager.cc" />
     <ClCompile Include="..\..\src\node.cc" />
+    <ClCompile Include="..\..\src\scene.cc" />
     <ClCompile Include="..\..\src\shader.cc" />
     <ClCompile Include="..\..\src\shaderProgram.cc" />
     <ClCompile Include="..\..\src\shaderProgramManager.cc" />
@@ -48,10 +49,12 @@
     <None Include="..\..\src\main.hh" />
     <None Include="..\..\src\managers.hh" />
     <None Include="..\..\src\meshManager.hh" />
+    <None Include="..\..\src\scene.hh" />
     <None Include="..\..\src\shader.hh" />
     <None Include="..\..\src\shaderProgram.hh" />
     <None Include="..\..\src\shaderProgramManager.hh" />
     <None Include="..\..\src\templateManager.hh" />
+    <None Include="..\..\src\templateStack.hh" />
     <None Include="..\..\src\texture.hh" />
     <None Include="..\..\src\textureManager.hh" />
   </ItemGroup>
