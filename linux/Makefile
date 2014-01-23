@@ -27,6 +27,7 @@ OBJS=\
       $(OBJDIR)/guiElement.o \
       $(OBJDIR)/guiBar.o \
       $(OBJDIR)/gui.o \
+      $(OBJDIR)/scene.o \
       $(OBJDIR)/collisions.o \
       $(OBJDIR)/entity.o \
       $(OBJDIR)/character.o \
