@@ -17,6 +17,7 @@
     <ClCompile Include="..\..\src\entity.cc" />
     <ClCompile Include="..\..\src\gui.cc" />
     <ClCompile Include="..\..\src\guiBar.cc" />
+    <ClCompile Include="..\..\src\guiButton.cc" />
     <ClCompile Include="..\..\src\guiElement.cc" />
     <ClCompile Include="..\..\src\helpers.cc" />
     <ClCompile Include="..\..\src\joystick.cc" />
@@ -44,6 +45,7 @@
     <None Include="..\..\src\entity.hh" />
     <None Include="..\..\src\gui.hh" />
     <None Include="..\..\src\guiBar.hh" />
+    <None Include="..\..\src\guiButton.hh" />
     <None Include="..\..\src\guiElement.hh" />
     <None Include="..\..\src\helpers.hh" />
     <None Include="..\..\src\input.hh" />

@@ -78,6 +78,9 @@
     <ClCompile Include="..\..\src\testScene.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\guiButton.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\data\shaders\test.vshader">
@@ -156,6 +159,9 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="..\..\src\input.hh">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\..\src\guiButton.hh">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>
