@@ -55,11 +55,16 @@ static void GLFWKeyCallback( GLFWwindow* window,
 
 static void GLFWFrameBufferSizeCallback( GLFWwindow* window, int width, int height )
 {
-	// TODO: Generate event and send it to the current scene
+	glViewport( 0, 0, width, height );
+
+	WindowEvent event;
+	event.type = WINDOW_FRAMEBUFFER_RESIZE;
+	event.point = glm::vec2( width, height );
+
+	// TODO: Send the vent o the current scene
 	/*gui.SetSize( static_cast<float>( width ),
 	             static_cast<float>( height ) );
 	*/
-	glViewport( 0, 0, width, height );
 }
 
 

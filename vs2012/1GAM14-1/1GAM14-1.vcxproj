@@ -62,6 +62,7 @@
     <None Include="..\..\src\testScene.hh" />
     <None Include="..\..\src\texture.hh" />
     <None Include="..\..\src\textureManager.hh" />
+    <None Include="..\..\src\windowEvent.hh" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\mesh.hh" />
