@@ -4,6 +4,8 @@
 #include "helpers.hh"
 #include "joystick.hh"
 
+#include <iostream>
+
 
 extern std::unique_ptr<Joystick> joystick;
 extern bool joystickYInverted;
@@ -395,6 +397,19 @@ void TestScene::HandleInputEvent( const InputEvent& event )
 
 		 case GLFW_KEY_LEFT:
 			leftKey = event.subType == KEY_DOWN;
+			break;
+		}
+	}
+	else if( event.type == JOYSTICK_INPUT )
+	{
+		switch( event.subType )
+		{
+		 case JOYSTICK_CONNECTED:
+			std::cout << "Joystick connected: " << joystick->GetName() << "\n";
+			break;
+
+		 case JOYSTICK_DISCONNECTED:
+			std::cout << "Joystick disconnected: " << joystick->GetName() << "\n";
 			break;
 		}
 	}

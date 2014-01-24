@@ -465,11 +465,11 @@ int main( int argc, char **argv )
 		time = glfwGetTime();
 
 		// Check joystick when it's time
-		joystickCheckTime -= deltaTime;
+		joystickCheckTime -= static_cast<float>( deltaTime );
 		if( joystickCheckTime <= 0.f )
 		{
 			std::async( std::launch::async, CheckJoystick );
-			joystickCheckTime = 2.f;
+			joystickCheckTime = 5.f;
 		}
 
 
