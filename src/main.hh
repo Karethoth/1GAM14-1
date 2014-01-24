@@ -42,6 +42,7 @@
 #include "helpers.hh"
 
 #include "input.hh"
+#include "windowEvent.hh"
 
 
 #include <GLFW/glfw3.h>
