@@ -158,6 +158,9 @@
     <None Include="..\..\src\input.hh">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="..\..\src\windowEvent.hh">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\node.hh">
