@@ -187,9 +187,11 @@ void TestScene::Create()
 		0.0 )
 	) );
 	tree->SetCollisionBox( AABB(
-		glm::vec3( 0.f, -4.9f, -2.5f ),
-		glm::vec3( 5.f, 0.f, 2.5f )
+		glm::vec3( 0.f, -4.9f, -1.f ),
+		glm::vec3( 4.f, 0.f, 1.f )
 	) );
+	world->AddChild( tree );
+
 	world->AddChild( tree );
 
 
