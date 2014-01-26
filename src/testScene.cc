@@ -419,3 +419,9 @@ void TestScene::HandleInputEvent( const InputEvent& event )
 	gui.HandleInputEvent( event );
 }
 
+
+
+void TestScene::HandleWindowEvent( const WindowEvent& event )
+{
+}
+

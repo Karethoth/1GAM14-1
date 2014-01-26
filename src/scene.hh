@@ -3,6 +3,7 @@
 
 #include "templateStack.hh"
 #include "input.hh"
+#include "windowEvent.hh"
 #include <memory>
 
 
@@ -23,6 +24,7 @@ class Scene
 	virtual void Tick( double deltaTime ) = 0;
 
 	virtual void HandleInputEvent( const InputEvent& event ) = 0;
+	virtual void HandleWindowEvent( const WindowEvent& event ) = 0;
 
 	virtual void SetSceneStack( const SceneStackPtr& stack );
 

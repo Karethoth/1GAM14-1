@@ -25,6 +25,7 @@ class TestScene : public Scene
 	virtual void Tick( double deltaTime );
 
 	virtual void HandleInputEvent( const InputEvent& event );
+	virtual void HandleWindowEvent( const WindowEvent& event );
 
 
  protected:
